@@ -45,6 +45,8 @@ const registerUser = async (req, res) => {
 
     const user = await User.create(userData);
 
+    console.log('Created user:', user);
+
     // Fetch fresh user data
     const savedUser = await User.findById(user._id);
     
