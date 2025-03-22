@@ -31,6 +31,11 @@ const alertSchema = new Schema({
   imageURL: {
     type: String,
   },
+  status: {
+    type: String,
+    enum: ['pending', 'responding', 'completed'],
+    default: 'pending'
+  }
 }, {
   timestamps: true,
 });

@@ -94,5 +94,5 @@ const submitReport = async (req, res) => {
 };
 
 module.exports = {
-  submitReport,
+  submitReport
 };

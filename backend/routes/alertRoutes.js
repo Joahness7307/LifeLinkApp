@@ -1,6 +1,6 @@
 const express = require('express');
 const { createAlert, getAlertsByAgency } = require('../controllers/alertController');
-const requireAuth = require('../middleware/authMiddleware');
+const { requireAuth } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
