@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
 import '../styles/Login.css';
 import appLogo from '../assets/appLogo.png';
@@ -11,7 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const { login, isLoading, error } = useLogin();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +24,6 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <div className="emergency-pulse"></div>
       <div className="auth-content">
         <div className="logo-container">
           <img src={appLogo} alt="LifeLink Logo" className="auth-logo" />
