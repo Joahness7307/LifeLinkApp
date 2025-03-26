@@ -40,12 +40,12 @@ const Navbar = () => {
           {/* Left Section */}
           <div className="navbar-left">
             {/* Dynamically adjust the Home link based on the user's role */}
-            <Link
+            {/* <Link
               to={user.role === 'responder' ? '/ResponderDashboard' : '/emergencies'}
               className="nav-link"
             >
               Home
-            </Link>
+            </Link> */}
             <form onSubmit={handleSearch} className="search-form">
               <img src={searchIcon} alt="Search" className="search-icon" />
               <input
@@ -61,7 +61,7 @@ const Navbar = () => {
           {/* Center Section */}
           <div className="navbar-center">
             <Link
-              to={user.role === 'responder' ? '/responder-dashboard' : '/emergencies'}
+              to={user.role === 'responder' ? '/ResponderDashboard' : '/emergencies'}
             >
               <img src={appLogo} alt="LifeLink Logo" className="navbar-logo-img" />
             </Link>
