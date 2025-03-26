@@ -9,49 +9,49 @@ const ResponderDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    console.log('User object in ResponderDashboard:', user); // Debug log
+  // useEffect(() => {
+  //   console.log('User object in ResponderDashboard:', user); // Debug log
 
-    // Check if the user is logged in and has the "responder" role
-    if (!user || user.role !== 'responder') {
-      navigate('/unauthorized');
-      return;
-    }
+  //   // Check if the user is logged in and has the "responder" role
+  //   if (!user || user.role !== 'responder') {
+  //     navigate('/unauthorized');
+  //     return;
+  //   }
 
-    // Check if the responder is associated with an agency
-    if (!user.agencyId) {
-      console.error('Responder does not have an associated agencyId.');
-      setError('You are not associated with any agency.');
-      setLoading(false);
-      return;
-    }
+  //   // Check if the responder is associated with an agency
+  //   if (!user.agencyId) {
+  //     console.error('Responder does not have an associated agencyId.');
+  //     setError('You are not associated with any agency.');
+  //     setLoading(false);
+  //     return;
+  //   }
 
-    // Fetch alerts for the responder's agency
-    const fetchAlerts = async () => {
-      try {
-        const response = await fetch(`http://localhost:3001/responder/alerts`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`, // Include the token for authorization
-          },
-        });
+  //   // Fetch alerts for the responder's agency
+  //   const fetchAlerts = async () => {
+  //     try {
+  //       const response = await fetch(`http://localhost:3001/responder/alerts`, {
+  //         headers: {
+  //           Authorization: `Bearer ${user.token}`, // Include the token for authorization
+  //         },
+  //       });
 
-        const json = await response.json();
+  //       const json = await response.json();
 
-        if (!response.ok) {
-          setError(json.error);
-          return;
-        }
+  //       if (!response.ok) {
+  //         setError(json.error);
+  //         return;
+  //       }
 
-        setAlerts(json);
-      } catch (err) {
-        setError('Failed to fetch alerts');
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       setAlerts(json);
+  //     } catch (err) {
+  //       setError('Failed to fetch alerts');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchAlerts();
-  }, [user, navigate]);
+  //   fetchAlerts();
+  // }, [user, navigate]);
 
   if (loading) {
     return <div>Loading...</div>;

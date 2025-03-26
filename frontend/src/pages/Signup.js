@@ -12,7 +12,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
-  const [role, setRole] = useState('user'); // Default role is 'user'
+  const [role, setRole] = useState(''); // Initialize as an empty string
   const [agencyId, setAgencyId] = useState(''); // For responders
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const { signup, error, isLoading } = useSignup();
@@ -32,10 +32,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="emergency-pulse"></div>
+    <div className="auth-container-signup-page">
       <div className="auth-content">
-        <div className="logo-container">
+        <div className="logo-container-signup-page">
           <img src={appLogo} alt="LifeLink Logo" className="auth-logo" />
         </div>
         <div className="auth-card">
@@ -98,13 +97,16 @@ const Signup = () => {
               />
             </div>
             <div className="input-group">
-              <label htmlFor="role">Role:</label>
               <select
                 id="role"
                 name="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
+                required // Ensure the user selects a role
               >
+                <option value="" disabled hidden>
+                  Select Role
+                </option>
                 <option value="user">User</option>
                 <option value="responder">Responder</option>
               </select>
