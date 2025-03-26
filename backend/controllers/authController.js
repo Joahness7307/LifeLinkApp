@@ -14,6 +14,11 @@ const registerUser = async (req, res) => {
   try {
     const { userName, email, password, phoneNumber, address, role, agencyId } = req.body;
 
+    // Validate role
+    if (!['user', 'responder'].includes(role)) {
+      return res.status(400).json({ error: 'Invalid role. Only "user" and "responder" roles are allowed.' });
+    }
+
     // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -32,39 +37,28 @@ const registerUser = async (req, res) => {
       }
     }
 
-    // Create user with proper data
-    const userData = {
+    // Create user
+    const user = await User.create({
       userName,
       email,
       password,
       phoneNumber,
       address,
       role,
-      ...(role === 'responder' && { agencyId }) // Only include agencyId for responders
-    };
+      ...(role === 'responder' && { agencyId }), // Save agencyId for responders
+    });
 
-    const user = await User.create(userData);
-
-    console.log('Created user:', user);
-
-    // Fetch fresh user data
-    const savedUser = await User.findById(user._id);
-    
-
-    if (savedUser) {
-      const responseData = {
-        _id: savedUser._id,
-        userName: savedUser.userName,
-        email: savedUser.email,
-        phoneNumber: savedUser.phoneNumber,
-        address: savedUser.address,
-        role: savedUser.role,
-        ...(savedUser.role === 'responder' && { agencyId: savedUser.agencyId }), // Include agencyId in response if responder
-        token: generateToken(savedUser._id)
-      };
-
-      res.status(201).json(responseData);
-    }
+    // Return response
+    res.status(201).json({
+      _id: user._id,
+      userName: user.userName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      address: user.address,
+      role: user.role,
+      ...(user.role === 'responder' && { agencyId: user.agencyId }),
+      token: generateToken(user._id),
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -75,8 +69,8 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user and explicitly select all fields including role
-    const user = await User.findOne({ email }).select('+password +role');
+    // Find user and explicitly select all fields including role and agencyId
+    const user = await User.findOne({ email }).select('+password +role +agencyId');
     console.log('Login - Found user:', user); // Debug log
 
     if (user && (await user.matchPassword(password))) {
@@ -87,7 +81,8 @@ const loginUser = async (req, res) => {
         phoneNumber: user.phoneNumber,
         address: user.address,
         role: user.role,
-        token: generateToken(user._id)
+        agencyId: user.agencyId || null, // Include agencyId for responders
+        token: generateToken(user._id),
       };
 
       res.json(responseData);

@@ -34,27 +34,25 @@ const SubmitReport = () => {
     }
 
     const formDataToSend = new FormData();
-    
-    // Add required fields
-    formDataToSend.append('emergencyId', emergencyId);
-    formDataToSend.append('userId', userId);
-    // Use the user's phone number from the form input
-    formDataToSend.append('contactNumber', user.phoneNumber);
-    // Use the user's address from the form input
-    formDataToSend.append('address', user.address);
-    
-    // Optional fields
-    if (formData.message && formData.message.trim() !== '') {
-      formDataToSend.append('message', formData.message);
-    }
-    
+    formDataToSend.append('emergencyId', formData.emergencyId);
+    formDataToSend.append('userId', formData.userId);
+    formDataToSend.append('contactNumber', formData.contactNumber);
+    formDataToSend.append('address', formData.address);
+    formDataToSend.append('message', formData.message);
     if (image) {
       formDataToSend.append('image', image);
     }
 
     try {
-      const response = await fetch('/report', {
+      const storedUser = localStorage.getItem('user');
+      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+      const token = parsedUser ? parsedUser.token : null;
+
+      const response = await fetch('/reports', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: formDataToSend,
       });
 
@@ -64,7 +62,7 @@ const SubmitReport = () => {
         setModalMessage('Emergency report submitted successfully!');
         setShowModal(true);
       } else {
-        console.error('Failed to submit the report:', responseData);
+        console.error('Failed to submit the report:', responseData.error);
         setModalMessage(`Failed to submit the report: ${responseData.error}`);
         setShowModal(true);
       }

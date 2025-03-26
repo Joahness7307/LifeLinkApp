@@ -51,7 +51,6 @@ const submitReport = async (req, res) => {
 
       // Find the existing emergency record
       const emergency = await Emergency.findById(emergencyId);
-
       if (!emergency) {
         return res.status(404).json({ error: 'Emergency not found' });
       }
@@ -64,12 +63,11 @@ const submitReport = async (req, res) => {
 
       // Find agencies associated with the emergency type
       const agencies = await Agency.find({ categories: emergency.type });
-
       if (agencies.length === 0) {
         return res.status(404).json({ error: 'No agencies found for this emergency type' });
       }
 
-      // Create an alert for each agency
+      // Create an alert for each agency and add the alert ID to the agency's alerts array
       const alerts = await Promise.all(
         agencies.map(async (agency) => {
           const alert = await Alert.create({
@@ -81,6 +79,11 @@ const submitReport = async (req, res) => {
             message: message || '',         // Optional message
             imageURL,                       // Optional image URL
           });
+
+          // Add the alert ID to the agency's alerts array
+          agency.alerts.push(alert._id);
+          await agency.save();
+
           return alert;
         })
       );

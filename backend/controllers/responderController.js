@@ -3,6 +3,10 @@ const Alert = require('../models/alertModel');
 // Get alerts for responder's agency
 const getAlerts = async (req, res) => {
   try {
+    if (!req.user.agencyId) {
+      return res.status(400).json({ error: 'Responder does not have an associated agencyId.' });
+    }
+
     const alerts = await Alert.find({ agencyId: req.user.agencyId })
       .populate('userId', 'userName phoneNumber address')
       .populate('emergencyId', 'type description')

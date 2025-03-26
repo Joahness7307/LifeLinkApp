@@ -8,19 +8,15 @@ import eyeSlashIcon from '../assets/hidden.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const { login, isLoading, error } = useLogin();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const success = await login(email, password);
-    if (success) {
-      navigate('/emergencies'); // Redirect to the emergency page
-    }
-  }
+    await login(email, password); // Call the login function
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -71,7 +67,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  );  
-}
+  );
+};
 
 export default Login;

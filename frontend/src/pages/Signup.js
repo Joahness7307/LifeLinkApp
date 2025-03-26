@@ -12,6 +12,8 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
+  const [role, setRole] = useState('user'); // Default role is 'user'
+  const [agencyId, setAgencyId] = useState(''); // For responders
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const { signup, error, isLoading } = useSignup();
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const success = await signup(userName, email, password, phoneNumber, address);
+    const success = await signup(userName, email, password, phoneNumber, address, role, agencyId);
     if (success) {
       navigate('/login'); // Redirect to the login page after successful signup
     } 
@@ -95,6 +97,30 @@ const Signup = () => {
                 onChange={(e) => setAddress(e.target.value)}
               />
             </div>
+            <div className="input-group">
+              <label htmlFor="role">Role:</label>
+              <select
+                id="role"
+                name="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="user">User</option>
+                <option value="responder">Responder</option>
+              </select>
+            </div>
+            {role === 'responder' && (
+              <div className="input-group">
+                <input
+                  type="text"
+                  name="agencyId"
+                  required
+                  placeholder="Agency ID"
+                  value={agencyId}
+                  onChange={(e) => setAgencyId(e.target.value)}
+                />
+              </div>
+            )}
             <button type="submit" className="auth-button" disabled={isLoading}>
               {isLoading ? 'Signing up...' : 'Sign Up'}
             </button>

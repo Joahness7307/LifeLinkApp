@@ -4,10 +4,12 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
-import EmergencyList from './pages/EmergencyList';
+import UserDashboard from './pages/UserDashboard';
 import SubmitReport from './pages/SubmitReport';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
+import Unauthorized from './pages/Unauthorized'; // Import the Unauthorized component
+import ResponderDashboard from './pages/ResponderDashboard'; // Import the Responder Dashboard
 import '../src/styles/index.css';
 
 function App() {
@@ -22,7 +24,15 @@ function App() {
           path="/emergencies"
           element={
             <ProtectedRoute>
-              <EmergencyList />
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ResponderDashboard"
+          element={
+            <ProtectedRoute>
+              <ResponderDashboard />
             </ProtectedRoute>
           }
         />
@@ -35,6 +45,7 @@ function App() {
           } 
         />
         <Route path="/SubmitReport" element={<SubmitReport />} />
+        <Route path="/unauthorized" element={<Unauthorized />} /> {/* Add this route */}
       </Routes>
     </div>
   );

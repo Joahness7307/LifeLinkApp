@@ -7,6 +7,8 @@ const alertRoutes = require('./routes/alertRoutes');
 const agencyRoutes = require('./routes/agencyRoutes');
 const emergencyRoutes = require('./routes/emergencyRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const responderRoutes = require('./routes/responderRoutes'); // Import responderRoutes
+const adminRoutes = require('./routes/adminRoutes'); // Import admin routes
 const path = require('path');
 
 const app = express();
@@ -28,10 +30,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/user', userRoutes);
-app.use('/alert', alertRoutes);
-app.use('/agency', agencyRoutes);
+app.use('/alerts', alertRoutes);
+app.use('/agencies', agencyRoutes);
 app.use('/emergencies', emergencyRoutes);
-app.use('/report', reportRoutes);
+app.use('/reports', reportRoutes);
+app.use('/responder', responderRoutes); // Mount responder routes
+app.use('/admin', adminRoutes); // Mount admin routes
 
 // MongoDB connection
 const dbURI = process.env.MONGO_URI;

@@ -39,7 +39,13 @@ const Navbar = () => {
         <>
           {/* Left Section */}
           <div className="navbar-left">
-            <Link to="/emergencies" className="nav-link">Home</Link>
+            {/* Dynamically adjust the Home link based on the user's role */}
+            <Link
+              to={user.role === 'responder' ? '/ResponderDashboard' : '/emergencies'}
+              className="nav-link"
+            >
+              Home
+            </Link>
             <form onSubmit={handleSearch} className="search-form">
               <img src={searchIcon} alt="Search" className="search-icon" />
               <input
@@ -54,7 +60,9 @@ const Navbar = () => {
 
           {/* Center Section */}
           <div className="navbar-center">
-            <Link to="/emergencies">
+            <Link
+              to={user.role === 'responder' ? '/responder-dashboard' : '/emergencies'}
+            >
               <img src={appLogo} alt="LifeLink Logo" className="navbar-logo-img" />
             </Link>
           </div>
@@ -63,7 +71,7 @@ const Navbar = () => {
           <div className="navbar-right">
             {/* Notifications Dropdown */}
             <div className="notifications-dropdown">
-              <button 
+              <button
                 className="notifications-button"
                 onClick={() => {
                   setShowNotifications(!showNotifications);
@@ -75,11 +83,11 @@ const Navbar = () => {
                   <span className="notification-badge">{notifications.length}</span>
                 )}
               </button>
-              
+
               {showNotifications && (
                 <div className="notifications-menu">
                   {notifications.length > 0 ? (
-                    notifications.map(notif => (
+                    notifications.map((notif) => (
                       <div key={notif.id} className="notification-item">
                         {notif.message}
                       </div>
@@ -93,7 +101,7 @@ const Navbar = () => {
 
             {/* User Dropdown */}
             <div className="user-dropdown">
-              <button 
+              <button
                 className="welcome-user"
                 onClick={() => {
                   setShowUserMenu(!showUserMenu);
@@ -102,7 +110,7 @@ const Navbar = () => {
               >
                 Welcome, {user.userName} ▼
               </button>
-              
+
               {showUserMenu && (
                 <div className="user-menu">
                   <Link to="/profile" onClick={() => setShowUserMenu(false)}>

@@ -1,14 +1,20 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useFetchEmergencies from '../hooks/useFetchEmergencies';
-import { AuthContext } from '../context/AuthContext'; // Import the AuthContext
+import useAuthContext from '../hooks/useAuthContext';
 import emergencyIcons from '../icons/emergencyIcons';
 import '../styles/EmergencyList.css';
 
-const EmergencyList = () => {
+const UserDashboard = () => {
   const { emergencies, error } = useFetchEmergencies();
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext); // Get the user data from AuthContext
+  const { user } = useAuthContext();
+
+  // Verify user role
+  if (user?.role !== 'user') {
+    navigate('/unauthorized');
+    return null;
+  }
 
   const handleEmergencyClick = (emergency) => {
     if (!user) {
@@ -16,14 +22,12 @@ const EmergencyList = () => {
       return;
     }
 
-    if (!user._id) {
-      console.error("user._id is undefined");
-      console.log('userId:', user._id);
-      return;
-    }
-
     navigate('/SubmitReport', {
-      state: { emergencyId: emergency._id, emergencyType: emergency.type, userId: user._id },
+      state: { 
+        emergencyId: emergency._id,
+        emergencyType: emergency.type,
+        userId: user._id 
+      }
     });
   };
 
@@ -45,4 +49,4 @@ const EmergencyList = () => {
   );
 };
 
-export default EmergencyList;
+export default UserDashboard;

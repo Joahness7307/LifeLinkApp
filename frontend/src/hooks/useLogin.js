@@ -28,13 +28,21 @@ export const useLogin = () => {
         // Update the auth context
         dispatch({ type: 'LOGIN', payload: data });
 
-        // Redirect to the EmergencyList page
-        navigate('/emergencies');
+        // Redirect based on the user's role
+        if (data.role === 'responder') {
+          navigate('/ResponderDashboard'); // Redirect responders to their dashboard
+        } else if (data.role === 'user') {
+          navigate('/emergencies'); // Redirect regular users to the emergencies page
+        } else {
+          navigate('/'); // Redirect other roles to the home page
+        }
       } else {
         setError(data.error);
       }
     } catch (error) {
       setError('Failed to log in. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
