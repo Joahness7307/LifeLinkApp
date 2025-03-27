@@ -14,7 +14,6 @@ const ResponderDashboard = () => {
 
     // Check if the user is logged in and has the "responder" role
     if (!user || user.role !== 'responder') {
-      console.log('Unauthorized access to ResponderDashboard. Redirecting to /unauthorized.');
       navigate('/unauthorized');
       return;
     }
