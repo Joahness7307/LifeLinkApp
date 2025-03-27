@@ -12,6 +12,7 @@ const UserDashboard = () => {
 
   // Verify user role
   if (user?.role !== 'user') {
+    console.log('Unauthorized access to UserDashboard. Redirecting to /unauthorized.');
     navigate('/unauthorized');
     return null;
   }
