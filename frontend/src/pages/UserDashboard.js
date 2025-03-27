@@ -20,6 +20,7 @@ const UserDashboard = () => {
   const handleEmergencyClick = (emergency) => {
     if (!user) {
       alert('You need to be logged in to report an emergency.');
+      console.log('User not logged in. Redirecting to /login.');
       return;
     }
 
