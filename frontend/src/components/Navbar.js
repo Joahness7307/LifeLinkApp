@@ -61,7 +61,7 @@ const Navbar = () => {
           {/* Center Section */}
           <div className="navbar-center">
             <Link
-              to={user.role === 'responder' ? '/responder-dashboard' : '/emergencies'}
+              to={user.role === 'responder' ? '/ResponderDashboard' : '/emergencies'}
             >
               <img src={appLogo} alt="LifeLink Logo" className="navbar-logo-img" />
             </Link>

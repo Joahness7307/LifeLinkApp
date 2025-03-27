@@ -24,7 +24,6 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <div className="emergency-pulse"></div>
       <div className="auth-content">
         <div className="logo-container">
           <img src={appLogo} alt="LifeLink Logo" className="auth-logo" />
