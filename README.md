@@ -5,7 +5,7 @@ LifeLink is an emergency response application that allows users to send alerts i
 ## Features
 
 - User authentication (Register/Login)
-- Role-based access control
+- Role-based access control ( normal users, reponders, admin )
 - Emergency alert submission
 
 ## Installation
