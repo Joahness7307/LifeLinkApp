@@ -97,6 +97,22 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2);
   }
+
+  .forgot-password-link {
+    text-align: right;
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+  
+  .forgot-password-link a {
+    color: #d32f2f;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .forgot-password-link a:hover {
+    text-decoration: underline;
+  }
   
   .google-login {
     margin-top: 1rem;
@@ -145,7 +161,7 @@
   .auth-link a:hover {
     text-decoration: underline;
   }
-  
+
   @keyframes pulse {
     0% {
       opacity: 0.6;
