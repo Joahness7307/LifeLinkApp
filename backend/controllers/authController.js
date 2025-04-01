@@ -69,31 +69,53 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user and explicitly select all fields including role and agencyId
-    const user = await User.findOne({ email }).select('+password +role +agencyId');
-    console.log('Login - Found user:', user); // Debug log
-
-    if (user && (await user.matchPassword(password))) {
-      const responseData = {
-        _id: user._id,
-        userName: user.userName,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        address: user.address,
-        role: user.role,
-        agencyId: user.agencyId || null, // Include agencyId for responders
-        token: generateToken(user._id),
-      };
-
-      res.json(responseData);
-    } else {
-      res.status(401).json({ error: 'Invalid email or password' });
+    // Check if email and password are provided
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
     }
+
+    // Find user and explicitly select password, role, and agencyId
+    const user = await User.findOne({ email }).select('+password +role +agencyId');
+
+    if (!user) {
+      console.log('Login failed: User not found');
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    console.log("Stored hashed password:", user.password); // Log stored hash
+    console.log("Entered password:", password); // Log entered password
+
+    // Compare provided password with stored hashed password
+    const isMatch = await user.matchPassword(password);
+
+    if (!isMatch) {
+      console.log('Login failed: Password mismatch');
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Generate JWT token
+    const token = generateToken(user._id);
+
+    // Prepare response data
+    const responseData = {
+      _id: user._id,
+      userName: user.userName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      address: user.address,
+      role: user.role,
+      agencyId: user.agencyId || null,
+      token,
+    };
+
+    console.log('Login successful:', responseData);
+    res.status(200).json(responseData);
   } catch (error) {
-    console.error('Login error:', error); // Debug log
-    res.status(400).json({ error: error.message });
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 module.exports = {
   registerUser,
