@@ -8,8 +8,10 @@ import UserDashboard from './pages/UserDashboard';
 import SubmitReport from './pages/SubmitReport';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
-import Unauthorized from './pages/Unauthorized'; // Import the Unauthorized component
-import ResponderDashboard from './pages/ResponderDashboard'; // Import the Responder Dashboard
+import Unauthorized from './pages/Unauthorized'; 
+import ResponderDashboard from './pages/ResponderDashboard'; 
+import ForgotPassword from './pages/ForgotPassword'; 
+import ResetPassword from './pages/ResetPassword';
 import '../src/styles/index.css';
 
 function App() {
@@ -46,6 +48,8 @@ function App() {
         />
         <Route path="/SubmitReport" element={<SubmitReport />} />
         <Route path="/unauthorized" element={<Unauthorized />} /> {/* Add this route */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
     </div>
   );
