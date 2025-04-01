@@ -60,6 +60,11 @@ const Login = () => {
             <button type="submit" className="auth-button" disabled={isLoading}>Login</button>
             {error && <p className="error">{error}</p>}
           </form>
+
+          <p className="forgot-password-link">
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
+
           <p className="auth-link">
             Don't have an account? <Link to="/signup">Signup</Link>
           </p>
