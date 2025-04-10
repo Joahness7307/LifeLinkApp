@@ -24,6 +24,6 @@ const requireAdmin = async (req, res, next) => {
     console.log(error);
     res.status(401).json({ error: 'Request is not authorized' });
   }
-};
+}; 
 
 module.exports = requireAdmin;

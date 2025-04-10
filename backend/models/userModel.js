@@ -45,9 +45,7 @@ const userSchema = new Schema({
       return this.role === 'responder';
     }
   }
-}, {
-  timestamps: true,
-});
+}, { timestamps: true });
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
