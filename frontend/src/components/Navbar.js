@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client'; // Import Socket.IO client
 import { useLogout } from '../hooks/useLogout';
 import useAuthContext from '../hooks/useAuthContext';
 import appLogo from '../assets/appLogo.png';
 import searchIcon from '../assets/searchIcon.png';
 import '../styles/Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ notifications = [], setNotifications }) => { // Default notifications to an empty array
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const navigate = useNavigate();
@@ -14,22 +15,73 @@ const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    if (user) {
+      // Fetch initial notifications
+      const fetchNotifications = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/notifications', {
+            headers: { Authorization: `Bearer ${user.token}` },
+          });
+          const json = await response.json();
+          if (response.ok) {
+            setNotifications(json);
+          }
+        } catch (error) {
+          console.error('Failed to fetch notifications:', error);
+        }
+      };
+
+      fetchNotifications();
+
+      // Connect to the Socket.IO server
+      const socket = io('http://localhost:3000', {
+        withCredentials: true, // Include credentials (cookies, headers)
+      });
+
+      // Join the user's room
+      socket.emit('join', user._id);
+
+      // Listen for new notifications
+      socket.on('notification', (notification) => {
+        console.log('New notification received:', notification);
+        setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+      });
+
+      // Cleanup on component unmount
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [user, setNotifications]);
+
+  const markAsRead = async (notificationId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/notifications/${notificationId}`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      if (response.ok) {
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notif) =>
+            notif._id === notificationId ? { ...notif, isRead: true } : notif
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+    }
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/login');
     setShowUserMenu(false);
   };
 
-  // Dummy notifications - replace with real notifications from your backend
-  const notifications = [
-    { id: 1, message: "New emergency alert in your area" },
-    { id: 2, message: "Your report has been processed" },
-    // Add more notifications as needed
-  ];
-
   const handleSearch = (e) => {
     e.preventDefault();
-    // Implement search functionality
     console.log('Searching for:', searchQuery);
   };
 
@@ -39,9 +91,8 @@ const Navbar = () => {
         <>
           {/* Left Section */}
           <div className="navbar-left">
-            {/* Dynamically adjust the Home link based on the user's role */}
             <Link
-              to={user.role === 'responder' ? '/ResponderDashboard' : '/emergencies'}
+              to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}
               className="nav-link"
             >
               Home
@@ -61,7 +112,7 @@ const Navbar = () => {
           {/* Center Section */}
           <div className="navbar-center">
             <Link
-              to={user.role === 'responder' ? '/ResponderDashboard' : '/emergencies'}
+              to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}
             >
               <img src={appLogo} alt="LifeLink Logo" className="navbar-logo-img" />
             </Link>
@@ -79,22 +130,40 @@ const Navbar = () => {
                 }}
               >
                 🔔
-                {notifications.length > 0 && (
-                  <span className="notification-badge">{notifications.length}</span>
+                {notifications.some((n) => !n.isRead) && (
+                  <span className="notification-badge">
+                    {notifications.filter((n) => !n.isRead).length}
+                  </span>
                 )}
               </button>
 
               {showNotifications && (
                 <div className="notifications-menu">
-                  {notifications.length > 0 ? (
-                    notifications.map((notif) => (
-                      <div key={notif.id} className="notification-item">
-                        {notif.message}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="notification-item">No new notifications</div>
-                  )}
+                 {notifications.length > 0 ? (
+                  notifications.map((notif) => (
+                    <div
+                      key={notif._id}
+                      className={`notification-item ${notif.isRead ? 'read' : 'unread'}`}
+                      onClick={() => {
+                        markAsRead(notif._id);
+                        // Redirect to the appropriate page based on the role
+                        if (user.role === 'responder') {
+                          navigate(`/reports/${notif.alertId?._id}`); // Redirect to report details for responders
+                        } else if (user.role === 'user') {
+                          navigate(`/reports/${notif.alertId?._id}`); // Redirect to report details for normal users
+                        }
+                      }}
+                    >
+                      <p>
+                        {user.role === 'responder'
+                          ? notif.message // Use the message for responders
+                          : notif.message} {/* Use the message for normal users */}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="notification-item">No new notifications</div>
+                )}
                 </div>
               )}
             </div>
@@ -131,7 +200,7 @@ const Navbar = () => {
           </div>
           <div className="navbar-links">
             <Link to="/login" className="navbar-link">Login</Link>
-            <Link to="/signup" className="navbar-linkS">Sign Up</Link>
+            <Link to="/signup" className="nav-link">Sign Up</Link>
           </div>
         </>
       )}
