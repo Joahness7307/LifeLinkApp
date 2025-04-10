@@ -48,6 +48,12 @@
   height: 100px;
 }
 
+.file-size-label {
+  font-size: 14px;
+  color: #666;
+  text-align: left;
+}
+
 .submit-report-container button {
   width: 100%;
   padding: 10px;

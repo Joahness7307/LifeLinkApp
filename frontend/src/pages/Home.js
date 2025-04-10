@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/GeneralStyles.css';
 import '../styles/Home.css';
 import appLogo from '../assets/appLogo.png';
 
