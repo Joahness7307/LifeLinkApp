@@ -21,6 +21,7 @@ const ForgotPassword = () => {
     };
 
     return (
+        <div className="main-container">
                 <div className="forgot-password-container">
                     <h2>Forgot Password</h2>
                     <p className="forgot-password-text">Enter your email to receive a password reset link.</p>
@@ -47,6 +48,7 @@ const ForgotPassword = () => {
                     </div>
                 </div>
             )}
+            </div>
             </div>
     );
 };
