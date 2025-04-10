@@ -58,12 +58,27 @@ const SubmitReport = () => {
 
       const responseData = await response.json();
 
-      if (response.ok) {
-        setModalMessage('Emergency report submitted successfully!');
-        setShowModal(true);
-      } else {
-        console.error('Failed to submit the report:', responseData.error);
-        setModalMessage(`Failed to submit the report: ${responseData.error}`);
+    if (response.ok) {
+      setModalMessage('Emergency report submitted successfully!');
+      setShowModal(true);
+    } else {
+      console.error('Failed to submit the report:', responseData);
+
+        // Extract the error message properly
+        let errorMessage = 'An unknown error occurred.';
+        if (typeof responseData.error === 'string') {
+          errorMessage = responseData.error;
+        } else if (typeof responseData.error === 'object' && responseData.error.message) {
+          errorMessage = responseData.error.message;
+        }
+
+        if (errorMessage === 'File too large. Maximum size is 5MB.') {
+          setModalMessage('The uploaded file is too large. Please upload a file smaller than 5MB.');
+        } else if (errorMessage === 'Invalid file type. Only JPEG, PNG, and GIF are allowed.') {
+          setModalMessage(errorMessage);
+        } else {
+          setModalMessage(`Failed to submit the report: ${errorMessage}`);
+        }
         setShowModal(true);
       }
     } catch (error) {
@@ -75,7 +90,7 @@ const SubmitReport = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    navigate('/emergencies');
+    navigate('/UserDashboard'); // Redirect to the UserDashboard after closing the modal
   };
 
   const handleImageChange = (e) => {
@@ -133,6 +148,7 @@ const SubmitReport = () => {
         </div>
         <div className="form-group">
           <label htmlFor="image">Attach Image (Optional):</label>
+          <small className='file-size-label'>Maximum file size: 5MB</small> {/* Inform the user */}
           <div className="file-input-container">
             {image ? (
               <>

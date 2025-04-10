@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useFetchEmergencies from '../hooks/useFetchEmergencies';
 import useAuthContext from '../hooks/useAuthContext';
+import useNotifications from '../hooks/useNotification';
 import emergencyIcons from '../icons/emergencyIcons';
 import '../styles/EmergencyList.css';
 
@@ -9,6 +10,8 @@ const UserDashboard = () => {
   const { emergencies, error } = useFetchEmergencies();
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  const userId = localStorage.getItem('userId'); // Replace with actual user ID retrieval logic
+  useNotifications(userId);
 
   // Verify user role
   if (user?.role !== 'user') {
@@ -19,7 +22,6 @@ const UserDashboard = () => {
   const handleEmergencyClick = (emergency) => {
     if (!user) {
       alert('You need to be logged in to report an emergency.');
-      console.log('User not logged in. Redirecting to /login.');
       return;
     }
 
