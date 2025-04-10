@@ -7,7 +7,6 @@ import appLogo from '../assets/appLogo.png';
 function Home() {
   return (
     <div className="home-container">
-      <div className="emergency-pulse"></div>
       <div className="home-content">
         <h1>
           Welcome to <img src={appLogo} alt="LifeLink Logo" className="home-logo-inline" />
