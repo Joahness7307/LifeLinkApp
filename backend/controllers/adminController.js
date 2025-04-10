@@ -4,6 +4,7 @@ const Agency = require('../models/agencyModel');
 const Alert = require('../models/alertModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Notification = require('../models/notificationModel');
 
 // Create another admin
 const createAdmin = async (req, res) => {
@@ -255,24 +256,40 @@ const deleteAlert = async (req, res) => {
       return res.status(404).json({ error: 'Alert not found' });
     }
 
+    // Prepare cleanup operations
+    const cleanupOperations = [];
+
     // Remove the alert reference from the associated emergency
     if (alert.emergencyId) {
-      await Emergency.findByIdAndUpdate(alert.emergencyId, {
-        $pull: { alerts: id }, // Remove the alert ID from the emergency's alerts array
-      });
+      cleanupOperations.push(
+        Emergency.findByIdAndUpdate(alert.emergencyId, {
+          $pull: { alerts: id }, // Remove the alert ID from the emergency's alerts array
+        })
+      );
     }
 
     // Remove the alert reference from the associated agency
     if (alert.agencyId) {
-      await Agency.findByIdAndUpdate(alert.agencyId, {
-        $pull: { alerts: id }, // Remove the alert ID from the agency's alerts array
-      });
+      cleanupOperations.push(
+        Agency.findByIdAndUpdate(alert.agencyId, {
+          $pull: { alerts: id }, // Remove the alert ID from the agency's alerts array
+        })
+      );
     }
+
+    // Remove associated notifications
+    cleanupOperations.push(
+      Notification.deleteMany({ alertId: id }) // Delete all notifications associated with this alert
+    );
+
+    // Perform cleanup operations in parallel
+    await Promise.all(cleanupOperations);
 
     // Delete the alert
     await Alert.findByIdAndDelete(id);
 
-    res.status(200).json({ message: 'Alert deleted successfully and references removed' });
+    console.log(`Alert with ID ${id} and its associated notifications deleted successfully.`);
+    res.status(200).json({ message: 'Alert and associated notifications deleted successfully' });
   } catch (error) {
     console.error('Error deleting alert:', error);
     res.status(500).json({ error: 'Failed to delete alert' });
@@ -294,5 +311,5 @@ module.exports = {
   updateAgency,
   deleteAgency,
   getAllAlerts,
-  deleteAlert,
+  deleteAlert, // Export the deleteAlert function
 };

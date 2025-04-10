@@ -1,0 +1,73 @@
+/* Container for the report details */
+.report-details-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 50px; /* Add padding to the bottom */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Title styling */
+.report-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Content styling */
+.report-content p {
+  font-size: 16px;
+  color: #555;
+  margin: 10px 0;
+}
+
+.report-content p strong {
+  color: #333;
+}
+
+/* Image container */
+.report-image-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.report-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Respond button styling */
+.respond-button {
+  display: block;
+  margin: 20px auto;
+  background-color: #d32f2f;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.respond-button:hover {
+  background-color: #b71c1c;
+}
+
+/* Loading and error messages */
+.loading,
+.error {
+  text-align: center;
+  font-size: 18px;
+  color: #d32f2f;
+  margin-top: 20px;
+}
