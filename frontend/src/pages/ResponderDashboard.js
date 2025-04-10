@@ -10,7 +10,7 @@ const ResponderDashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log('User object in ResponderDashboard:', user); // Debug log
+    // console.log('User object in ResponderDashboard:', user); // Debug log
 
     // Check if the user is logged in and has the "responder" role
     if (!user || user.role !== 'responder') {
