@@ -1,12 +1,18 @@
 /* Navbar.css */
 .navbar {
+  position: fixed; /* Fix the navbar at the top */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 100px; /* Adjust height as needed */
+  background-color: #ffffff; /* Background color */
+  color: #fff; /* Text color */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
+  padding: 0 20px;
+  z-index: 1000; /* Ensure it stays above other elements */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
 }
 
 /* Left Section */
@@ -111,7 +117,8 @@
 
 .notification-item {
   padding: 1rem;
-  border-bottom: 1px solid #eee;
+  color: #000;
+  border-bottom: 1px solid #000000;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
