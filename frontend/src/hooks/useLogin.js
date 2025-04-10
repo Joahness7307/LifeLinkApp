@@ -23,7 +23,8 @@ export const useLogin = () => {
 
       if (response.ok) {
         // Save the user to local storage
-        localStorage.setItem('user', JSON.stringify(data));
+        localStorage.setItem('user', JSON.stringify(data)); // Keep the full user object
+        localStorage.setItem('token', data.token); // Store the token separately
 
         // Update the auth context
         dispatch({ type: 'LOGIN', payload: data });
@@ -32,7 +33,7 @@ export const useLogin = () => {
         if (data.role === 'responder') {
           navigate('/ResponderDashboard'); // Redirect responders to their dashboard
         } else if (data.role === 'user') {
-          navigate('/emergencies'); // Redirect regular users to the emergencies page
+          navigate('/UserDashboard'); // Redirect regular users to the emergencies page
         } else {
           navigate('/'); // Redirect other roles to the home page
         }
