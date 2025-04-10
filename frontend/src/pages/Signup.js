@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignup } from '../hooks/useSignup';
 import '../styles/Signup.css';
-import appLogo from '../assets/appLogo.png';
 import eyeIcon from '../assets/eye.png';
 import eyeSlashIcon from '../assets/hidden.png';
 
@@ -34,9 +33,6 @@ const Signup = () => {
   return (
     <div className="auth-container-signup-page">
       <div className="auth-content">
-        <div className="logo-container-signup-page">
-          <img src={appLogo} alt="LifeLink Logo" className="auth-logo" />
-        </div>
         <div className="auth-card">
           <h2>Sign Up</h2>
           <form onSubmit={handleSubmit}>
