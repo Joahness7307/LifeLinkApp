@@ -1,23 +1,29 @@
 /* Home.css */
 .home-container {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
-  position: relative;
-  overflow: hidden;
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+  display: flex; /* Use Flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-image: url('../assets/world-map.png'); /* Path to your world-map image */
+  background-size: cover; /* Make the image cover the entire container */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  position: relative; /* Position relative for pseudo-element */
+  overflow: hidden; /* Prevent scrolling */
 }
 
-.emergency-pulse {
+.home-container::before {
+  content: ''; /* Create a pseudo-element for the background overlay */
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.15) 100%);
-  animation: pulse 2s infinite;
+  background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent dark overlay */
+  z-index: 0; /* Place it behind the content */
 }
-
+  
 .home-content {
   display: flex;
   flex-direction: column;
@@ -25,7 +31,12 @@
   width: 100%;
   max-width: 900px;
   z-index: 1;
-  padding-bottom: 150px;
+  padding: 20px;
+  background-color: rgb(255, 255, 255); /* Semi-transparent background */
+  border-radius: 10px;
+  backdrop-filter: blur(3px); /* Apply blur effect */
+  -webkit-backdrop-filter: blur(10px); /* For Safari support */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
 }
 
 .logo-container {
@@ -40,14 +51,13 @@
 }
 
 .home-logo-inline {
-  width: 350px; /* Increased size */
-  height: auto;
+  height: 100px;
   vertical-align: middle;
   margin-left: 10px;
 }
 
 .home-container h1 {
-  font-size: 3rem;
+  font-size: 4rem;
   margin-bottom: 1rem;
   color: #333;
   display: flex;
@@ -62,19 +72,20 @@
 }
 
 .get-started-button {
+  display: inline-block;
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #d32f2f;
   color: #fff;
   text-decoration: none;
-  font-weight: bold;
   border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .get-started-button:hover {
-  background-color: #ff6b6b;
-  color: white;
+  background-color: #b71c1c;
 }
 
 @keyframes pulse {

@@ -3,6 +3,7 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  margin-top: 150px;
   padding-bottom: 50px; /* Add padding to the bottom */
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -13,9 +14,9 @@
 
 /* Title styling */
 .report-title {
-  font-size: 24px;
+  font-size: 2rem;
   font-weight: bold;
-  color: #333;
+  color: #d32f2f;
   margin-bottom: 20px;
   text-align: center;
 }
