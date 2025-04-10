@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthContext from '../hooks/useAuthContext';
+import '../styles/ResponderDashboard.css'; // Import your CSS file
 
 const ResponderDashboard = () => {
   const { user } = useAuthContext();
@@ -62,7 +63,7 @@ const ResponderDashboard = () => {
   }
 
   return (
-    <div>
+    <div className='responder-container'>
       <h1>Responder Dashboard</h1>
       {alerts.length === 0 ? (
         <p>No alerts found for your agency.</p>
