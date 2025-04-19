@@ -18,15 +18,15 @@ const createAlert = async (req, res) => {
     }
 
     // Normalize category to match Emergency type (case-insensitive)
-    console.log('Category:', category.toUpperCase());
+    // console.log('Category:', category.toUpperCase());
     const emergency = await Emergency.findOne({ type: category.toUpperCase() });
-    console.log('Emergency Query Result:', emergency);
+    // console.log('Emergency Query Result:', emergency);
 
     if (!emergency) {
       return res.status(404).json({ error: 'No emergency type found for this category' });
     }
 
-    console.log('Fetched Emergency:', emergency); // Debug log
+    // console.log('Fetched Emergency:', emergency); // Debug log
 
     const alert = await createAlertForAgency({
       userId: req.user._id,
@@ -78,7 +78,7 @@ const getAlertDetails = async (req, res) => {
       return res.status(404).json({ error: 'Alert not found' });
     }
 
-    console.log('Fetched Alert:', alert); // Debug log
+    // console.log('Fetched Alert:', alert); // Debug log
 
     res.status(200).json(alert);
   } catch (error) {
@@ -110,7 +110,7 @@ const respondToAlert = async (req, res) => {
       isRead: false, // Mark it as unread for the normal user
     });
 
-    console.log('Notification created for normal user:', notification);
+    // console.log('Notification created for normal user:', notification);
 
     // Emit the notification to the user
     sendNotification({
