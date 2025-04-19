@@ -9,6 +9,7 @@ const alertSchema = new mongoose.Schema({
   location: { type: String, required: true },
   message: { type: String },
   imageURL: { type: String },
+  cloudinaryPublicId: { type: String },
   status: { type: String, default: 'pending' },
 }, { timestamps: true });
 
