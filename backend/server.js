@@ -48,6 +48,20 @@ app.use('/notifications', notificationRoutes);
 // MongoDB connection
 const dbURI = process.env.MONGO_URI;
 
+// Add this check at startup
+const requiredEnvVars = [
+  'CLOUDINARY_CLOUD_NAME',
+  'CLOUDINARY_API_KEY',
+  'CLOUDINARY_API_SECRET'
+];
+
+requiredEnvVars.forEach(envVar => {
+  if (!process.env[envVar]) {
+    console.error(`Missing required environment variable: ${envVar}`);
+    process.exit(1);
+  }
+});
+
 mongoose
   .connect(dbURI, { serverSelectionTimeoutMS: 10000 })
   .then(() => {

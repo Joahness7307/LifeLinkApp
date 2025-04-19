@@ -78,12 +78,12 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email }).select('+password +role +agencyId');
 
     if (!user) {
-      console.log('Login failed: User not found');
+      // console.log('Login failed: User not found');
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    console.log("Stored hashed password:", user.password); // Log stored hash
-    console.log("Entered password:", password); // Log entered password
+    // console.log("Stored hashed password:", user.password); // Log stored hash
+    // console.log("Entered password:", password); // Log entered password
 
     // Compare provided password with stored hashed password
     const isMatch = await user.matchPassword(password);
@@ -108,7 +108,7 @@ const loginUser = async (req, res) => {
       token,
     };
 
-    console.log('Login successful:', responseData);
+    // console.log('Login successful:', responseData);
     res.status(200).json(responseData);
   } catch (error) {
     console.error('Login error:', error);
