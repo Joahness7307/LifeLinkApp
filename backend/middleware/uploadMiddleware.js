@@ -1,33 +1,25 @@
 const multer = require('multer');
-const path = require('path');
 
-// Configure multer for file upload
 const storage = multer.diskStorage({
-  destination: './uploads/',
-  filename: function(req, file, cb) {
-    cb(null, 'image-' + Date.now() + path.extname(file.originalname));
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
   }
 });
 
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/gif' || file.mimetype === 'video/mp4') {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type. Only JPEG, PNG, GIF and MP4 are allowed.'), false);
+  }
+};
+
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5000000 }, // 5MB limit
-  fileFilter: function(req, file, cb) {
-    checkFileType(file, cb);
-  }
-}).single('image'); // 'image' is the field name in the form
-
-// Check file type
-function checkFileType(file, cb) {
-  const filetypes = /jpeg|jpg|png|gif/;
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = filetypes.test(file.mimetype);
-
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb('Error: Images Only!');
-  }
-}
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: fileFilter
+}).single('image');
 
 module.exports = upload; 
