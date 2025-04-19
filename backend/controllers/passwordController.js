@@ -55,14 +55,14 @@ exports.resetPassword = async (req, res) => {
       return res.status(400).json({ error: "Invalid or expired token." });
     }
 
-    console.log("New Password (Before Saving):", newPassword); // Log raw password
+    // console.log("New Password (Before Saving):", newPassword); // Log raw password
 
     // Assign new password directly (it will be hashed in pre-save)
     user.password = newPassword;
 
     // Save the updated user
     const updatedUser = await user.save();
-    console.log("Saved Hashed Password:", updatedUser.password); // Confirm save
+    // console.log("Saved Hashed Password:", updatedUser.password); // Confirm save
 
     res.json({ message: "Password successfully reset." });
   } catch (error) {

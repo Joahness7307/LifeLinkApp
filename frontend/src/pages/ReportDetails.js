@@ -80,6 +80,12 @@ const ReportDetails = ({ setNotifications }) => {
     }
   };
 
+  const getOptimizedImageUrl = (imageURL) => {
+    if (!imageURL) return '';
+    // Add Cloudinary transformations to the URL
+    return imageURL.replace('/upload/', '/upload/q_auto,f_auto,w_auto,dpr_auto/');
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -102,9 +108,10 @@ const ReportDetails = ({ setNotifications }) => {
         {alertDetails.imageURL && (
           <div className="report-image-container">
             <img
-              src={`http://localhost:3001${alertDetails.imageURL}`}
+              src={getOptimizedImageUrl(alertDetails.imageURL)}
               alt="Report"
               className="report-image"
+              loading="lazy"
             />
           </div>
         )}
