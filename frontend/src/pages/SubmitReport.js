@@ -1,35 +1,35 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useFetchUser from '../hooks/useFetchUser';
-import Modal from '../components/Modal';
+import useAuthContext from '../hooks/useAuthContext';
+import Modal from '../components/Modal'; // Import the Modal component
 import '../styles/SubmitReport.css';
 import removeIcon from '../assets/cancel.png';
 
 const SubmitReport = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { emergencyId, emergencyType, userId } = location.state;
-  const { user } = useFetchUser(userId);
-  // const [message, setMessage] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
+  const { emergencyId, emergencyType } = location.state; // Get emergency details from UserDashboard
+  const { user } = useAuthContext(); // Get user details from context
+
   const [formData, setFormData] = useState({
     emergencyId: emergencyId,
-    userId: userId,
+    userId: user?._id,
     contactNumber: user?.phoneNumber || '',
     address: user?.address || '',
-    message: ''
+    message: '',
   });
+
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [showFullScreen, setShowFullScreen] = useState(false);
-  // const [fileInfo, setFileInfo] = useState(null);
+  const [showModal, setShowModal] = useState(false); // State to control the modal
+  const [modalMessage, setModalMessage] = useState(''); // State for the modal message
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!userId) {
-      console.error("userId is undefined in SubmitReport");
+    if (!formData.contactNumber || !formData.address) {
+      alert('Please provide a valid contact number and address.');
       return;
     }
 
@@ -38,67 +38,45 @@ const SubmitReport = () => {
     formDataToSend.append('userId', formData.userId);
     formDataToSend.append('contactNumber', formData.contactNumber);
     formDataToSend.append('address', formData.address);
-    formDataToSend.append('message', formData.message);
+    if (formData.message) {
+      formDataToSend.append('message', formData.message);
+    }
     if (image) {
       formDataToSend.append('image', image);
     }
 
     try {
       const storedUser = localStorage.getItem('user');
-      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-      const token = parsedUser ? parsedUser.token : null;
+      const token = storedUser ? JSON.parse(storedUser).token : null;
 
       const response = await fetch('/reports', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: formDataToSend,
       });
 
-      const responseData = await response.json();
-
-    if (response.ok) {
-      setModalMessage('Emergency report submitted successfully!');
-      setShowModal(true);
-    } else {
-      console.error('Failed to submit the report:', responseData);
-
-        // Extract the error message properly
-        let errorMessage = 'An unknown error occurred.';
-        if (typeof responseData.error === 'string') {
-          errorMessage = responseData.error;
-        } else if (typeof responseData.error === 'object' && responseData.error.message) {
-          errorMessage = responseData.error.message;
-        }
-
-        if (errorMessage === 'File too large. Maximum size is 5MB.') {
-          setModalMessage('The uploaded file is too large. Please upload a file smaller than 5MB.');
-        } else if (errorMessage === 'Invalid file type. Only JPEG, PNG, and GIF are allowed.') {
-          setModalMessage(errorMessage);
-        } else {
-          setModalMessage(`Failed to submit the report: ${errorMessage}`);
-        }
-        setShowModal(true);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit report');
       }
-    } catch (error) {
-      console.error('Error submitting report:', error);
-      setModalMessage('An error occurred. Please try again.');
-      setShowModal(true);
-    }
-  };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    navigate('/UserDashboard'); // Redirect to the UserDashboard after closing the modal
+      // Show the modal with a success message
+      setModalMessage('Your report has been submitted successfully!');
+      setShowModal(true);
+    } catch (error) {
+      console.error('Failed to submit the report:', error);
+      setModalMessage(`Error: ${error.message}`);
+      setShowModal(true); // Show the modal with an error message
+    }
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
-      
-      // Create preview URL but don't show it immediately
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -110,7 +88,11 @@ const SubmitReport = () => {
   const removeImage = () => {
     setImage(null);
     setImagePreview(null);
-    // setFileInfo(null);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate('/UserDashboard'); // Redirect to the UserDashboard after closing the modal
   };
 
   if (!user) {
@@ -125,7 +107,7 @@ const SubmitReport = () => {
           <label>Type:</label>
           <input type="text" value={emergencyType} readOnly />
         </div>
-         <div className="form-group">
+        <div className="form-group">
           <label>Username:</label>
           <input type="text" value={user.userName} readOnly />
         </div>
@@ -142,32 +124,21 @@ const SubmitReport = () => {
           <textarea
             id="message"
             value={formData.message}
-            onChange={(e) => setFormData({...formData, message: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             placeholder="Describe the emergency situation..."
           />
         </div>
         <div className="form-group">
           <label htmlFor="image">Attach Image (Optional):</label>
-          <small className='file-size-label'>Maximum file size: 5MB</small> {/* Inform the user */}
+          <small className="file-size-label">Maximum file size: 5MB</small>
           <div className="file-input-container">
             {image ? (
               <>
-                <span 
-                  className="file-name"
-                  onClick={() => setShowFullScreen(true)}
-                >
+                <span className="file-name" onClick={() => setShowFullScreen(true)}>
                   {image.name}
                 </span>
-                <button 
-                  type="button" 
-                  className="remove-image-btn"
-                  onClick={removeImage}
-                >
-                  <img 
-                    src={removeIcon} 
-                    alt="Remove" 
-                    className="remove-icon"
-                  />
+                <button type="button" className="remove-image-btn" onClick={removeImage}>
+                  <img src={removeIcon} alt="Remove" className="remove-icon" />
                 </button>
               </>
             ) : (
@@ -181,21 +152,16 @@ const SubmitReport = () => {
             )}
           </div>
         </div>
-        <button type="submit" className="submit-btn">Submit Report</button>
+        <button type="submit" className="submit-btn">
+          Submit Report
+        </button>
       </form>
       {showModal && <Modal message={modalMessage} onClose={handleCloseModal} />}
 
-      {/* Full Screen Image Modal */}
       {showFullScreen && imagePreview && (
-        <div 
-          className="fullscreen-modal"
-          onClick={() => setShowFullScreen(false)}
-        >
-          <div 
-            className="modal-content"
-            onClick={e => e.stopPropagation()}
-          >
-            <button 
+        <div className="fullscreen-modal" onClick={() => setShowFullScreen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button
               type="button"
               className="modal-close-btn"
               onClick={(e) => {
@@ -203,17 +169,9 @@ const SubmitReport = () => {
                 setShowFullScreen(false);
               }}
             >
-              <img 
-                src={removeIcon} 
-                alt="Close" 
-                className="modal-close-icon"
-              />
+              <img src={removeIcon} alt="Close" className="modal-close-icon" />
             </button>
-            <img 
-              src={imagePreview} 
-              alt="Full screen preview" 
-              className="fullscreen-image"
-            />
+            <img src={imagePreview} alt="Full screen preview" className="fullscreen-image" />
           </div>
         </div>
       )}

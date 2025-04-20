@@ -7,9 +7,9 @@ const alertSchema = new mongoose.Schema({
   category: { type: String, required: true },
   contactNumber: { type: String, required: true },
   location: { type: String, required: true },
-  message: { type: String },
-  imageURL: { type: String },
-  cloudinaryPublicId: { type: String },
+  message: { type: String, required: false, default: 'No message provided' }, // Optional with default
+  imageURL: { type: String, required: false }, // Optional
+  cloudinaryPublicId: { type: String, required: false }, // Optional
   status: { type: String, default: 'pending' },
 }, { timestamps: true });
 
