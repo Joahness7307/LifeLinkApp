@@ -1,12 +1,14 @@
 const express = require('express');
+const multer = require('multer');
 
 const { submitReport } = require('../controllers/reportController');
 const { requireAuth } = require('../middleware/authMiddleware');
 const { requireRole } = require('../middleware/roleMiddleware');
 
 const router = express.Router();
+const upload = multer();
 
 // Only normal users can submit reports
-router.post('/', requireAuth, requireRole('user'), submitReport);
+router.post('/', requireAuth, requireRole('user'), upload.single('image'), submitReport);
 
 module.exports = router;

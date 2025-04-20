@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAuthContext from '../hooks/useAuthContext';
+import Modal from '../components/Modal'; // Import the Modal component
 import '../styles/ReportDetails.css'; // Import your CSS file
 
 const ReportDetails = ({ setNotifications }) => {
@@ -9,6 +10,8 @@ const ReportDetails = ({ setNotifications }) => {
   const [alertDetails, setAlertDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false); // State to control the modal
+  const [modalMessage, setModalMessage] = useState(''); // State for the modal message
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,21 +66,26 @@ const ReportDetails = ({ setNotifications }) => {
         throw new Error(data.error || 'Failed to update alert status');
       }
 
-      // Notify the user and redirect to another page if needed
-      alert('You are now responding to this alert.');
+      // Show the modal with a success message
+      setModalMessage('You are now responding to this alert.');
+      setShowModal(true);
 
       // Update the notification in the Navbar
       setNotifications((prevNotifications) =>
         prevNotifications.map((notif) =>
-        notif.alertId === alertId ? { ...notif, isRead: true } : notif
-      )
-    );
-
-    // Redirect to another page if needed
-    navigate('/ResponderDashboard');
+          notif.alertId === alertId ? { ...notif, isRead: true } : notif
+        )
+      );
     } catch (err) {
-      alert(`Error: ${err.message}`);
+      console.error('Error responding to alert:', err);
+      setModalMessage(`Error: ${err.message}`);
+      setShowModal(true); // Show the modal with an error message
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate('/ResponderDashboard'); // Redirect to the ResponderDashboard after closing the modal
   };
 
   const getOptimizedImageUrl = (imageURL) => {
@@ -125,6 +133,7 @@ const ReportDetails = ({ setNotifications }) => {
           Respond
         </button>
       )}
+      {showModal && <Modal message={modalMessage} onClose={handleCloseModal} />}
     </div>
   );
 };
