@@ -23,8 +23,9 @@
 }
 
 .modal-content button {
+  width: 100%;
   padding: 10px 20px;
-  background: #007bff;
+  background: #d32f2f;
   color: white;
   border: none;
   border-radius: 5px;
@@ -32,7 +33,7 @@
 }
 
 .modal-content button:hover {
-  background: #0056b3;
+  background: #b71c1c;
 }
 
 .modal-message-container {
