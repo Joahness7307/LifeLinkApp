@@ -1,7 +1,9 @@
 /* Home.css */
+/* General styles for the home page */
 .home-container {
   height: 100vh; /* Full viewport height */
   width: 100vw; /* Full viewport width */
+  padding: 20px;
   display: flex; /* Use Flexbox */
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
@@ -44,24 +46,15 @@
   animation: fadeInDown 1s ease-out;
 }
 
-.home-logo {
-  width: 350px;
-  height: auto;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-}
-
 .home-logo-inline {
-  height: 100px;
+  width: 300px;
+  height: auto;
   vertical-align: middle;
-  margin-left: 10px;
 }
 
 .home-container h1 {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  color: #333;
-  display: flex;
-  align-items: center;
+  font-size: 3.5rem;
+  color: #1b1b1b;
   animation: fadeInDown 1s ease-out;
 }
 
@@ -74,6 +67,7 @@
 .get-started-button {
   display: inline-block;
   margin-top: 20px;
+  margin-bottom: 20px;
   padding: 10px 20px;
   background-color: #d32f2f;
   color: #fff;
@@ -88,21 +82,7 @@
   background-color: #b71c1c;
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
+/* Keyframes for animations */
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -111,5 +91,82 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+
+/* Small devices (mobile phones, less than 600px) */
+@media (max-width: 600px) {
+  .home-content h1 {
+    font-size: 2rem;
+  }
+
+  .home-container p {
+    font-size: 1.2rem;
+  }
+
+  .get-started-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .home-logo-inline {
+    width: 150px;
+  }
+}
+
+/* Medium devices (tablets, 600px to 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .home-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .home-container p {
+    font-size: 1.3rem;
+  }
+
+  .get-started-button {
+    padding: 9px 18px;
+    font-size: 15px;
+  }
+
+  .home-logo-inline {
+    width: 200px;
+  }
+}
+
+/* Large devices (desktops, more than 1024px) */
+@media (min-width: 1024px) {
+  .home-content h1 {
+    font-size: 3.5rem;
+  }
+
+  .home-container p {
+    font-size: 1.8rem;
+  }
+
+  .get-started-button {
+    padding: 12px 24px;
+    font-size: 18px;
+  }
+
+  .home-logo-inline {
+    width: 300px;
   }
 }

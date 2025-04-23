@@ -12,7 +12,9 @@ const generateToken = (id) => {
 // Register user
 const registerUser = async (req, res) => {
   try {
-    const { userName, email, password, phoneNumber, address, role, agencyId } = req.body;
+    const { userName, email, password, phoneNumber, address, role, agencyId, latitude, longitude } = req.body;
+
+    console.log('Latitude:', latitude, 'Longitude:', longitude); // Debugging: Check if latitude and longitude are received
 
     // Validate role
     if (!['user', 'responder'].includes(role)) {
@@ -45,7 +47,9 @@ const registerUser = async (req, res) => {
       phoneNumber,
       address,
       role,
-      ...(role === 'responder' && { agencyId }), // Save agencyId for responders
+      latitude, // Save latitude
+      longitude, // Save longitude
+      ...(role === 'responder' && { agencyId }),
     });
 
     // Return response
@@ -55,6 +59,8 @@ const registerUser = async (req, res) => {
       email: user.email,
       phoneNumber: user.phoneNumber,
       address: user.address,
+      latitude: user.latitude, // Include latitude in response
+      longitude: user.longitude, // Include longitude in response
       role: user.role,
       ...(user.role === 'responder' && { agencyId: user.agencyId }),
       token: generateToken(user._id),
