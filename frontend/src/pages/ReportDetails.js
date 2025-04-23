@@ -8,7 +8,7 @@ import '../styles/ReportDetails.css'; // Import your CSS file
 
 const socket = io('http://localhost:3000'); // Connect to the backend Socket.IO server
 socket.on('connect', () => {
-  console.log('Socket connected with ID:', socket.id);
+  // console.log('Socket connected with ID:', socket.id);
 });
 
 socket.on('connect_error', (err) => {
@@ -49,7 +49,7 @@ const ReportDetails = ({ setNotifications }) => {
           throw new Error(data.error || 'Failed to fetch alert details');
         }
 
-        console.log('Fetched Alert Details:', data); // Debug log
+        // console.log('Fetched Alert Details:', data); // Debug log
         setAlertDetails(data);
         setAlertDetailsLoaded(true); // Mark alert details as loaded
 
@@ -122,18 +122,18 @@ const ReportDetails = ({ setNotifications }) => {
       setDistance(dist.toFixed(2));
       console.log('Updated Distance State:', dist.toFixed(2)); // Debug log
     } else {
-      console.log('Missing data for distance calculation:', {
-        responderLocation,
-        emergencyLatitude: alertDetails?.latitude,
-        emergencyLongitude: alertDetails?.longitude,
-      });
+      // console.log('Missing data for distance calculation:', {
+      //   responderLocation,
+      //   emergencyLatitude: alertDetails?.latitude,
+      //   emergencyLongitude: alertDetails?.longitude,
+      // });
       // Optionally reset distance if data is missing
       setDistance(null);
     }
   }, [responderLocation, alertDetails?.latitude, alertDetails?.longitude]);
 
-  console.log('Distance to Display:', distance);
-  console.log('Rendering ReportDetails Component with Distance:', distance);
+  // console.log('Distance to Display:', distance);
+  // console.log('Rendering ReportDetails Component with Distance:', distance);
 
   const handleRespond = async () => {
     try {
@@ -186,6 +186,11 @@ const ReportDetails = ({ setNotifications }) => {
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  // Example usage of alertDetailsLoaded
+  if (!alertDetailsLoaded) {
+    return <div>Loading alert details...</div>;
   }
 
   if (error) {

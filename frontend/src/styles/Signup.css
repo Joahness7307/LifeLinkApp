@@ -40,8 +40,8 @@
 }
 
 .auth-card {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
+  background: rgba(255, 255, 255, 0.897);
+  padding: 1rem 2rem;
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   width: 100%;
@@ -192,21 +192,6 @@
   }
 }
 
-/* Responsive Design */
-@media (max-width: 480px) {
-  .auth-content {
-    padding: 15px;
-  }
-
-  .auth-logo {
-    width: 150px;
-  }
-
-  .auth-card {
-    padding: 1.5rem;
-  }
-}
-
 /* Style specifically for the role selection dropdown */
 #role {
   width: 100%;
@@ -286,4 +271,90 @@
 
 .input-group select option[value=""] {
   color: rgba(0, 0, 0, 0.5); /* Light gray color for the placeholder */
+}
+
+
+/* Responsive Design */
+
+/* Small devices (mobile phones, less than 600px) */
+@media (max-width: 600px) {
+  .auth-content {
+    padding: 15px;
+    max-width: 90%; /* Reduce the width for smaller screens */
+  }
+
+  .auth-card {
+    padding: 1.5rem;
+  }
+
+  .auth-card h2 {
+    font-size: 1.8rem; /* Slightly smaller heading */
+  }
+
+  .input-group input,
+  .input-group select {
+    font-size: 0.9rem; /* Smaller input text */
+    padding: 10px; /* Adjust padding */
+  }
+
+  .auth-button {
+    font-size: 0.9rem; /* Smaller button text */
+    padding: 10px; /* Adjust padding */
+  }
+
+  .auth-link a {
+    font-size: 0.9rem; /* Smaller font size */
+  }
+}
+
+/* Medium devices (tablets, 600px to 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .auth-content {
+    max-width: 80%; /* Slightly larger width for tablets */
+  }
+
+  .auth-card {
+    padding: 2rem;
+  }
+
+  .auth-card h2 {
+    font-size: 2rem; /* Adjust heading size */
+  }
+
+  .input-group input,
+  .input-group select {
+    font-size: 1rem; /* Normal input text size */
+    padding: 12px; /* Normal padding */
+  }
+
+  .auth-button {
+    font-size: 1rem; /* Normal button text size */
+    padding: 12px; /* Normal padding */
+  }
+}
+
+/* Large devices (desktops, more than 1024px) */
+@media (min-width: 1024px) {
+  .auth-content {
+    max-width: 500px; /* Full width for desktops */
+  }
+
+  .auth-card {
+    padding: 2.5rem;
+  }
+
+  .auth-card h2 {
+    font-size: 2.2rem; /* Larger heading */
+  }
+
+  .input-group input,
+  .input-group select {
+    font-size: 1.1rem; /* Larger input text */
+    padding: 14px; /* Larger padding */
+  }
+
+  .auth-button {
+    font-size: 1.1rem; /* Larger button text */
+    padding: 14px; /* Larger padding */
+  }
 }
