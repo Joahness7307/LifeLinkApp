@@ -17,10 +17,12 @@ cloudinary.config({
 const testConfig = async () => {
   try {
     const result = await cloudinary.api.ping();
+    console.log('Cloudinary configuration is valid:', result);
     
     // Try to get account details
     const account = await cloudinary.api.usage();
   } catch (error) {
+    console.error('Cloudinary configuration error:', error);
     process.exit(1);
   }
 };

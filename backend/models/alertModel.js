@@ -7,32 +7,32 @@ const alertSchema = new mongoose.Schema({
   category: { type: String, required: true },
   contactNumber: { type: String, required: true },
   location: { type: String, required: true },
-  message: { type: String, required: false, default: 'No message provided' }, // Optional with default
-  imageURL: { type: String, required: false }, // Optional
-  cloudinaryPublicId: { type: String, required: false }, // Optional
+  latitude: { type: Number, required: false },
+  longitude: { type: Number, required: false },
+  message: { type: String, required: false, default: 'No message provided' },
+  imageURL: { type: String, required: false },
+  cloudinaryPublicId: { type: String, required: false },
   status: { type: String, default: 'pending' },
 }, { timestamps: true });
 
-// Middleware to remove the alert from associated documents when deleted
 alertSchema.post('findOneAndDelete', async function (doc) {
   if (doc) {
     const Agency = require('./agencyModel');
     const Emergency = require('./emergencyModel');
 
-    // Remove the alert reference from the associated agency
     if (doc.agencyId) {
       await Agency.findByIdAndUpdate(doc.agencyId, {
         $pull: { alerts: doc._id },
       });
     }
 
-    // Remove the alert reference from the associated emergency
     if (doc.emergencyId) {
       await Emergency.findByIdAndUpdate(doc.emergencyId, {
         $pull: { alerts: doc._id },
       });
     }
   }
+  console.log('Alert saved:', doc); // Debug log
 });
 
 module.exports = mongoose.model('Alert', alertSchema);

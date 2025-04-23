@@ -6,9 +6,9 @@ const { requireAuth } = require('../middleware/authMiddleware');
 const { requireRole } = require('../middleware/roleMiddleware');
 
 const router = express.Router();
-const upload = multer();
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Only normal users can submit reports
 router.post('/', requireAuth, requireRole('user'), upload.single('image'), submitReport);
+console.log('submitReport function called');
 
 module.exports = router;
