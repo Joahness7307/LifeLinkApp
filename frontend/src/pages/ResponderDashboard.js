@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 import useAuthContext from '../hooks/useAuthContext';
+import { getLocation } from '../utils/geolocationUtils';
 import '../styles/ResponderDashboard.css'; // Import your CSS file
+
+const socket = io('http://localhost:3000');
 
 const ResponderDashboard = () => {
   const { user } = useAuthContext();
@@ -53,6 +57,28 @@ const ResponderDashboard = () => {
 
     fetchAlerts();
   }, [user, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      // Join the responder's room
+      socket.emit('join', user._id);
+
+      // Continuously emit the responder's location
+      const locationInterval = setInterval(() => {
+        getLocation(
+          (latitude, longitude) => {
+            console.log('Emitting responder location:', { latitude, longitude });
+            socket.emit('updateLocation', { responderId: user._id, latitude, longitude });
+          },
+          (error) => {
+            console.error('Error fetching location:', error);
+          }
+        );
+      }, 5000); // Emit location every 5 seconds
+
+      return () => clearInterval(locationInterval); // Cleanup on component unmount
+    }
+  }, [user]);
 
   if (loading) {
     return <div>Loading...</div>;

@@ -1,15 +1,19 @@
+/* Ensure the signup page takes the full height of the viewport and is scrollable */
 .auth-container-signup-page {
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
+  min-height: 100vh; /* Ensure the container takes at least the full height of the viewport */
+  width: 100%; /* Full width */
   display: flex; /* Use Flexbox */
   justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  align-items: flex-start; /* Align content to the top */
   background-image: url('../assets/world-map.png'); /* Path to your world-map image */
   background-size: cover; /* Make the image cover the entire container */
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
   position: relative; /* Position relative for pseudo-element */
-  overflow: hidden; /* Prevent scrolling */
+  overflow: auto; /* Allow scrolling if content overflows */
+  padding-top: 120px; /* Add padding to prevent overlap with the navbar */
+  padding-bottom: 20px; /* Add padding at the bottom */
+  box-sizing: border-box; /* Include padding in the height calculation */
 }
 
 .auth-container-signup-page::before {
@@ -22,238 +26,264 @@
   background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent dark overlay */
   z-index: 0; /* Place it behind the content */
 }
-  
+
+.auth-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  z-index: 1; /* Ensure it appears above the background overlay */
+  padding: 20px;
+  margin-top: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  animation: fadeIn 1s ease-out;
+  margin-bottom: 30px; /* Add space below the signup form */
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.auth-card h2 {
+  color: #d32f2f;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.input-group {
+  margin-bottom: 1.2rem;
+  position: relative; /* Add position relative to the input group */
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensure padding is included in width */ 
+}
+
+.input-group input:focus {
+  border-color: #d32f2f;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+.toggle-password-icon {
+  position: absolute; /* Position the icon absolutely */
+  right: 20px; /* Adjust the position to the right */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Center vertically */
+  width: 20px; /* Adjust the size */
+  height: 20px; /* Adjust the size */
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+.auth-button {
+  width: 100%;
+  padding: 12px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.auth-button:hover {
+  background: #b71c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2);
+}
+
+.google-login {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px;
+  background: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.google-button:hover {
+  background: #357ae8;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+}
+
+.auth-link a {
+  color: #d32f2f;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
   .auth-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 500px;
-    z-index: 1;
-    padding: 20px;
-    margin-top: 100px;
-    box-sizing: border-box; /* Ensure padding is included in width */
+    padding: 15px;
   }
-  
-  .logo-container-signup-page {
-    margin-top: 100px; /* Add space above the logo */
-    margin-bottom: 2rem; /* Keep the existing space below the logo */
-    animation: fadeInDown 1s ease-out;
-  }
-  
+
   .auth-logo {
-    width: 250px;
-    height: auto;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    width: 150px;
   }
-  
+
   .auth-card {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    animation: fadeIn 1s ease-out;
-    margin-bottom: 30px; /* Add space below the signup form */
-    box-sizing: border-box; /* Ensure padding is included in width */
+    padding: 1.5rem;
   }
-  
-  .auth-card h2 {
-    color: #d32f2f;
-    text-align: center;
-    font-size: 2rem;
-  }
-  
-  .input-group {
-    margin-bottom: 1.2rem;
-    position: relative; /* Add position relative to the input group */
-  }
-  
-  .input-group input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-sizing: border-box; /* Ensure padding is included in width */ 
-  }
-  
-  .input-group input:focus {
-    border-color: #d32f2f;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
-  }
+}
 
-  .toggle-password-icon {
-    position: absolute; /* Position the icon absolutely */
-    right: 20px; /* Adjust the position to the right */
-    top: 50%; /* Center vertically */
-    transform: translateY(-50%); /* Center vertically */
-    width: 20px; /* Adjust the size */
-    height: 20px; /* Adjust the size */
-    cursor: pointer; /* Change cursor to pointer */
-  }
-  
-  .auth-button {
-    width: 100%;
-    padding: 12px;
-    background: #d32f2f;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-  }
-  
-  .auth-button:hover {
-    background: #b71c1c;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2);
-  }
-  
-  .google-login {
-    margin-top: 1rem;
-    text-align: center;
-  }
-  
-  .google-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 12px;
-    background: #4285f4;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .google-button:hover {
-    background: #357ae8;
-  }
-  
-  .google-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-  }
-  
-  .auth-link {
-    text-align: center;
-    margin-top: 1.5rem;
-    color: #666;
-  }
-  
-  .auth-link a {
-    color: #d32f2f;
-    text-decoration: none;
-    font-weight: 600;
-    margin-left: 5px;
-  }
-  
-  .auth-link a:hover {
-    text-decoration: underline;
-  }
-  
-  @keyframes pulse {
-    0% {
-      opacity: 0.6;
-      transform: scale(0.98);
-    }
-    50% {
-      opacity: 0.3;
-      transform: scale(1);
-    }
-    100% {
-      opacity: 0.6;
-      transform: scale(0.98);
-    }
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 480px) {
-    .auth-content {
-      padding: 15px;
-    }
-  
-    .auth-logo {
-      width: 150px;
-    }
-  
-    .auth-card {
-      padding: 1.5rem;
-    }
-  }
+/* Style specifically for the role selection dropdown */
+#role {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  color: #333;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  appearance: none; /* Remove default browser styling for dropdowns */
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
 
-  /* Style specifically for the role selection dropdown */
-  #role {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    font-size: 1rem;
-    background-color: white;
-    color: #333;
-    transition: all 0.3s ease;
-    box-sizing: border-box; /* Ensure padding is included in width */
-    appearance: none; /* Remove default browser styling for dropdowns */
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 16px;
-  }
-  
-  #role:focus {
-    border-color: #d32f2f;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
-  }
-  
-  #role option {
-    font-size: 1rem;
-    color: #333;
-  }
+#role:focus {
+  border-color: #d32f2f;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
 
-  #role option[value=""] {
-    color: #aaa; /* Light gray color for the placeholder */
-  }
+#role option {
+  font-size: 1rem;
+  color: #333;
+}
 
-  /* Style for the input group containing the role label and dropdown */
-  .input-group label {
-    display: block; /* Ensure the label takes up the full width */
-    margin-bottom: 8px; /* Add spacing between the label and the dropdown */
-    font-size: 1rem; /* Match the font size with the rest of the form */
-    color: #333; /* Use a consistent color for the label */
-    text-align: left; /* Align the label to the left */
-  }
+#role option[value=""] {
+  color: #aaa; /* Light gray color for the placeholder */
+}
+
+/* Style for the input group containing the role label and dropdown */
+.input-group label {
+  display: block; /* Ensure the label takes up the full width */
+  margin-bottom: 8px; /* Add spacing between the label and the dropdown */
+  font-size: 1rem; /* Match the font size with the rest of the form */
+  color: #333; /* Use a consistent color for the label */
+  text-align: left; /* Align the label to the left */
+}
+
+/* Style for the dropdown fields (country, region, province, city/municipality, barangay) */
+.input-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  color: #333; /* Text color for selected options */
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  appearance: none; /* Remove default browser styling for dropdowns */
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.input-group select::placeholder {
+  color: rgba(0, 0, 0, 0.5); /* Match the placeholder color of the Username field */
+}
+
+.input-group select:focus {
+  border-color: #d32f2f;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+.input-group select option {
+  font-size: 1rem;
+  color: #333; /* Text color for dropdown options */
+}
+
+.input-group select option[value=""] {
+  color: rgba(0, 0, 0, 0.5); /* Light gray color for the placeholder */
+}
