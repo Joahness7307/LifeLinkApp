@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { io } from 'socket.io-client'; // Import Socket.IO client
+import { io } from 'socket.io-client';
 import { useLogout } from '../hooks/useLogout';
 import useAuthContext from '../hooks/useAuthContext';
 import appLogo from '../assets/appLogo.png';
 import searchIcon from '../assets/searchIcon.png';
 import '../styles/Navbar.css';
 
-const Navbar = ({ notifications = [], setNotifications }) => { // Default notifications to an empty array
+const Navbar = ({ notifications = [], setNotifications }) => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
-      // Fetch initial notifications
       const fetchNotifications = async () => {
         try {
           const response = await fetch('http://localhost:3001/notifications', {
@@ -34,21 +34,13 @@ const Navbar = ({ notifications = [], setNotifications }) => { // Default notifi
 
       fetchNotifications();
 
-      // Connect to the Socket.IO server
-      const socket = io('http://localhost:3000', {
-        withCredentials: true, // Include credentials (cookies, headers)
-      });
-
-      // Join the user's room
+      const socket = io('http://localhost:3000', { withCredentials: true });
       socket.emit('join', user._id);
-
-      // Listen for new notifications
       socket.on('notification', (notification) => {
         console.log('New notification received:', notification);
-        setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        setNotifications((prev) => [notification, ...prev]);
       });
 
-      // Cleanup on component unmount
       return () => {
         socket.disconnect();
       };
@@ -61,12 +53,9 @@ const Navbar = ({ notifications = [], setNotifications }) => { // Default notifi
         method: 'PATCH',
         headers: { Authorization: `Bearer ${user.token}` },
       });
-
       if (response.ok) {
-        setNotifications((prevNotifications) =>
-          prevNotifications.map((notif) =>
-            notif._id === notificationId ? { ...notif, isRead: true } : notif
-          )
+        setNotifications((prev) =>
+          prev.map((n) => (n._id === notificationId ? { ...n, isRead: true } : n))
         );
       }
     } catch (error) {
@@ -78,6 +67,7 @@ const Navbar = ({ notifications = [], setNotifications }) => { // Default notifi
     logout();
     navigate('/login');
     setShowUserMenu(false);
+    setIsMobileMenuOpen(false);
   };
 
   const handleSearch = (e) => {
@@ -85,11 +75,30 @@ const Navbar = ({ notifications = [], setNotifications }) => { // Default notifi
     console.log('Searching for:', searchQuery);
   };
 
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
   return (
     <nav className="navbar">
       {user ? (
         <>
-          {/* Left Section */}
+          <div className="burger-menu-icon" onClick={toggleMobileMenu}>
+            {isMobileMenuOpen ? '✖' : '☰'}
+          </div>
+          {isMobileMenuOpen && (
+            <div className="mobile-menu authenticated-mobile-menu">
+              <Link
+                to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}
+                onClick={toggleMobileMenu}
+              >
+                Home
+              </Link>
+              <Link to="/profile" onClick={toggleMobileMenu}>
+                Profile
+              </Link>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          )}
+
           <div className="navbar-left">
             <Link
               to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}
@@ -109,18 +118,18 @@ const Navbar = ({ notifications = [], setNotifications }) => { // Default notifi
             </form>
           </div>
 
-          {/* Center Section */}
           <div className="navbar-center">
-            <Link
-              to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}
-            >
+            <Link to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}>
               <img src={appLogo} alt="LifeLink Logo" className="navbar-logo-img" />
             </Link>
           </div>
 
-          {/* Right Section */}
           <div className="navbar-right">
-            {/* Notifications Dropdown */}
+            <div className="search-icon-mobile">
+              <button className="search-icon-button" onClick={handleSearch}>
+                <img src={searchIcon} alt="Search" className="search-icon" />
+              </button>
+            </div>
             <div className="notifications-dropdown">
               <button
                 className="notifications-button"
@@ -139,36 +148,26 @@ const Navbar = ({ notifications = [], setNotifications }) => { // Default notifi
 
               {showNotifications && (
                 <div className="notifications-menu">
-                 {notifications.length > 0 ? (
-                  notifications.map((notif) => (
-                    <div
-                      key={notif._id}
-                      className={`notification-item ${notif.isRead ? 'read' : 'unread'}`}
-                      onClick={() => {
-                        markAsRead(notif._id);
-                        // Redirect to the appropriate page based on the role
-                        if (user.role === 'responder') {
-                          navigate(`/reports/${notif.alertId?._id}`); // Redirect to report details for responders
-                        } else if (user.role === 'user') {
-                          navigate(`/reports/${notif.alertId?._id}`); // Redirect to report details for normal users
-                        }
-                      }}
-                    >
-                      <p>
-                        {user.role === 'responder'
-                          ? notif.message // Use the message for responders
-                          : notif.message} {/* Use the message for normal users */}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <div className="notification-item">No new notifications</div>
-                )}
+                  {notifications.length > 0 ? (
+                    notifications.map((notif) => (
+                      <div
+                        key={notif._id}
+                        className={`notification-item ${notif.isRead ? 'read' : 'unread'}`}
+                        onClick={() => {
+                          markAsRead(notif._id);
+                          navigate(`/reports/${notif.alertId?._id}`);
+                        }}
+                      >
+                        <p>{notif.message}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="notification-item">No new notifications</div>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* User Dropdown */}
             <div className="user-dropdown">
               <button
                 className="welcome-user"
@@ -179,7 +178,6 @@ const Navbar = ({ notifications = [], setNotifications }) => { // Default notifi
               >
                 Welcome, {user.userName} ▼
               </button>
-
               {showUserMenu && (
                 <div className="user-menu">
                   <Link to="/profile" onClick={() => setShowUserMenu(false)}>
@@ -198,10 +196,19 @@ const Navbar = ({ notifications = [], setNotifications }) => { // Default notifi
               <img src={appLogo} alt="LifeLink Logo" className="navbar-logo-img" />
             </Link>
           </div>
-          <div className="navbar-links">
-            <Link to="/login" className="navbar-link">Login</Link>
+          <div className="navbar-right-unauthenticated">
+            <Link to="/login" className="navbar-link">Sign In</Link>
             <Link to="/signup" className="nav-link">Sign Up</Link>
           </div>
+          <div className="burger-menu-icon2" onClick={toggleMobileMenu}>
+            {isMobileMenuOpen ? '✖' : '☰'}
+          </div>
+          {isMobileMenuOpen && (
+            <div className="mobile-menu">
+              <Link to="/login" onClick={toggleMobileMenu}>Sign In</Link>
+              <Link to="/signup" onClick={toggleMobileMenu}>Sign Up</Link>
+            </div>
+          )}
         </>
       )}
     </nav>

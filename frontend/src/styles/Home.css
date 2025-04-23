@@ -34,11 +34,21 @@
   max-width: 900px;
   z-index: 1;
   padding: 20px;
-  background-color: rgb(255, 255, 255); /* Semi-transparent background */
+  background-color: rgba(255, 255, 255, 0.829);
   border-radius: 10px;
-  backdrop-filter: blur(3px); /* Apply blur effect */
-  -webkit-backdrop-filter: blur(10px); /* For Safari support */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  /* Smooth resizing transition */
+  transition: all 0.5s ease-in-out;
+}
+
+.home-container h1,
+.home-container p,
+.get-started-button,
+.home-logo-inline {
+  transition: all 0.4s ease-in-out;
 }
 
 .logo-container {
@@ -134,7 +144,7 @@
 /* Medium devices (tablets, 600px to 1024px) */
 @media (min-width: 600px) and (max-width: 1024px) {
   .home-content h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
   }
 
   .home-container p {
@@ -147,7 +157,7 @@
   }
 
   .home-logo-inline {
-    width: 200px;
+    width: 230px;
   }
 }
 

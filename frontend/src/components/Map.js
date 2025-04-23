@@ -6,7 +6,7 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 
 const Map = ({ latitude, longitude }) => {
   useEffect(() => {
-    console.log('Initializing map with Latitude:', latitude, 'Longitude:', longitude);
+    // console.log('Initializing map with Latitude:', latitude, 'Longitude:', longitude);
 
     // Check if the map container already exists and clean it up
     const mapContainerId = 'map';
