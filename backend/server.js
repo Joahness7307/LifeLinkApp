@@ -32,7 +32,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/user', userRoutes);
@@ -66,8 +66,8 @@ mongoose
   .connect(dbURI, { serverSelectionTimeoutMS: 10000 })
   .then(() => {
     console.log('Connected to MongoDB');
-    server.listen(process.env.PORT || 3001, () => {
-      console.log(`Server running on port ${process.env.PORT || 3001}`);
+    server.listen(process.env.PORT || 3000, () => {
+      console.log(`Server running on port ${process.env.PORT || 3000}`);
     });
   })
   .catch((error) => console.error('Error connecting to MongoDB:', error));

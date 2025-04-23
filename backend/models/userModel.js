@@ -5,46 +5,34 @@ const validator = require('validator');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  userName: { 
-    type: String, 
-    required: true,
-    unique: true
+  userName: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true, trim: true, lowercase: true },
+  password: { type: String, required: true, select: false },
+  phoneNumber: { type: String, required: true },
+  address: {
+    country: { type: String, required: true },
+    region: { type: String, required: true },
+    province: { type: String, required: true },
+    city: { type: String, required: true },
+    cityCode: { type: String, required: true }, // Add cityCode
+    barangay: { type: String, required: true },
+    barangayCode: { type: String, required: true }, // Add barangayCode
   },
-  email: { 
-    type: String, 
-    required: true, 
-    unique: true, 
-    trim: true, 
-    lowercase: true 
-  },
-  password: { 
-    type: String, 
-    required: true,
-    select: false // Don't include password by default
-  },
-  phoneNumber: { 
-    type: String,   
-    required: true 
-  },
-  address: { 
-    type: String, 
-    required: true 
-  },
+  latitude: { type: Number, required: false }, // GPS latitude
+  longitude: { type: Number, required: false }, // GPS longitude
   role: {
     type: String,
     enum: ['user', 'responder', 'admin'],
     default: 'user',
-    required: true // Make sure role is required
+    required: true,
   },
-  // For responders only
   agencyId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Agency',
-    // Only required if role is responder
-    required: function() {
+    required: function () {
       return this.role === 'responder';
-    }
-  }
+    },
+  },
 }, { timestamps: true });
 
 // Hash password before saving

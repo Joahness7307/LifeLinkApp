@@ -50,6 +50,39 @@
   height: 100px;
 }
 
+/* Style for dropdowns (select elements) */
+.submit-report-container select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+  appearance: none; /* Removes default browser styling for dropdowns */
+  outline: none;
+  transition: border-color 0.3s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.submit-report-container select:focus {
+  border-color: #007bff; /* Highlight border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.submit-report-container select option {
+  font-size: 16px;
+  color: #333;
+}
+
+.submit-report-container select option[value=""] {
+  color: rgba(0, 0, 0, 0.5); /* Light gray color for the placeholder */
+}
+
 .file-size-label {
   font-size: 14px;
   color: #666;
