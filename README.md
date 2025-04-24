@@ -1,41 +1,59 @@
 # LifeLinkApp
 
-LifeLink is an emergency response application that allows users to send alerts in critical situations.
+LifeLink is a mobile emergency response application designed to provide users with immediate access to emergency services, trusted contacts, and vital health information during crises. The app ensures fast, reliable, and secure communication between users and emergency responders, enhancing personal safety and emergency preparedness. The system is built using the MERN stack. It provides GPS-enabled emergency tracking, secure user authentication, role-based access, and live notifications for efficient emergency handling.
 
-## Features
+## 🌐 Technologies Used
 
-- User authentication (Register/Login)
-- Role-based access control ( normal users, reponders, admin )
-- Emergency alert submission
+MongoDB Atlas (Cloud Database)
 
-## Installation
+Express.js (Backend Framework)
 
-1. Clone the repository:
+React.js (Frontend Library)
 
-   ```bash
-   git clone https://github.com/Joahness7307/LifeLinkApp.git
-   
-2. cd LifeLinkApp/backend
-   npm install
-   cd ../frontend
-   npm install
+Node.js (Server Environment)
 
-3. cd backend && npm run dev
-   cd frontend && npm start
+Socket.IO (Real-time Communication)
 
-#### **🔹 Technologies Used**
+Cloudinary (Cloud Storage for Uploaded Media)
 
-```md
-## Tech Stack
+Leaflet (Mapping and GPS Tracking)
 
-- Node.js (Express.js)
-- MongoDB (Mongoose ORM)
-- React.js
-- MongoDB Atlas (Optional)
+## 🔐 Features
 
-## Contributing
+User Authentication
 
-1. Fork the repo and create a new branch.
-2. Make your changes and commit them.
-3. Push to your branch and submit a pull request.
-```
+Register, Login, Add, Update, Delete Users
+
+Role-Based Access Control
+
+Normal Users
+
+Responders
+
+Admin
+
+Emergency Report Submission and Handling
+
+Forgot Password via Gmail Account
+
+Real-Time Notifications using Socket.IO
+
+GPS Tracking Feature (90% functional)
+
+Cloud Media Uploads via Cloudinary
+
+Responsive Design for Mobile and Desktop
+
+## 🚀 Running the App
+
+### Backend
+
+npm run dev
+
+# or
+
+npm start
+
+### Frontend
+
+npm start
