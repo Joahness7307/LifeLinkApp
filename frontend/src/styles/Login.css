@@ -34,8 +34,19 @@
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
   }
 
+  .auth-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    z-index: 1; /* Ensure it appears above the background overlay */
+    padding: 20px;
+    margin-top: 20px;
+    box-sizing: border-box; /* Ensure padding is included in width */
+  }
+
   .auth-card {
-    background: rgba(255, 255, 255, 0.95);
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -203,16 +214,93 @@
   }
   
   /* Responsive Design */
-  @media (max-width: 480px) {
-    .auth-content {
-      padding: 15px;
-    }
-  
-    .auth-logo {
-      width: 150px;
-    }
-  
-    .auth-card {
-      padding: 1.5rem;
-    }
+
+/* Small devices (mobile phones, less than 600px) */
+@media (max-width: 600px) {
+  .auth-container {
+    padding: 10px; /* Add padding to the container */
   }
+
+  .auth-logo {
+    width: 200px; /* Adjust logo size */
+  }
+
+  .auth-content {
+    padding: 10px; /* Adjust content padding */
+  }
+
+  .auth-card {
+    padding: 1rem; /* Adjust card padding */
+  }
+
+  .input-group input {
+    padding: 8px; /* Adjust input padding */
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .auth-button,
+  .google-button {
+    padding: 8px; /* Adjust button padding */
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .forgot-password-link a {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+}
+
+/* Medium devices (tablets, 600px to 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .auth-content {
+    padding: 15px;
+  }
+
+  .auth-card {
+    padding: 1.5rem;
+  }
+
+  .input-group input {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .auth-button,
+  .google-button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .forgot-password-link a {
+    font-size: 0.9rem;
+  }
+}
+
+/* Large devices (desktops, more than 1024px) */
+@media (min-width: 1024px) {
+  .auth-logo {
+    width: 250px;
+  }
+
+  .auth-content {
+    padding: 20px;
+  }
+
+  .auth-card {
+    padding: 2rem;
+  }
+
+  .input-group input {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .auth-button,
+  .google-button {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .forgot-password-link a {
+    font-size: 1rem;
+  }
+}

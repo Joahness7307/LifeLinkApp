@@ -25,7 +25,7 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-content">
         <div className="auth-card">
-          <h2>Login</h2>
+          <h2>Sign In</h2>
           <form onSubmit={handleSubmit}>
             <div className="input-group">
               <input
