@@ -1,0 +1,363 @@
+/* SubmitReport.css */
+.submit-report-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  margin-top: 150px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  overflow: auto;
+  height: calc(100vh - 200px);
+}
+
+.submit-report-container h2 {
+  text-align: center;
+  color: #d32f2f;
+  margin: 50px;
+}
+
+.submit-report-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.submit-report-container .form-group { /* New class for label-input pairs */
+  display: flex;
+  flex-direction: column; /* Stack label and input */
+  margin-bottom: 20px; /* Add spacing between groups */
+}
+
+.submit-report-container label {
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 5px; /* Add spacing between label and input */
+}
+
+.submit-report-container input,
+.submit-report-container textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.submit-report-container textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+/* Style for dropdowns (select elements) */
+.submit-report-container select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+  appearance: none; /* Removes default browser styling for dropdowns */
+  outline: none;
+  transition: border-color 0.3s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.submit-report-container select:focus {
+  border-color: #007bff; /* Highlight border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.submit-report-container select option {
+  font-size: 16px;
+  color: #333;
+}
+
+.submit-report-container select option[value=""] {
+  color: rgba(0, 0, 0, 0.5); /* Light gray color for the placeholder */
+}
+
+.file-size-label {
+  font-size: 14px;
+  color: #666;
+  text-align: left;
+}
+
+.submit-report-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.submit-report-container button:hover {
+  background-color: #b71c1c;
+}
+
+.image-upload-container {
+  margin-top: 0.5rem;
+}
+
+.image-input {
+  display: none;
+}
+
+.image-input-label {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #d32f2f;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.image-input-label:hover {
+  background-color: #b71c1c;
+}
+
+.image-preview {
+  margin-top: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.image-preview img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.file-input-container {
+  display: flex;
+  align-items: stretch;
+  gap: 5px;
+  width: 100%;
+}
+
+.file-name {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.file-name:hover {
+  background-color: #eeeeee;
+}
+
+.remove-image-btn {
+  padding: 0;
+  width: auto;
+  min-width: 36px;
+  height: auto;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0;
+}
+
+.remove-image-btn:hover {
+  background-color: #cc0000;
+}
+
+/* Style for the file input */
+.file-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Full Screen Modal Styles */
+.fullscreen-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  display: inline-block;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block; /* This ensures the container wraps the image */
+}
+
+/* Updated close button styles */
+.modal-content .modal-close-btn {
+  position: absolute;
+  top: 16px;          /* Changed from -16px to 16px */
+  right: 16px;        /* Changed from -16px to 16px */
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 20px;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent black background */
+  border: none;
+  border-radius: 50% !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+  transition: background-color 0.2s ease;
+}
+
+.modal-content .modal-close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);  /* Darker on hover */
+}
+
+.modal-content .modal-close-btn .modal-close-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  filter: brightness(0) invert(1);  /* Makes the icon white */
+}
+
+.fullscreen-image {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: block;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.remove-icon {
+  width: 14px;
+  height: 14px;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+/* Responsive Design */
+
+/* Small devices (mobile phones, less than 600px) */
+@media (max-width: 600px) {
+  .submit-report-container {
+    margin: 20px auto;
+    padding: 20px;
+    margin-top: 100px;
+    height: auto; /* Allow height to adjust based on content */
+  }
+
+  .submit-report-container h2 {
+    font-size: 1.5rem;
+    margin: 20px;
+  }
+
+  .submit-report-container input,
+  .submit-report-container textarea,
+  .submit-report-container select {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .submit-report-container button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .image-preview img {
+    max-width: 150px;
+    max-height: 150px;
+  }
+}
+
+/* Medium devices (tablets, 600px to 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .submit-report-container {
+    max-width: 80%;
+    margin: 30px auto;
+    padding: 25px;
+    margin-top: 120px;
+  }
+
+  .submit-report-container h2 {
+    font-size: 1.8rem;
+    margin: 30px;
+  }
+
+  .submit-report-container input,
+  .submit-report-container textarea,
+  .submit-report-container select {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .submit-report-container button {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .image-preview img {
+    max-width: 180px;
+    max-height: 180px;
+  }
+}
+
+/* Large devices (desktops, more than 1024px) */
+@media (min-width: 1024px) {
+  .submit-report-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    margin-top: 150px;
+  }
+
+  .submit-report-container h2 {
+    font-size: 2rem;
+    margin: 50px;
+  }
+
+  .submit-report-container input,
+  .submit-report-container textarea,
+  .submit-report-container select {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .submit-report-container button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+  }
+}

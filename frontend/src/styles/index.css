@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  font-family: "Poppins";
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; /* Allow vertical scrolling */
+}
+
+.App {
+  text-align: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: auto;
+}
+
+.welcome-screen {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  position: relative;
+}
+/* 
+.emergency-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.15) 100%);
+  animation: pulse 2s infinite;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+  animation: fadeInDown 1s ease-out;
+}
+
+.app-logo {
+  width: 450px;
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.02);
+}
+
+.welcome-text {
+  color: #333;
+  margin-bottom: 3rem;
+  animation: fadeIn 1s ease-in;
+}
+
+.welcome-text h2 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-text p {
+  font-size: 1.4rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.get-started-btn {
+  padding: 1.2rem 3rem;
+  font-size: 1.3rem;
+  background-color: white;
+  color: #d32f2f;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeInUp 1s ease-out;
+}
+
+.get-started-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background-color: #f8f8f8;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+/* @media (max-width: 1024px) {
+  .app-logo {
+    width: 350px;
+  }
+  
+  .welcome-text h2 {
+    font-size: 1.8rem;
+  }
+  
+  .welcome-text p {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-logo {
+    width: 280px;
+  }
+  
+  .welcome-text h2 {
+    font-size: 1.5rem;
+  }
+  
+  .welcome-text p {
+    font-size: 1.1rem;
+  }
+  
+  .get-started-btn {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-logo {
+    width: 220px;
+  }
+  
+  .content {
+    padding: 1.5rem;
+  }
+}  */
