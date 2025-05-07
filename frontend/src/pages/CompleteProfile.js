@@ -16,7 +16,8 @@ const CompleteProfile = () => {
   const [selectedProvince, setSelectedProvince] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedBarangay, setSelectedBarangay] = useState('');
-  const { user, dispatch } = useAuthContext();
+  // const { user, dispatch } = useAuthContext(); // Comment out 'user' if unused
+  const { dispatch } = useAuthContext(); // Only dispatch is used here
 
   const navigate = useNavigate();
 
@@ -74,8 +75,6 @@ const CompleteProfile = () => {
       barangayCode: selectedBarangay, // Explicitly include the barangayCode
     };
 
-    console.log('Address:', address);
-
     const token = localStorage.getItem('token');
     const response = await fetch('/api/user/complete-profile', {
       method: 'POST',
@@ -87,10 +86,11 @@ const CompleteProfile = () => {
     });
 
     if (response.ok) {
-      // Update the user's profile completion status in AuthContext
+      const updatedUser = await response.json(); // Fetch the updated user data
+      localStorage.setItem('token', updatedUser.token); // Update the token in localStorage
       dispatch({
         type: 'LOGIN',
-        payload: { ...user, isProfileComplete: true },
+        payload: { ...updatedUser, token: updatedUser.token }, // Update the AuthContext with the latest user data
       });
       navigate('/UserDashboard'); // Redirect to the dashboard
     } else {

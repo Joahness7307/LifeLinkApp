@@ -59,7 +59,7 @@ const getAlertsByAgency = async (req, res) => {
     const alerts = await Alert.find({ agencyId }).populate('userId', 'userName phoneNumber address');
     res.status(200).json(alerts);
   } catch (error) {
-    console.log("Error fetching alerts: ", error);
+    // console.log("Error fetching alerts: ", error);
     res.status(400).json({ error: error.message });
   }
 };

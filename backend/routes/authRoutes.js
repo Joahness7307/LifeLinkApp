@@ -25,15 +25,15 @@ router.get(
         { expiresIn: '30d' }
       );
 
-      console.log('Generated token:', token); // Debug log
+      // console.log('Generated token:', token); // Debug log
 
       if (!req.user.isProfileComplete) {
         // Redirect to Complete Profile page if profile is incomplete
-        console.log('Redirecting user to:', '/complete-profile');
+        // console.log('Redirecting user to:', '/complete-profile');
         res.redirect(`http://localhost:3001/auth/google/callback?token=${token}&redirect=complete-profile`);
       } else {
         // Redirect to UserDashboard if profile is complete
-        console.log('Redirecting user to:', '/UserDashboard');
+        // console.log('Redirecting user to:', '/UserDashboard');
         res.redirect(`http://localhost:3001/auth/google/callback?token=${token}&redirect=UserDashboard`);
       }
     } catch (error) {
