@@ -35,15 +35,15 @@ const submitReport = async (req, res) => {
     if (!emergency) {
       return res.status(404).json({ error: 'Emergency type not found' });
     }
-    console.log('Received emergencyId:', emergencyId);
-    console.log('Emergency found:', emergency);
+    // console.log('Received emergencyId:', emergencyId);
+    // console.log('Emergency found:', emergency);
 
     // Find the agency responsible for this emergency type
     const agency = await Agency.findOne({ categories: emergency.type });
     if (!agency) {
       return res.status(404).json({ error: 'No agency found for this category' });
     }
-    console.log('Agency found:', agency);
+    // console.log('Agency found:', agency);
   
     let cloudinaryResult = null;
     if (req.file) {

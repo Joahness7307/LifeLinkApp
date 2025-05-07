@@ -6,7 +6,10 @@ import profileImage from '../assets/profileImage.jpg'; // Import your image
 
 const Profile = () => {
   const { user } = useAuthContext();
-  const { user: userDetails, error } = useFetchUser(user?.id);
+  const { user: userDetails, error } = useFetchUser(user?.id || localStorage.getItem('userId'));
+
+  // console.log('AuthContext user:', user);
+  // console.log('Fetched user details:', userDetails);
 
   if (!userDetails) {
     return <div>Loading...</div>; // Show a loading message while userDetails is being fetched
