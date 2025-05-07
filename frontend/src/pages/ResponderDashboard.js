@@ -34,7 +34,7 @@ const ResponderDashboard = () => {
     // Fetch alerts for the responder's agency
     const fetchAlerts = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/responder/alerts`, {
+        const response = await fetch(`/api/responder/alerts`, {
           headers: {
             Authorization: `Bearer ${user.token}`, // Include the token for authorization
           },
