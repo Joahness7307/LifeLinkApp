@@ -63,6 +63,8 @@ function App() {
         <Route path="/complete-profile" element={<CompleteProfile />} />
         {/* Add GoogleAuthHandler route */}
         <Route path="/auth/google/callback" element={<GoogleAuthHandler />} />
+        {/* Add a fallback route */}
+        <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
     </div>
   );
