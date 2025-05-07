@@ -11,10 +11,10 @@ const requireAdmin = async (req, res, next) => {
   const token = authorization.split(' ')[1];
 
   try {
-    const { _id } = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({ _id }).select('_id role');
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(id).select('_id role');
 
-    if (user.role !== 'admin') {
+    if (!user || user.role !== 'admin') {
       return res.status(403).json({ error: 'Access denied, admin only' });
     }
 
@@ -24,6 +24,6 @@ const requireAdmin = async (req, res, next) => {
     console.log(error);
     res.status(401).json({ error: 'Request is not authorized' });
   }
-}; 
+};
 
 module.exports = requireAdmin;

@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const passport = require('passport');
+require('./config/passport'); // Import Passport configuration
 const mongoose = require('mongoose');
 const http = require('http'); // Import HTTP to create a server
 const path = require('path');
@@ -11,10 +13,10 @@ const alertRoutes = require('./routes/alertRoutes');
 const agencyRoutes = require('./routes/agencyRoutes');
 const emergencyRoutes = require('./routes/emergencyRoutes');
 const reportRoutes = require('./routes/reportRoutes');
-const responderRoutes = require('./routes/responderRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const passwordRoutes = require('./routes/passwordRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const authRoutes = require('./routes/authRoutes'); // Add Google Auth Routes
 
 const app = express();
 const server = http.createServer(app);
@@ -32,18 +34,21 @@ app.use((req, res, next) => {
   next();
 });
 
+// Initialize Passport
+app.use(passport.initialize());
+
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.use('/user', userRoutes);
-app.use('/alerts', alertRoutes);
-app.use('/agencies', agencyRoutes);
-app.use('/emergencies', emergencyRoutes);
-app.use('/reports', reportRoutes);
-app.use('/responder', responderRoutes);
-app.use('/admin', adminRoutes);
-app.use('/password', passwordRoutes);
-app.use('/notifications', notificationRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/alerts', alertRoutes);
+app.use('/api/agencies', agencyRoutes);
+app.use('/api/emergencies', emergencyRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/password', passwordRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/auth', authRoutes); // Add Google Auth Routes
 
 // MongoDB connection
 const dbURI = process.env.MONGO_URI;

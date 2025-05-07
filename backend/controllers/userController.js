@@ -19,12 +19,12 @@ const getUserById = async (req, res) => {
 // update user
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { userName, email, phoneNumber, address } = req.body;
+  const { userName, email, contactNumber, address } = req.body;
 
   try {
     const user = await User.findByIdAndUpdate(
       id,
-      { userName, email, phoneNumber, address },
+      { userName, email, contactNumber, address },
       { new: true, runValidators: true }
     );
 
@@ -67,9 +67,40 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+// complete profile
+const completeProfile = async (req, res) => {
+  try {
+    const { contactNumber, address } = req.body;
+
+    if (
+      !contactNumber ||
+      !address ||
+      !address.country ||
+      !address.region ||
+      !address.province ||
+      !address.city ||
+      !address.cityCode || // Validate cityCode
+      !address.barangay ||
+      !address.barangayCode // Validate barangayCode
+    ) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { contactNumber, address, isProfileComplete: true },
+      { new: true }
+    );
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to complete profile' });
+  }
+};
+
 module.exports = {
   getUserById,
   updateUser,
   deleteUser,
   verifyEmail,
+  completeProfile,
 };
