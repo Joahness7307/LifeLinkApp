@@ -24,10 +24,13 @@ const submitReport = async (req, res) => {
       cloudinaryPublicId,
     } = req.body;
 
-    if (!contactNumber || !address) {
-      return res.status(400).json({ error: 'Contact number and address are required.' });
+    // Validate required fields
+    if (!emergencyId || !userId || !contactNumber || !address) {
+      console.error('Missing required fields:', { emergencyId, userId, contactNumber, address }); // Debug log
+      return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Find the emergency type
     const emergency = await Emergency.findById(emergencyId);
     if (!emergency) {
       return res.status(404).json({ error: 'Emergency type not found' });
@@ -35,11 +38,13 @@ const submitReport = async (req, res) => {
     console.log('Received emergencyId:', emergencyId);
     console.log('Emergency found:', emergency);
 
+    // Find the agency responsible for this emergency type
     const agency = await Agency.findOne({ categories: emergency.type });
     if (!agency) {
       return res.status(404).json({ error: 'No agency found for this category' });
     }
-
+    console.log('Agency found:', agency);
+  
     let cloudinaryResult = null;
     if (req.file) {
       try {

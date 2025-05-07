@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 
-const testPasswordComparison = async () => {
-  const plainTextPassword = 'admin123'; // Replace with the password you used
-  const hashedPassword = '$2b$10$NIKQHLVtXNwSH1gTXwAkVeanU8SG1JLc8p1fAv6DTVWj8nQl4Pe9S'; // Replace with the hashed password from the database
+const plainPassword = 'passA@123';
+const hashedPassword = '$2b$10$1vAU9gSmjQ.VewB/NOcU2erS7NzkwscnIIo/mQRxFrCisFABSrQNy';
 
-  const isMatch = await bcrypt.compare(plainTextPassword, hashedPassword);
-  console.log('Password Match:', isMatch);
-};
-
-testPasswordComparison();
+bcrypt.compare(plainPassword, hashedPassword, (err, result) => {
+  if (err) {
+    console.error('Error comparing passwords:', err);
+  } else {
+    console.log('Password match:', result);
+  }
+});
