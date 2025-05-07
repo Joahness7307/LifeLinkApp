@@ -80,20 +80,20 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log('Login request received:', { email, password }); // Log the input data
+    // console.log('Login request received:', { email, password }); // Log the input data
 
     // Find user and explicitly select password
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
-      console.log('User not found with email:', email); // Log if user is not found
+      // console.log('User not found with email:', email); // Log if user is not found
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    console.log('User found:', user); // Log the found user object
+    // console.log('User found:', user); // Log the found user object
 
     // Compare the provided password with the hashed password in the database
     const isPasswordValid = await user.matchPassword(password);
-    console.log('Password match:', isPasswordValid); // Log the result of password comparison
+    // console.log('Password match:', isPasswordValid); // Log the result of password comparison
 
     if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid email or password' });
@@ -102,14 +102,14 @@ const loginUser = async (req, res) => {
     // Generate a JWT token
     const token = generateToken(user._id, user.userName, user.contactNumber, user.address, user.isProfileComplete);
 
-    console.log('Generated token payload:', {
-      id: user._id,
-      userName: user.userName,
-      email: user.email,
-      contactNumber: user.contactNumber,
-      address: user.address,
-      isProfileComplete: user.isProfileComplete,
-    });
+    // console.log('Generated token payload:', {
+    //   id: user._id,
+    //   userName: user.userName,
+    //   email: user.email,
+    //   contactNumber: user.contactNumber,
+    //   address: user.address,
+    //   isProfileComplete: user.isProfileComplete,
+    // });
 
     // Return user data and token
     res.status(200).json({

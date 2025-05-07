@@ -17,7 +17,7 @@ const requireAuth = async (req, res, next) => {
       return res.status(401).json({ error: 'User not found' });
     }
 
-    console.log('Authenticated user:', user); // Debug log
+    // console.log('Authenticated user:', user); // Debug log
     req.user = user; // Attach the user to the request
     next();
   } catch (error) {
