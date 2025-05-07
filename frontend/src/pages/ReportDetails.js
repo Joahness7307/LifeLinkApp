@@ -37,7 +37,7 @@ const ReportDetails = ({ setNotifications }) => {
           throw new Error('User is not authenticated');
         }
 
-        const response = await fetch(`http://localhost:3000/alerts/${alertId}`, {
+        const response = await fetch(`http://localhost:3000/api/alerts/${alertId}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },
@@ -142,7 +142,7 @@ const ReportDetails = ({ setNotifications }) => {
         throw new Error('User is not authenticated');
       }
 
-      const response = await fetch(`http://localhost:3000/alerts/${alertId}/respond`, {
+      const response = await fetch(`http://localhost:3000/api/alerts/${alertId}/respond`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,

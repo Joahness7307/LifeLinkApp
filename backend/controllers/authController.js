@@ -1,71 +1,76 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
-const Agency = require('../models/agencyModel');
+const bcrypt = require('bcrypt');
 
-// Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
+// Generate JWT token
+const generateToken = (id, userName, contactNumber, address, isProfileComplete) => {
+  return jwt.sign(
+    { id, userName, contactNumber, address, isProfileComplete },
+    process.env.JWT_SECRET,
+    { expiresIn: '30d' }
+  );
 };
 
 // Register user
 const registerUser = async (req, res) => {
   try {
-    const { userName, email, password, phoneNumber, address, role, agencyId, latitude, longitude } = req.body;
+    const { userName, email, password, contactNumber, address } = req.body;
 
-    console.log('Latitude:', latitude, 'Longitude:', longitude); // Debugging: Check if latitude and longitude are received
-
-    // Validate role
-    if (!['user', 'responder'].includes(role)) {
-      return res.status(400).json({ error: 'Invalid role. Only "user" and "responder" roles are allowed.' });
-    }
+    // console.log('Registering user:', { email, password }); // Log the input data
 
     // Check if user exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ $or: [{ email }, { userName }] });
     if (userExists) {
-      return res.status(400).json({ error: 'User already exists' });
+      return res.status(400).json({ error: 'Email or Username already exists' });
     }
 
-    // If role is responder, verify agency exists
-    if (role === 'responder') {
-      if (!agencyId) {
-        return res.status(400).json({ error: 'Agency ID is required for responders' });
-      }
-
-      const agency = await Agency.findById(agencyId);
-      if (!agency) {
-        return res.status(400).json({ error: 'Invalid Agency ID' });
-      }
+    // Validate address
+    if (
+      !address ||
+      !address.country ||
+      !address.region ||
+      !address.province ||
+      !address.city ||
+      !address.cityCode || // Validate cityCode
+      !address.barangay ||
+      !address.barangayCode // Validate barangayCode
+    ) {
+      return res.status(400).json({ error: 'Complete address is required' });
     }
 
-    // Create user
+  // Create user
     const user = await User.create({
       userName,
       email,
       password,
-      phoneNumber,
-      address,
-      role,
-      latitude, // Save latitude
-      longitude, // Save longitude
-      ...(role === 'responder' && { agencyId }),
+      contactNumber,
+      address: {
+        country: address.country,
+        region: address.region,
+        province: address.province,
+        city: address.city,
+        cityCode: address.cityCode, // Save cityCode
+        barangay: address.barangay,
+        barangayCode: address.barangayCode, // Save barangayCode
+      },
+      isProfileComplete: true, // Mark profile as complete
     });
+
+    // console.log('User created:', user); // Log the created user object
 
     // Return response
     res.status(201).json({
       _id: user._id,
       userName: user.userName,
       email: user.email,
-      phoneNumber: user.phoneNumber,
+      password: user.password,
+      contactNumber: user.contactNumber,
       address: user.address,
-      latitude: user.latitude, // Include latitude in response
-      longitude: user.longitude, // Include longitude in response
-      role: user.role,
-      ...(user.role === 'responder' && { agencyId: user.agencyId }),
+      isProfileComplete: user.isProfileComplete,
       token: generateToken(user._id),
     });
   } catch (error) {
+    console.error('Error during registration:', error); // Log any errors
     res.status(400).json({ error: error.message });
   }
 };
@@ -75,55 +80,95 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if email and password are provided
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required' });
+    console.log('Login request received:', { email, password }); // Log the input data
+
+    // Find user and explicitly select password
+    const user = await User.findOne({ email }).select('+password');
+    if (!user) {
+      console.log('User not found with email:', email); // Log if user is not found
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Find user and explicitly select password, role, and agencyId
-    const user = await User.findOne({ email }).select('+password +role +agencyId');
+    console.log('User found:', user); // Log the found user object
+
+    // Compare the provided password with the hashed password in the database
+    const isPasswordValid = await user.matchPassword(password);
+    console.log('Password match:', isPasswordValid); // Log the result of password comparison
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Generate a JWT token
+    const token = generateToken(user._id, user.userName, user.contactNumber, user.address, user.isProfileComplete);
+
+    console.log('Generated token payload:', {
+      id: user._id,
+      userName: user.userName,
+      email: user.email,
+      contactNumber: user.contactNumber,
+      address: user.address,
+      isProfileComplete: user.isProfileComplete,
+    });
+
+    // Return user data and token
+    res.status(200).json({
+      _id: user._id,
+      userName: user.userName,
+      email: user.email,
+      contactNumber: user.contactNumber,
+      address: user.address,
+      role: user.role,
+      isProfileComplete: user.isProfileComplete,
+      token,
+    });
+  } catch (error) {
+    console.error('Error during login:', error); // Log any errors
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Google OAuth Login/Signup
+const googleAuth = async (req, res) => {
+  try {
+    const { email, name } = req.user; // Extracted from Google profile
+    let user = await User.findOne({ email });
 
     if (!user) {
-      // console.log('Login failed: User not found');
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
+      // Split the full name into firstName and lastName
+      const [firstName, ...lastNameParts] = name.split(' ');
+      const lastName = lastNameParts.join(' ');
 
-    // console.log("Stored hashed password:", user.password); // Log stored hash
-    // console.log("Entered password:", password); // Log entered password
-
-    // Compare provided password with stored hashed password
-    const isMatch = await user.matchPassword(password);
-
-    if (!isMatch) {
-      console.log('Login failed: Password mismatch');
-      return res.status(401).json({ error: 'Invalid email or password' });
+      // Create a new user if not found
+      user = await User.create({
+        userName: `${firstName} ${lastName}`,
+        email,
+        password: null, // No password for Google-authenticated users
+        contactNumber: '', // Leave contactNumber empty for now
+        isProfileComplete: false, // Mark as incomplete
+      });
     }
 
     // Generate JWT token
     const token = generateToken(user._id);
 
-    // Prepare response data
-    const responseData = {
+    // Return user data and token
+    res.status(200).json({
       _id: user._id,
       userName: user.userName,
       email: user.email,
-      phoneNumber: user.phoneNumber,
-      address: user.address,
-      role: user.role,
-      agencyId: user.agencyId || null,
+      contactNumber: user.contactNumber,
+      isProfileComplete: user.isProfileComplete, // Include this field
       token,
-    };
-
-    // console.log('Login successful:', responseData);
-    res.status(200).json(responseData);
+    });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error during Google OAuth:', error);
+    res.status(500).json({ error: 'Failed to authenticate with Google. Please try again.' });
   }
 };
 
-
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  googleAuth,
 };

@@ -9,23 +9,28 @@ const useFetchEmergencies = () => {
   useEffect(() => {
     const fetchEmergencies = async () => {
       try {
-        const storedUser = localStorage.getItem('user');
-        const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-        const token = parsedUser ? parsedUser.token : null;
+        // Retrieve the token from localStorage
+        const token = localStorage.getItem('token');
 
-        const response = await fetch('/emergencies', {
+        if (!token) {
+          setError('Authorization token is missing');
+          return;
+        }
+
+        const response = await fetch('/api/emergencies', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
+        
         const data = await response.json();
         if (response.ok) {
           setEmergencies(data);
         } else {
-          setError(data.error);
+          setError(data.error || 'Failed to fetch emergencies');
         }
       } catch (error) {
-        setError(error.message);
+        setError(error.message || 'An error occurred while fetching emergencies');
       }
     };
 

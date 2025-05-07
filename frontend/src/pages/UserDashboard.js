@@ -4,20 +4,14 @@ import useFetchEmergencies from '../hooks/useFetchEmergencies';
 import useAuthContext from '../hooks/useAuthContext';
 import useNotifications from '../hooks/useNotification';
 import emergencyIcons from '../icons/emergencyIcons';
-import '../styles/EmergencyList.css';
+import '../styles/UserDashboard.css';
 
 const UserDashboard = () => {
   const { emergencies, error } = useFetchEmergencies();
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const userId = localStorage.getItem('userId'); // Replace with actual user ID retrieval logic
+  const userId = localStorage.getItem('userId');
   useNotifications(userId);
-
-  // Verify user role
-  if (user?.role !== 'user') {
-    navigate('/unauthorized');
-    return null;
-  }
 
   const handleEmergencyClick = (emergency) => {
     if (!user) {
