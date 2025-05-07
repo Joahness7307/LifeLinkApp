@@ -16,9 +16,9 @@ const Navbar = ({ notifications = [], setNotifications }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  console.log('Auth is ready:', authIsReady); // Debugging log
-  console.log('User:', user); // Debugging log
-  console.log('Navbar user:', user);
+  // console.log('Auth is ready:', authIsReady); // Debugging log
+  // console.log('User:', user); // Debugging log
+  // console.log('Navbar user:', user);
 
   useEffect(() => {
   if (user && user.isProfileComplete) { // Only fetch notifications if the profile is complete
