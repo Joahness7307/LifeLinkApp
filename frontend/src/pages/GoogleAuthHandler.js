@@ -14,8 +14,8 @@ const GoogleAuthHandler = () => {
     if (token) {
       localStorage.setItem('token', token); // Save the token to local storage
 
-      console.log('Token received:', token);
-      console.log('Redirecting to:', redirect);
+      // console.log('Token received:', token);
+      // console.log('Redirecting to:', redirect);
 
       // Decode the token to extract user data
       const decodedUser = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
@@ -29,6 +29,8 @@ const GoogleAuthHandler = () => {
         isProfileComplete: decodedUser.isProfileComplete,
         token,
       };
+
+      localStorage.setItem('userId', decodedUser.id); // Save the user ID
 
       // Dispatch the user data to AuthContext
       dispatch({ type: 'LOGIN', payload: user });

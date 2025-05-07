@@ -7,11 +7,11 @@ const useNotifications = (userId, setNotifications) => {
   useEffect(() => {
     if (!userId) return;
 
-    console.log(`Joining room for userId: ${userId}`);
+    // console.log(`Joining room for userId: ${userId}`);
     socket.emit('join', userId); // Emit the "join" event with the userId
 
     socket.on('notification', (data) => {
-      console.log('Received notification:', data.message);
+      // console.log('Received notification:', data.message);
       setNotifications((prevNotifications) => [...prevNotifications, data.message]);
     });
 

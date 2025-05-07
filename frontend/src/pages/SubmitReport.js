@@ -121,7 +121,7 @@ const SubmitReport = () => {
         imageData.append('file', image);
         imageData.append('upload_preset', 'ml_default'); // Ensure this matches your Cloudinary preset
       
-        console.log('Image data being sent to Cloudinary:', imageData.get('file')); // Debug log
+        // console.log('Image data being sent to Cloudinary:', imageData.get('file')); // Debug log
       
         const uploadRes = await fetch('https://api.cloudinary.com/v1_1/deeuurvsb/image/upload', {
           method: 'POST',
@@ -129,17 +129,17 @@ const SubmitReport = () => {
         });
       
         const uploadData = await uploadRes.json();
-        console.log('Cloudinary response:', uploadData); // Debug log
+        // console.log('Cloudinary response:', uploadData); // Debug log
       
         if (!uploadRes.ok) {
           throw new Error(uploadData.error?.message || 'Failed to upload image to Cloudinary');
         }
       
         imageUrl = uploadData.secure_url;
-        console.log('Image uploaded to Cloudinary:', imageUrl); // Debug log
+        // console.log('Image uploaded to Cloudinary:', imageUrl); // Debug log
       }
 
-      console.log('User from AuthContext:', user); // Debug log
+      // console.log('User from AuthContext:', user); // Debug log
 
       const reportData = {
         emergencyId: formData.emergencyId, // Use the updated emergency ID
@@ -154,7 +154,7 @@ const SubmitReport = () => {
         cloudinaryPublicId: imageUrl ? imageUrl.split('/').pop().split('.')[0] : null, // Extract public ID
       };
       
-      console.log('Report data being sent:', reportData); // Debug log
+      // console.log('Report data being sent:', reportData); // Debug log
       
       const response = await fetch('/api/reports', {
         method: 'POST',
@@ -164,7 +164,7 @@ const SubmitReport = () => {
         },
         body: JSON.stringify(reportData),
       });
-      console.log('Report data being sent:', reportData); // Debug log
+      // console.log('Report data being sent:', reportData); // Debug log
 
       const result = await response.json();
 
@@ -199,7 +199,7 @@ const SubmitReport = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      console.log('Selected file:', file); // Debug log
+      // console.log('Selected file:', file); // Debug log
       setImage(file);
   
       const reader = new FileReader();
