@@ -33,6 +33,7 @@ export const AuthContextProvider = ({ children }) => {
           isProfileComplete: decodedUser.isProfileComplete || false, // Ensure this is restored
           token: storedToken, // Include the token
         };
+        // console.log('Decoded user:', user); // Debugging log
         dispatch({ type: 'LOGIN', payload: user });
       } catch (error) {
         console.error('Failed to decode token from local storage', error);

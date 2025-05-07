@@ -82,15 +82,15 @@
     box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
   }
 
-  .toggle-password-icon2 {
-    position: absolute; /* Position the icon absolutely */
-    right: 20px; /* Adjust the position to the right */
-    top: 50%; /* Center vertically */
-    transform: translateY(-50%); /* Center vertically */
-    width: 20px; /* Adjust the size */
-    height: 20px; /* Adjust the size */
-    cursor: pointer; /* Change cursor to pointer */
-  }
+  .toggle-password-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+} 
   
   .auth-button {
     width: 100%;

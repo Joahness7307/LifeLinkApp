@@ -85,13 +85,28 @@ const completeProfile = async (req, res) => {
     ) {
       return res.status(400).json({ error: 'All fields are required' });
     }
+
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { contactNumber, address, isProfileComplete: true },
       { new: true }
     );
 
-    res.status(200).json(user);
+    // Generate a new token with updated user data
+    const token = jwt.sign(
+      {
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
+        contactNumber: user.contactNumber,
+        address: user.address,
+        isProfileComplete: user.isProfileComplete,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '30d' }
+    );
+
+    res.status(200).json({ ...user.toObject(), token }); // Return updated user data and token
   } catch (error) {
     res.status(500).json({ error: 'Failed to complete profile' });
   }
