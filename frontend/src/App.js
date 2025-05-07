@@ -13,6 +13,8 @@ import ResponderDashboard from './pages/ResponderDashboard';
 import ForgotPassword from './pages/ForgotPassword'; 
 import ResetPassword from './pages/ResetPassword';
 import ReportDetails from './pages/ReportDetails';
+import CompleteProfile from './pages/CompleteProfile';
+import GoogleAuthHandler from './pages/GoogleAuthHandler'; // Import the GoogleAuthHandler page
 import '../src/styles/index.css';
 
 function App() {
@@ -58,6 +60,9 @@ function App() {
           path="/reports/:alertId"
           element={<ReportDetails setNotifications={setNotifications} />}
         />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
+        {/* Add GoogleAuthHandler route */}
+        <Route path="/auth/google/callback" element={<GoogleAuthHandler />} />
       </Routes>
     </div>
   );

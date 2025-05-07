@@ -10,18 +10,19 @@ const requireAuth = async (req, res, next) => {
     }
 
     const token = authorization.split(' ')[1];
-    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Include userName in the selection
-    req.user = await User.findById(id).select('_id userName role agencyId');
-    if (!req.user) {
+    const user = await User.findById(decoded.id).select('-password'); // Exclude password
+    if (!user) {
       return res.status(401).json({ error: 'User not found' });
     }
 
+    console.log('Authenticated user:', user); // Debug log
+    req.user = user; // Attach the user to the request
     next();
   } catch (error) {
-    console.log(error);
-    res.status(401).json({ error: 'Request is not authorized' });
+    console.error('Error in requireAuth middleware:', error); // Debug log
+    res.status(401).json({ error: 'Unauthorized' });
   }
 };
 

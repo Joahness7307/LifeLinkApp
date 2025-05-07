@@ -14,9 +14,10 @@ const SubmitReport = () => {
   const { emergencies } = useFetchEmergencies(); // Fetch emergencies from backend
 
   const [formData, setFormData] = useState({
-    emergencyType: location.state?.emergencyType || '', // Default to the selected emergency type if provided
+    emergencyId: location.state?.emergencyId || '', // Default to the selected emergency ID
+    emergencyType: location.state?.emergencyType || '', // Default to the selected emergency type
     userId: user?._id,
-    contactNumber: user?.phoneNumber || '',
+    contactNumber: user?.contactNumber || '',
     address: '',
     message: '',
   });
@@ -31,6 +32,17 @@ const SubmitReport = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Redirect if user is not logged in or profile is incomplete
+  useEffect(() => {
+    if (!user) {
+      console.error('User is not logged in.');
+      navigate('/login');
+    } else if (!user.address?.cityCode) {
+      console.error('City code is missing in the user profile.');
+      navigate('/CompleteProfile');
+    }
+  }, [user, navigate]);
 
   // Fetch barangays based on user's city code
   useEffect(() => {
@@ -57,6 +69,10 @@ const SubmitReport = () => {
         setShowModal(true);
       }
     };
+
+    if (user?.contactNumber) {
+      setFormData((prev) => ({ ...prev, contactNumber: user.contactNumber })); // Update contact number
+    }
 
     fetchBarangays();
   }, [user]);
@@ -88,15 +104,14 @@ const SubmitReport = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!latitude || !longitude || !selectedBarangay || !formData.emergencyType) {
-      setModalMessage('Please fill out all required fields before submitting.');
+    if (!formData.emergencyId || !formData.emergencyType) {
+      setModalMessage('Please select a valid emergency type.');
       setShowModal(true);
       return;
     }
 
     setIsSubmitting(true);
-    const storedUser = localStorage.getItem('user');
-    const token = storedUser ? JSON.parse(storedUser).token : null;
+    const token = localStorage.getItem('token'); // Retrieve the token from local storage
 
     try {
       let imageUrl = null;
@@ -124,9 +139,15 @@ const SubmitReport = () => {
         console.log('Image uploaded to Cloudinary:', imageUrl); // Debug log
       }
 
+      console.log('User from AuthContext:', user); // Debug log
+
       const reportData = {
-        emergencyId: location.state?.emergencyId, // Ensure this is passed from the frontend
-        ...formData,
+        emergencyId: formData.emergencyId, // Use the updated emergency ID
+        emergencyType: formData.emergencyType, // Use the updated emergency type
+        userId: user?.id, // Use the user ID from AuthContext
+        contactNumber: formData.contactNumber,
+        address: formData.address,
+        message: formData.message,
         latitude,
         longitude,
         imageURL: imageUrl, // Include the Cloudinary URL
@@ -135,7 +156,7 @@ const SubmitReport = () => {
       
       console.log('Report data being sent:', reportData); // Debug log
       
-      const response = await fetch('/reports', {
+      const response = await fetch('/api/reports', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -161,6 +182,17 @@ const SubmitReport = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleEmergencyTypeChange = (e) => {
+    const selectedType = e.target.value;
+    const selectedEmergency = emergencies.find((emergency) => emergency.type === selectedType);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      emergencyType: selectedType, // Update the emergency type
+      emergencyId: selectedEmergency?._id || '', // Update the emergency ID based on the selected type
+    }));
   };
 
   // Handle image change
@@ -198,9 +230,7 @@ const SubmitReport = () => {
           <select
             id="emergencyType"
             value={formData.emergencyType}
-            onChange={(e) =>
-              setFormData((prevData) => ({ ...prevData, emergencyType: e.target.value }))
-            }
+            onChange={handleEmergencyTypeChange} // Update emergency type and ID
             required
           >
             <option value="" disabled hidden>

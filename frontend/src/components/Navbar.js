@@ -9,47 +9,52 @@ import '../styles/Navbar.css';
 
 const Navbar = ({ notifications = [], setNotifications }) => {
   const { logout } = useLogout();
-  const { user } = useAuthContext();
+  const { user, authIsReady } = useAuthContext();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  console.log('Auth is ready:', authIsReady); // Debugging log
+  console.log('User:', user); // Debugging log
+  console.log('Navbar user:', user);
+
   useEffect(() => {
-    if (user) {
-      const fetchNotifications = async () => {
-        try {
-          const response = await fetch('http://localhost:3001/notifications', {
-            headers: { Authorization: `Bearer ${user.token}` },
-          });
-          const json = await response.json();
-          if (response.ok) {
-            setNotifications(json);
-          }
-        } catch (error) {
-          console.error('Failed to fetch notifications:', error);
+  if (user && user.isProfileComplete) { // Only fetch notifications if the profile is complete
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/notifications', {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        const json = await response.json();
+        if (response.ok) {
+          setNotifications(json);
         }
-      };
+      } catch (error) {
+        console.error('Failed to fetch notifications:', error);
+      }
+    };
 
-      fetchNotifications();
+    fetchNotifications();
 
-      const socket = io('http://localhost:3000', { withCredentials: true });
-      socket.emit('join', user._id);
-      socket.on('notification', (notification) => {
-        console.log('New notification received:', notification);
-        setNotifications((prev) => [notification, ...prev]);
-      });
+    const socket = io('http://localhost:3000', { withCredentials: true });
+    socket.emit('join', user._id);
+    socket.on('notification', (notification) => {
+      console.log('New notification received:', notification);
+      setNotifications((prev) => [notification, ...prev]);
+    });
+    
 
-      return () => {
-        socket.disconnect();
-      };
-    }
-  }, [user, setNotifications]);
+    return () => {
+      socket.disconnect();
+    };
+  }
+}, [user, setNotifications]);
 
   const markAsRead = async (notificationId) => {
     try {
-      const response = await fetch(`http://localhost:3001/notifications/${notificationId}`, {
+      const response = await fetch(`http://localhost:3000/api/notifications/${notificationId}`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${user.token}` },
       });
@@ -76,7 +81,29 @@ const Navbar = ({ notifications = [], setNotifications }) => {
   };
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  
+  // Wait for authIsReady before rendering the Navbar
+  if (!authIsReady) {
+    return null; // Or a loading spinner if desired
+  }
 
+  // Restricted Navbar for users with incomplete profiles
+  if (user && !user.isProfileComplete) {
+    return (
+      <nav className="navbar">
+        <div className="navbar-left">
+          <img src={appLogo} alt="App Logo" className="navbar-logo-img" />
+        </div>
+        <div className="navbar-right">
+          <button className="nav-link" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+      </nav>
+    );
+  }
+
+  // Full Navbar for fully authenticated users
   return (
     <nav className="navbar">
       {user ? (
@@ -86,10 +113,7 @@ const Navbar = ({ notifications = [], setNotifications }) => {
           </div>
           {isMobileMenuOpen && (
             <div className="mobile-menu authenticated-mobile-menu">
-              <Link
-                to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}
-                onClick={toggleMobileMenu}
-              >
+              <Link to="/UserDashboard" onClick={toggleMobileMenu}>
                 Home
               </Link>
               <Link to="/profile" onClick={toggleMobileMenu}>
@@ -100,10 +124,7 @@ const Navbar = ({ notifications = [], setNotifications }) => {
           )}
 
           <div className="navbar-left">
-            <Link
-              to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}
-              className="nav-link"
-            >
+            <Link to="/UserDashboard" className="nav-link">
               Home
             </Link>
             <form onSubmit={handleSearch} className="search-form">
@@ -119,7 +140,7 @@ const Navbar = ({ notifications = [], setNotifications }) => {
           </div>
 
           <div className="navbar-center">
-            <Link to={user.role === 'responder' ? '/ResponderDashboard' : '/UserDashboard'}>
+            <Link to="/UserDashboard">
               <img src={appLogo} alt="LifeLink Logo" className="navbar-logo-img" />
             </Link>
           </div>
@@ -176,7 +197,7 @@ const Navbar = ({ notifications = [], setNotifications }) => {
                   setShowNotifications(false);
                 }}
               >
-                Welcome, {user.userName} ▼
+                 Welcome, {user?.userName || 'Guest'} ▼
               </button>
               {showUserMenu && (
                 <div className="user-menu">
