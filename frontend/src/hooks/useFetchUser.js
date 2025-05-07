@@ -7,19 +7,26 @@ const useFetchUser = (userId) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Get the authentication token
-        const storedUser = localStorage.getItem('user');
-        const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-        const token = parsedUser ? parsedUser.token : null;
+        console.log('Fetching user profile for ID:', userId); // Debug log
 
-        const response = await fetch(`/user/${userId}`, {
+        // Get the authentication token
+        const token = localStorage.getItem('token'); // Fetch the token directly
+        console.log('Token being sent:', token); // Debug log
+
+        if (!token) {
+          setError('Authentication token is missing.');
+          return;
+        }
+
+        const response = await fetch(`/api/user/${userId}`, {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+          },
         });
-        
+
         const data = await response.json();
         if (response.ok) {
+          console.log('Fetched user profile:', data); // Debug log
           setUser(data);
         } else {
           setError(data.error);
