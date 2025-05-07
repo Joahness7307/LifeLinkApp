@@ -159,6 +159,23 @@
     margin-right: 8px;
   }
 
+  .google-login-btn {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .google-login-btn:hover {
+    background-color: #357ae8;
+  }
+
   .auth-link {
     text-align: center;
     margin-top: 1.5rem;
