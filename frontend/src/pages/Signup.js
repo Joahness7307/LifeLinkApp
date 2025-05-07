@@ -4,15 +4,13 @@ import { useSignup } from '../hooks/useSignup';
 import '../styles/Signup.css';
 import eyeIcon from '../assets/eye.png';
 import eyeSlashIcon from '../assets/hidden.png';
-import { getLocation, forwardGeocode } from '../utils/geolocationUtils';
+import { forwardGeocode } from '../utils/geolocationUtils';
 
 const Signup = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [role, setRole] = useState(''); // Initialize as an empty string
-  const [agencyId, setAgencyId] = useState(''); // For responders
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const { signup, error, isLoading } = useSignup();
   const navigate = useNavigate();
@@ -29,9 +27,6 @@ const Signup = () => {
   const [selectedProvince, setSelectedProvince] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedBarangay, setSelectedBarangay] = useState('');
-
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
 
   useEffect(() => {
     // Fetch countries (static or from an API)
@@ -74,6 +69,10 @@ const Signup = () => {
     }
   }, [selectedCity]);
 
+  const handleGoogleSignup = () => {
+    window.location.href = 'http://localhost:3000/auth/google'; // Redirect to Google OAuth
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -108,8 +107,6 @@ const Signup = () => {
         password,
         phoneNumber,
         address,
-        role,
-        agencyId,
         latitude,
         longitude
       );
@@ -259,38 +256,15 @@ const Signup = () => {
                 ))}
               </select>
             </div>
-            <div className="input-group">
-              <select
-                id="role"
-                name="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required // Ensure the user selects a role
-              >
-                <option value="" disabled hidden>
-                  Select Role
-                </option>
-                <option value="user">User</option>
-                <option value="responder">Responder</option>
-              </select>
-            </div>
-            {role === 'responder' && (
-              <div className="input-group">
-                <input
-                  type="text"
-                  name="agencyId"
-                  required
-                  placeholder="Agency ID"
-                  value={agencyId}
-                  onChange={(e) => setAgencyId(e.target.value)}
-                />
-              </div>
-            )}
+            
             <button type="submit" className="auth-button" disabled={isLoading}>
               {isLoading ? 'Signing up...' : 'Sign Up'}
             </button>
             {error && <div className="error">{error}</div>}
           </form>
+          <button onClick={handleGoogleSignup} className="google-login-btn">
+            Continue with Google
+          </button>
           <p className="auth-link">
             Already have an account? <Link to="/login">Login</Link>
           </p>

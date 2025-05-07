@@ -3,11 +3,10 @@ import useAuthContext from '../hooks/useAuthContext';
 import useFetchUser from '../hooks/useFetchUser';
 import '../styles/Profile.css';
 import profileImage from '../assets/profileImage.jpg'; // Import your image
-import Map from '../components/Map';
 
 const Profile = () => {
   const { user } = useAuthContext();
-  const { user: userDetails, error } = useFetchUser(user?._id);
+  const { user: userDetails, error } = useFetchUser(user?.id);
 
   if (!userDetails) {
     return <div>Loading...</div>; // Show a loading message while userDetails is being fetched
@@ -31,7 +30,7 @@ const Profile = () => {
             </div>
             <div className="profile-field">
               <label>Phone Number:</label>
-              <p>{userDetails.phoneNumber}</p>
+              <p>{userDetails.contactNumber}</p>
             </div>
             <div className="profile-field">
               <label>Address:</label>
@@ -39,18 +38,7 @@ const Profile = () => {
                 {`${userDetails.address.barangay}, ${userDetails.address.city}, ${userDetails.address.province}, ${userDetails.address.region}, ${userDetails.address.country}`}
               </p>
             </div>
-            <div className="profile-field">
-              <label>Latitude:</label>
-              <p>{userDetails.latitude}</p>
-            </div>
-            <div className="profile-field">
-              <label>Longitude:</label>
-              <p>{userDetails.longitude}</p>
-            </div>
           </div>
-        )}
-        {userDetails.latitude && userDetails.longitude && (
-          <Map latitude={userDetails.latitude} longitude={userDetails.longitude} />
         )}
       </div>
     </div>

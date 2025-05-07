@@ -1,0 +1,146 @@
+/* Container for the complete profile page */
+/* Banner for the complete profile page */
+.complete-profile-banner {
+  background-color: #f9f9f9; /* Light gray background */
+  border: 1px solid #d32f2f; /* Red border */
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #d32f2f; /* Red text color */
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.complete-profile-container {
+  max-width: 500px;
+  margin: 130px auto;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.9); /* Light background */
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Form heading */
+.complete-profile-container h2 {
+  text-align: center;
+  color: #333; /* Red color for the heading */
+  font-size: 1.6rem;
+  margin: 2rem;
+}
+
+/* Input group for form fields */
+.complete-profile-input-group {
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+
+/* Input fields */
+.complete-profile-input-group input {
+  width: 100%;
+  padding: 12px; /* Padding for input fields */
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+/* Input focus styles */
+.complete-profile-input-group input:focus {
+  border-color: #d32f2f;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+/* Dropdown fields */
+.complete-profile-input-group select {
+  width: 100%;
+  padding: 12px; /* Padding for dropdown fields */
+  padding-right: 40px; /* Add extra padding to the right for the dropdown icon */
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  appearance: none; /* Remove default browser styles for select */
+  background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(0,0,0,0.5)"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat right 12px center; /* Custom dropdown icon */
+  background-color: white; /* Match the input background */
+  background-size: 16px; /* Size of the dropdown icon */
+}
+
+/* Dropdown focus styles */
+.complete-profile-input-group select:focus {
+  border-color: #d32f2f;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+/* Submit button */
+.complete-profile-submit-button {
+  width: 100%;
+  padding: 12px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+/* Submit button hover effect */
+.complete-profile-submit-button:hover {
+  background: #b71c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2);
+}
+
+/* Responsive Design */
+
+/* Small devices (mobile phones, less than 600px) */
+@media (max-width: 600px) {
+  .complete-profile-container {
+    padding: 15px;
+  }
+
+  .complete-profile-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .complete-profile-input-group input,
+  .complete-profile-input-group select {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .complete-profile-submit-button {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
+
+/* Medium devices (tablets, 600px to 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .complete-profile-container {
+    padding: 20px;
+  }
+
+  .complete-profile-container h2 {
+    font-size: 1.8rem;
+  }
+
+  .complete-profile-input-group input,
+  .complete-profile-input-group select {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .complete-profile-submit-button {
+    font-size: 1rem;
+    padding: 12px;
+  }
+}
