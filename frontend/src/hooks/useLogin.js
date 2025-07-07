@@ -33,14 +33,35 @@ export const useLogin = () => {
           role: data.role,
           isProfileComplete: data.isProfileComplete,
           token: data.token,
+          departmentId: data.departmentId || null,
         };
 
         dispatch({ type: 'LOGIN', payload: user });
 
-        if (data.isProfileComplete) {
-          navigate('/UserDashboard'); // Redirect to the UserDashboard if profile is complete
-        } else {
-          navigate('/complete-profile'); // Redirect to Complete Profile if profile is incomplete
+        // Redirect based on role
+        if (data.role === 'publicUser') {
+          if (!data.isProfileComplete) {
+            navigate('/complete-profile'); // Redirect to Complete Profile
+          } else {
+            navigate('/PublicUserDashboard'); // Redirect to Public User Dashboard
+          }
+        } else if (data.role === 'departmentAdmin') {
+          console.log('Login data:', data);
+          console.log('Assigned area:', data.assignedArea);
+          console.log('Department:', data.assignedArea && data.assignedArea.department);
+          // Set departmentId in local storage
+          if (data.assignedArea && data.assignedArea.department) {
+            localStorage.setItem('departmentId', data.assignedArea.department._id);
+          }
+          navigate('/DepartmentAdminDashboard'); // Redirect to Department Admin Dashboard
+        } else if (data.role === 'cityAdmin') {
+          navigate('/CityAdminDashboard'); // Redirect to City Admin Dashboard
+        } else if (data.role === 'provinceAdmin') {
+          navigate('/ProvinceAdminDashboard'); // Redirect to Province Admin Dashboard
+        } else if (data.role === 'regionAdmin') {
+          navigate('/RegionAdminDashboard'); // Redirect to Region Admin Dashboard
+        } else if (data.role === 'superAdmin') {
+          navigate('/SuperAdminDashboard'); // Redirect to Region Admin Dashboard
         }
       } else {
         setError(data.error);

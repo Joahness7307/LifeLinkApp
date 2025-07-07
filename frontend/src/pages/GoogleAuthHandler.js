@@ -39,8 +39,8 @@ const GoogleAuthHandler = () => {
       setTimeout(() => {
         if (redirect === 'complete-profile') {
           navigate('/complete-profile');
-        } else if (redirect === 'UserDashboard') {
-          navigate('/UserDashboard');
+        } else if (redirect === 'PublicUserDashboard') {
+          navigate('/PublicUserDashboard');
         } else {
           navigate('/'); // Fallback to home page
         }

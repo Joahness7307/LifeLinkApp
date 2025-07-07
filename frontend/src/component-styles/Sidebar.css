@@ -1,0 +1,79 @@
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  min-width: 220px;
+  max-width: 300px;
+  flex-shrink: 0;
+  background: #2d2f35;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 2rem 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.sidebar-link {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.18s;
+  position: relative;
+  margin-top: 80px;
+  font-weight: 500;
+}
+
+.sidebar-links {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .3s all ease-in-out;
+  position: relative;
+  font-weight: 500;
+}
+
+.sidebar-link:hover, .sidebar-links:hover,
+.sidebar-link:focus, .sidebar-links:focus {
+  background: #df6800;
+  outline: none;
+}
+
+.badge {
+  background: #d32f2f;
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.2em 0.7em;
+  font-size: 0.95em;
+  margin-left: 0.7em;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    min-height: unset;
+    flex-direction: row;
+    gap: 1rem;
+    padding: 1rem 0.5rem;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .sidebar-link {
+    font-size: 1rem;
+    padding: 0.6rem 0.7rem;
+  }
+}

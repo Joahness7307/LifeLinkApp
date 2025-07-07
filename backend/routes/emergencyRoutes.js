@@ -1,13 +1,21 @@
 const express = require('express');
-const { getAllEmergencies, getEmergencyById, createEmergency, sendAlert } = require('../controllers/emergencyController');
-const { requireAuth } = require('../middleware/authMiddleware');
+const emergencySubtypes = require('../config/emergencySubtypes');
 
 const router = express.Router();
 
-// Protect the routes with the requireAuth middleware
-router.get('/', requireAuth, getAllEmergencies);
-router.get('/:id', requireAuth, getEmergencyById); // Add this line
-router.post('/', requireAuth, createEmergency);
-router.post('/alert', requireAuth, sendAlert);
+router.get('/types', (req, res) => {
+  res.json(Object.keys(emergencySubtypes));
+});
+
+router.get('/subtypes/:type', (req, res) => {
+  const { type } = req.params;
+  const subtypes = emergencySubtypes[type];
+
+  if (!subtypes) {
+    return res.status(404).json({ error: 'Emergency type not found' });
+  }
+
+  res.json(subtypes);
+});
 
 module.exports = router;
