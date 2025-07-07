@@ -1,5 +1,4 @@
 const Alert = require('../models/alertModel');
-const Agency = require('../models/agencyModel');
 
 const createAlertForAgency = async ({ userId, agencyId, category, contactNumber, location, message, imageURL }) => {
   const alert = await Alert.create({
@@ -15,7 +14,7 @@ const createAlertForAgency = async ({ userId, agencyId, category, contactNumber,
 
   console.log('Category:', category);
 
-  const agency = await Agency.findById(agencyId);
+  const agency = await Department.findById(agencyId);
   if (agency) {
     agency.alerts.push(alert._id);
     await agency.save();

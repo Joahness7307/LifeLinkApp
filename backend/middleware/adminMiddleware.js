@@ -12,10 +12,10 @@ const requireAdmin = async (req, res, next) => {
 
   try {
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(id).select('_id role');
+    const user = await User.findById(id).select('_id role departmentId');
 
-    if (!user || user.role !== 'admin') {
-      return res.status(403).json({ error: 'Access denied, admin only' });
+    if (!user || !['superAdmin', 'departmentAdmin'].includes(user.role)) {
+      return res.status(403).json({ error: 'Access denied, super admin or department admin only' });
     }
 
     req.user = user;

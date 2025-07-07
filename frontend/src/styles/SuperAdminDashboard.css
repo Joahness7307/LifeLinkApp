@@ -1,0 +1,118 @@
+
+.super-admin-dashboard {
+  max-width: 1000px;
+  margin: 8rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+.super-admin-dashboard h1 {
+  text-align: center;
+  margin-bottom: 4rem;
+  color: #2d3a4b;
+}
+
+.super-admin-dashboard form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  background: #f7f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+
+.super-admin-dashboard form input,
+.super-admin-dashboard form select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #b0b8c1;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fff;
+}
+
+.super-admin-dashboard form button[type="submit"] {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.super-admin-dashboard form button[type="submit"]:hover {
+  background: #125ea2;
+}
+
+.super-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background: #fafbfc;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.super-admin-a-table th, .region-admins-table td {
+  padding: 0.9rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e3e6ea;
+}
+
+.super-admin-table th {
+  background: #f1f5f9;
+  color: #2d3a4b;
+  font-weight: 600;
+}
+
+.super-admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.edit-btn, .delete-btn {
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.98rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-btn {
+  background: #1976d2;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background: #125ea2;
+}
+
+.delete-btn {
+  background: #d32f2f;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background: #a31515;
+}
+
+@media (max-width: 700px) {
+  .super-admin-dashboard {
+    padding: 1rem;
+  }
+  .super-admin-table th, .super-admin-table td {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.95rem;
+  }
+  .super-admin-dashboard form {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+}

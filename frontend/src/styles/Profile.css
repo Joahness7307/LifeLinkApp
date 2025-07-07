@@ -1,21 +1,35 @@
 /* General Styles */
 .profile-container {
-  padding: 2rem;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: calc(100vh - 80px);
-  margin-top: 100px;
+  flex-direction: column;
+  align-items: center;
+  background: #f4f8fb;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(44, 110, 175, 0.07);
+}
+
+.profile-container h2 {
+  margin: 0;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
 }
 
 .profile-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
-  box-sizing: border-box;
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.profile-section {
+  flex: 1 1 0;
+  min-width: 480px;
+  max-width: 570px;
 }
 
 .profile-image {
@@ -27,35 +41,62 @@
   display: block;
 }
 
-.profile-card h2 {
-  color: #333;
-  margin-top: -10px;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
 .profile-details {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
+/* Make label not wrap and align at the top */
 .profile-field {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 0.5rem;
 }
 
+/* Prevent label from shrinking or wrapping */
 .profile-field label {
-  font-weight: bold;
-  color: #666;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-right: 8px;
+  margin-bottom: 0;
+  line-height: 2.2; /* aligns label with numbers */
+  font-weight: 500;
+  color: #444;
 }
 
 .profile-field p {
   margin: 0;
+  color: #444;
   padding: 0.5rem;
-  background: #f5f5f5;
   border-radius: 5px;
+}
+
+/* Numbers wrap to next line, but label stays on first line */
+.numbers-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.number-item {
+  background: #f7f9fa;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+.number-separator {
+  margin: 0 4px;
+  color: #888;
+  font-weight: bold;
+  user-select: none;
 }
 
 .error {
@@ -132,7 +173,8 @@
 @media (min-width: 1024px) {
   .profile-container {
     padding: 2rem;
-    margin-top: 100px;
+    margin-top: 120px;
+    margin-left: 260px;
   }
 
   .profile-card {
@@ -150,11 +192,11 @@
   }
 
   .profile-field label {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .profile-field p {
-    font-size: 1rem;
+    font-size: 1.1rem;
     padding: 0.5rem;
   }
 }

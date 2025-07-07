@@ -1,39 +1,63 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import eyeIcon from "../assets/eye.png";
+import eyeSlashIcon from "../assets/hidden.png";
 import "../styles/ResetPassword.css";
 
 const ResetPassword = () => {
     const { token } = useParams();
     const navigate = useNavigate();
     const [newPassword, setNewPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [message, setMessage] = useState("");
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-  
-      const response = await fetch(`http://localhost:3000/password/reset-password/${token}`, { // Send token in URL
+
+      const response = await fetch(`http://localhost:3000/api/password/reset-password`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ newPassword }), // Only send newPassword in body
+          body: JSON.stringify({ token, newPassword }),
       });
-  
+
       const data = await response.json();
       setMessage(data.message);
-  
+
       if (response.ok) navigate("/login");
-  };
+    };
+
+    const togglePasswordVisibility = () => {
+      setShowPassword((prev) => !prev);
+    };
 
     return (
         <div className="reset-password-container">
             <form className="reset-password-form" onSubmit={handleSubmit}>
                 <h2>Reset Password</h2>
-                <input 
-                    type="password" 
-                    placeholder="Enter new password" 
-                    value={newPassword} 
-                    onChange={(e) => setNewPassword(e.target.value)} 
-                    required 
-                />
+                <div className="reset-password-input-group" style={{ position: "relative" }}>
+                  <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter new password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                  />
+                  <img
+                      src={showPassword ? eyeSlashIcon : eyeIcon}
+                      alt="Toggle Password Visibility"
+                      className="reset-password-toggle-password-icon"
+                      onClick={togglePasswordVisibility}
+                      style={{
+                        position: "absolute",
+                        right: 20,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        cursor: "pointer",
+                        width: 20,
+                        height: 20
+                      }}
+                  />
+                </div>
                 <button type="submit">Reset Password</button>
                 {message && <p className="reset-password-message">{message}</p>}
             </form>
