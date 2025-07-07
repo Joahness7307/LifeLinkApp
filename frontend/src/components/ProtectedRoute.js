@@ -5,14 +5,12 @@ const ProtectedRoute = ({ children }) => {
   const { user } = useAuthContext();
 
   if (!user) {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      if (parsedUser.token) {
-        return children;
-      }
-    }
     return <Navigate to="/login" />;
+  }
+
+  // Only redirect to complete-profile if publicUser and not complete
+  if (user.role === 'publicUser' && !user.isProfileComplete) {
+    return <Navigate to="/complete-profile" />;
   }
 
   return children;

@@ -1,0 +1,132 @@
+.add-responder-container {
+  background: #f4f8fb;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(25,118,210,0.08);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin-top: 120px;
+  margin-left: 260px;
+  max-width: 1100px;
+  width: 100%;
+}
+
+.add-responder-container h2 {
+  color: #1976d2;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.add-responder-form {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.add-responder-form input[type="email"] {
+  padding: 0.7rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  font-size: 1.05rem;
+  outline: none;
+  flex: 1 1 0;
+  background: #f8fafc;
+  transition: border 0.2s;
+}
+
+.add-responder-form input[type="email"]:focus {
+  border: 1.5px solid #1976d2;
+}
+
+.add-responder-form button[type="submit"] {
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+  background: #1976d2;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-responder-form button[type="submit"]:hover {
+  background: #1251a3;
+}
+
+.add-responder-success {
+  color: #388e3c;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.responders-table {
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(25,118,210,0.06);
+  margin-top: 3rem;
+  overflow: hidden;
+}
+
+.responders-table th,
+.responders-table td {
+  padding: 0.8rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.responders-table th {
+  background: #2d2f35;
+  color: #fff;
+  font-weight: 600;
+}
+
+.responders-table tr:last-child td {
+  border-bottom: none;
+}
+
+.responders-table tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.responders-table tr:nth-child(odd) {
+  background: #e2e2e2;
+}
+
+.responders-table button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 0.35rem 1rem;
+  border-radius: 5px;
+  font-size: 0.98rem;
+  margin-right: 0.3rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.responders-table button:hover {
+  background: #1251a3;
+}
+
+.add-responder-error {
+  color: #d32f2f;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .add-responder-container {
+    padding: 1.2rem 0.5rem;
+    margin-top: 30px;
+  }
+  .add-responder-form {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+}

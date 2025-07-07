@@ -1,5 +1,4 @@
 const Notification = require('../models/notificationModel');
-const Alert = require('../models/alertModel'); // Import the Alert model
 
 const getNotifications = async (req, res) => {
   try {

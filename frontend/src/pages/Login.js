@@ -11,9 +11,9 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false); // State for password visibility
   const { login, isLoading, error } = useLogin();
 
-  const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:3000/auth/google'; // Redirect to Google OAuth
-  };
+  // const handleGoogleLogin = () => {
+  //   window.location.href = 'http://localhost:3000/auth/google?prompt=select_account'; // Redirect to Google OAuth
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,12 +25,12 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-content">
-        <div className="auth-card">
-          <h2>Sign In</h2>
+    <div className="login-container">
+      <div className="login-content">
+        <div className="login-card">
+          <h2>Login</h2>
           <form onSubmit={handleSubmit}>
-            <div className="input-group">
+            <div className="login-input-group">
               <input
                 type="text"
                 name="identifier"
@@ -40,9 +40,9 @@ const Login = () => {
                 onChange={(e) => setIdentifier(e.target.value)}
               />
             </div>
-            <div className="input-group">
+            <div className="login-input-group">
               <input
-                type={showPassword ? 'text' : 'password'} // Toggle input type
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 required
                 placeholder="Password"
@@ -50,26 +50,27 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <img
-                src={showPassword ? eyeSlashIcon : eyeIcon} // Toggle icon
+                src={showPassword ? eyeSlashIcon : eyeIcon}
                 alt="Toggle Password Visibility"
-                className="toggle-password-icon"
+                className="login-toggle-password-icon"
                 onClick={togglePasswordVisibility}
+                style={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', width: 20, height: 20 }}
               />
             </div>
-            <button type="submit" className="auth-button" disabled={isLoading}>
+            <button type="submit" className="login-button" disabled={isLoading}>
               Login
             </button>
             {error && <p className="error">{error}</p>}
           </form>
-          <p className="forgot-password-link">
+          <p className="login-forgot-password-link">
             <Link to="/forgot-password">Forgot Password?</Link>
           </p>
-          <button onClick={handleGoogleLogin} className="google-login-btn">
+          {/* <button onClick={handleGoogleLogin} className="login-google-btn">
             Continue with Google
-          </button>
-          <p className="auth-link">
+          </button> */}
+          {/* <p className="login-link">
             Don't have an account? <Link to="/signup">Signup</Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

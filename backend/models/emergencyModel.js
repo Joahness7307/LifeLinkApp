@@ -1,23 +1,30 @@
 const mongoose = require('mongoose');
-const Agency = require('../models/agencyModel');
+const Department = require('./departmentModel');
 const Schema = mongoose.Schema;
 
 const emergencySchema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: ['FIRE', 'ACCIDENT', 'MEDICAL', 'CRIME', 'FLOOD', 'OTHERS']
+    enum: [
+      'Fire',
+      'Police',
+      'Medical',
+      'Disaster',
+      'Government',
+      'Water',
+      'Electric'
+    ]
   },
   description: {
     type: String,
     required: true
   },
-  agency: {
+  departmentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: Agency,
+    ref: Department,
     required: true
   }
-  
 }, {
   timestamps: true
 });

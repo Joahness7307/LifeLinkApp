@@ -1,5 +1,5 @@
 import { createContext, useReducer, useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode'; // Correct import for named export
+import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
@@ -23,17 +23,20 @@ export const AuthContextProvider = ({ children }) => {
     if (storedToken) {
       try {
         const decodedUser = jwtDecode(storedToken); // Decode the token to get user data
+        // console.log('Decoded Token:', decodedUser); // Log the decoded token
         const user = {
           id: decodedUser.id || decodedUser._id || '',
           userName: decodedUser.userName || 'Guest',
           email: decodedUser.email || '',
           contactNumber: decodedUser.contactNumber || '',
           address: decodedUser.address || {},
-          role: decodedUser.role || 'user',
-          isProfileComplete: decodedUser.isProfileComplete || false, // Ensure this is restored
+          role: decodedUser.role || 'user', // Ensure the role is restored
+          // Only include isProfileComplete for public users
+          isProfileComplete: decodedUser.role === 'publicUser' ? decodedUser.isProfileComplete || false : undefined,
           token: storedToken, // Include the token
+          departmentId: decodedUser.departmentId || null,
+          
         };
-        // console.log('Decoded user:', user); // Debugging log
         dispatch({ type: 'LOGIN', payload: user });
       } catch (error) {
         console.error('Failed to decode token from local storage', error);
@@ -41,6 +44,7 @@ export const AuthContextProvider = ({ children }) => {
     }
     setAuthIsReady(true); // Ensure authIsReady is set to true after initialization
   }, []);
+  
 
   if (!authIsReady) {
     return <div>Loading...</div>; // Optional loading spinner
