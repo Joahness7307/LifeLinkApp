@@ -1,251 +1,414 @@
+import AdminLayout from '../components/AdminLayout';
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { io } from 'socket.io-client';
-import useAuthContext from '../hooks/useAuthContext';
-import Modal from '../components/Modal'; // Import the Modal component
-import Map from '../components/Map'; // Import the Map component
-import '../styles/ReportDetails.css'; // Import your CSS file
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import '../styles/ReportDetails.css';
+import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
+import L from 'leaflet';
 
-const socket = io('http://localhost:3000'); // Connect to the backend Socket.IO server
-socket.on('connect', () => {
-  // console.log('Socket connected with ID:', socket.id);
+const redIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
 
-socket.on('connect_error', (err) => {
-  console.error('Socket connection error:', err);
-});
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  function deg2rad(deg) { return deg * (Math.PI / 180); }
+  const R = 6371;
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
 
-const ReportDetails = ({ setNotifications }) => {
-  const { alertId } = useParams(); // Get the alertId from the URL
-  const { user } = useAuthContext(); // Get the logged-in user details
-  const [alertDetails, setAlertDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false); // State to control the modal
-  const [modalMessage, setModalMessage] = useState(''); // State for the modal message
-  const [responderLocation, setResponderLocation] = useState(null); // Responder's current location
-  const [distance, setDistance] = useState(null); // Distance between responder and alert location
-  const [alertDetailsLoaded, setAlertDetailsLoaded] = useState(false); // Track if alert details are loaded
+const ReportDetailsPage = () => {
+  const { id } = useParams();
+  const [report, setReport] = useState(null);
+  const [departmentLocation, setDepartmentLocation] = useState(null);
+  const [showMapModal, setShowMapModal] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [previewMedia, setPreviewMedia] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch alert details
   useEffect(() => {
-    const fetchAlertDetails = async () => {
-      try {
-        const token = user?.token; // Retrieve the token from context
-        if (!token) {
-          throw new Error('User is not authenticated');
-        }
-
-        const response = await fetch(`http://localhost:3000/api/alerts/${alertId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
-          },
+    const fetchReport = async () => {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/reports/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      setReport(data);
+      // Fetch department location if available in report
+      if (data.departmentId) {
+        const depRes = await fetch(`/api/departments/${data.departmentId}`, {
+          headers: { Authorization: `Bearer ${token}` }
         });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to fetch alert details');
-        }
-
-        // console.log('Fetched Alert Details:', data); // Debug log
-        setAlertDetails(data);
-        setAlertDetailsLoaded(true); // Mark alert details as loaded
-
-        // Request the latest responder location after alert details are fetched
-        if (data.responderId) {
-          console.log(`Requesting latest location for responderId: ${data.responderId}`);
-          socket.emit('requestResponderLocation', data.responderId);
-          console.log("Responder ID in alert details:", data.responderId);
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        const depData = await depRes.json();
+        setDepartmentLocation(depData.location);
       }
     };
+    fetchReport();
+  }, [id]);
 
-    fetchAlertDetails();
-  }, [alertId, user]);
-
-  // Listen for real-time responder location updates
-  useEffect(() => {
-    if (alertDetails?.responderId) {
-      console.log('Listening for location updates for responderId:', alertDetails.responderId);
-      const handleLocationUpdate = (location) => {
-        console.log('Received responder location update in ReportDetails:', location);
-        setResponderLocation(location);
-      };
-      socket.on(`locationUpdate:${alertDetails.responderId}`, handleLocationUpdate);
-
-      return () => {
-        socket.off(`locationUpdate:${alertDetails.responderId}`, handleLocationUpdate);
-      };
-    }
-  }, [alertDetails?.responderId]);
-
-  // Calculate distance between responder and alert location
-  useEffect(() => {
-    if (responderLocation?.latitude && responderLocation?.longitude && alertDetails?.latitude && alertDetails?.longitude) {
-      console.log('Responder Location:', responderLocation);
-      console.log('Emergency Location:', {
-        latitude: alertDetails.latitude,
-        longitude: alertDetails.longitude,
-      });
-
-      const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const toRadians = (degrees) => (degrees * Math.PI) / 180;
-        const R = 6371;
-        const dLat = toRadians(lat2 - lat1);
-        const dLon = toRadians(lon2 - lon1);
-        const a =
-          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos(toRadians(lat1)) *
-            Math.cos(toRadians(lat2)) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c;
-        console.log('Calculated Distance:', distance);
-        return distance;
-      };
-
-      const dist = calculateDistance(
-        responderLocation.latitude,
-        responderLocation.longitude,
-        alertDetails.latitude,
-        alertDetails.longitude
-      );
-
-      console.log('Setting Distance State:', dist);
-      setDistance(dist.toFixed(2));
-      console.log('Updated Distance State:', dist.toFixed(2)); // Debug log
+  const updateReportStatus = async (newStatus) => {
+  const token = localStorage.getItem('token');
+  try {
+    const res = await fetch(`/api/reports/${report._id}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (res.ok) {
+      const updated = await res.json();
+      setReport(updated);
     } else {
-      // console.log('Missing data for distance calculation:', {
-      //   responderLocation,
-      //   emergencyLatitude: alertDetails?.latitude,
-      //   emergencyLongitude: alertDetails?.longitude,
-      // });
-      // Optionally reset distance if data is missing
-      setDistance(null);
+      alert('Failed to update status');
     }
-  }, [responderLocation, alertDetails?.latitude, alertDetails?.longitude]);
+  } catch {
+    alert('Failed to update status');
+  }
+};
 
-  // console.log('Distance to Display:', distance);
-  // console.log('Rendering ReportDetails Component with Distance:', distance);
+const markAsFake = async (reason) => {
+  const token = localStorage.getItem('token');
+  try {
+    const res = await fetch(`/api/reports/${report._id}/mark-fake`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ fakeReason: reason })
+    });
+    if (res.ok) {
+      const updated = await res.json();
+      setReport(updated.report || updated);
+    } else {
+      alert('Failed to mark as fake');
+    }
+  } catch {
+    alert('Failed to mark as fake');
+  }
+};
 
-  const handleRespond = async () => {
-    try {
-      const token = user?.token; // Retrieve the token from context
-      if (!token) {
-        throw new Error('User is not authenticated');
-      }
+  // Fetch pending reports count for sidebar badge
+  useEffect(() => {
+    const fetchPendingCount = async () => {
+      const token = localStorage.getItem('token');
+      const departmentId = localStorage.getItem('departmentId');
+      if (!departmentId) return;
+      try {
+        const res = await fetch(`/api/reports/department/${departmentId}/status-counts`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok && data.pending !== undefined) setPendingCount(data.pending);
+      } catch {}
+    };
+    fetchPendingCount();
+  }, []);
 
-      const response = await fetch(`http://localhost:3000/api/alerts/${alertId}/respond`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to update alert status');
-      }
-
-      // Show the modal with a success message
-      setModalMessage('You are now responding to this alert.');
-      setShowModal(true);
-
-      // Update the notification in the Navbar
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notif) =>
-          notif.alertId === alertId ? { ...notif, isRead: true } : notif
-        )
-      );
-    } catch (err) {
-      console.error('Error responding to alert:', err);
-      setModalMessage(`Error: ${err.message}`);
-      setShowModal(true); // Show the modal with an error message
+  // Sidebar navigation handler
+  const handleSidebarNavigate = (section) => {
+    if (section === 'new-reports') {
+      navigate('/DepartmentAdminDashboard', { state: { scrollToPending: true } });
     }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    navigate('/ResponderDashboard'); // Redirect to the ResponderDashboard after closing the modal
+  if (!report) return <div>Loading...</div>;
+
+  // MapModal component
+  const MapModal = ({ open, onClose, report, departmentLocation }) => {
+    if (!open || !report?.location || !departmentLocation) return null;
+    const userPos = [report.location.latitude, report.location.longitude];
+    const deptPos = [departmentLocation.latitude, departmentLocation.longitude];
+    return (
+      <div className="modal-backdrop" onClick={onClose}>
+        <div
+          className="modal-content"
+          style={{
+            maxWidth: 900,
+            width: '98vw',
+            maxHeight: 700,
+            background: '#fff',
+            borderRadius: 10,
+            padding: 16,
+            position: 'relative'
+          }}
+          onClick={e => e.stopPropagation()}
+        >
+          <button
+            style={{
+              position: 'absolute',
+              top: 8,
+              right: 12,
+              background: 'transparent',
+              border: 'none',
+              fontSize: 34,
+              cursor: 'pointer',
+              color: 'red',
+              fontWeight: 'bold',
+              zIndex: 10
+            }}
+            onClick={onClose}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+          <h3 style={{ marginTop: 0, marginBottom: 12 }}>Emergency Location & Department</h3>
+          <MapContainer
+            center={userPos}
+            zoom={13}
+            style={{ height: 500, width: '100%', borderRadius: 8 }}
+            scrollWheelZoom={true}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <Marker position={userPos} icon={redIcon}>
+              <Popup>
+                Emergency Location<br />
+                Lat: {userPos[0]}, Lng: {userPos[1]}
+              </Popup>
+            </Marker>
+            <Marker position={deptPos} icon={L.icon({
+              iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34],
+              shadowSize: [41, 41]
+            })}>
+              <Popup>
+                Department Location<br />
+                Lat: {deptPos[0]}, Lng: {deptPos[1]}
+              </Popup>
+            </Marker>
+            <Polyline positions={[userPos, deptPos]} color="red" />
+          </MapContainer>
+          <div style={{ marginTop: 12, textAlign: 'center' }}>
+            <strong>Distance:</strong> {getDistanceFromLatLonInKm(userPos[0], userPos[1], deptPos[0], deptPos[1]).toFixed(2)} km
+          </div>
+        </div>
+      </div>
+    );
   };
-
-  const getOptimizedImageUrl = (imageURL) => {
-    if (!imageURL) return '';
-    // Add Cloudinary transformations to the URL
-    return imageURL.replace('/upload/', '/upload/q_auto,f_auto,w_auto,dpr_auto/');
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // Example usage of alertDetailsLoaded
-  if (!alertDetailsLoaded) {
-    return <div>Loading alert details...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
-    <div className="report-details-container">
-      <h1 className="report-title">Report Details</h1>
-      <div className="report-content">
-        <p><strong>Emergency Type:</strong> {alertDetails?.category || 'N/A'}</p>
-        <p><strong>Message:</strong> {alertDetails?.message}</p>
-        <p><strong>Location:</strong> {alertDetails?.location}</p>
-        <p><strong>Contact Number:</strong> {alertDetails?.contactNumber}</p>
-        <p><strong>Submitted By:</strong> {alertDetails?.userId?.userName}</p>
-        <p><strong>Agency:</strong> {alertDetails?.agencyId?.name}</p>
-        {distance && <p><strong>Distance:</strong> {distance} km away</p>}
-        <p><strong>Status:</strong> {alertDetails?.status}</p>
-        {alertDetails?.imageURL && (
-          <div className="report-image-container">
-            <img
-              src={getOptimizedImageUrl(alertDetails.imageURL)}
-              alt="Report"
-              className="report-image"
-              loading="lazy"
-            />
+    <AdminLayout newReportsCount={pendingCount} onSidebarNavigate={handleSidebarNavigate}>
+      <div className="report-details">
+        <h2>Report Details</h2>
+        <p><strong>Type: </strong> {report.type}</p>
+        <p><strong>Subtype: </strong> {report.subtype}</p>
+        <p><strong>Status: </strong> {report.status}</p>
+        {report.isFake && (
+          <p style={{ color: 'red', fontWeight: 'bold', marginTop: 8 }}>
+            🚩 Marked as Fake{report.fakeReason ? `: ${report.fakeReason}` : ''}
+          </p>
+        )}
+        <p>
+          <strong>Location: </strong>
+          {report.address
+            ? (typeof report.address === 'string'
+                ? (() => {
+                    try {
+                      const addr = JSON.parse(report.address);
+                      return (
+                        <>
+                          {addr.display || report.address}
+                          {report.location
+                            ? (
+                                <span style={{ color: '#888', fontSize: '0.95em' }}>
+                                  <br />
+                                  ({report.location.latitude}, {report.location.longitude})
+                                </span>
+                              )
+                            : null}
+                        </>
+                      );
+                    } catch {
+                      return report.address;
+                    }
+                  })()
+                : report.address.display || '')
+            : report.location
+              ? `Lat: ${report.location.latitude}, Lng: ${report.location.longitude}`
+              : 'Unknown'}
+        </p>
+        {/* View on Map Button */}
+        {report.location && departmentLocation && (
+          <div className="map-button-container">
+            <button
+              onClick={() => setShowMapModal(true)}
+            >
+              View on Map
+            </button>
+            <br />
+            <span>
+              <strong>Distance to Emergency:</strong> {getDistanceFromLatLonInKm(
+                report.location.latitude,
+                report.location.longitude,
+                departmentLocation.latitude,
+                departmentLocation.longitude
+              ).toFixed(2)} km
+            </span>
           </div>
         )}
-        {/* Display the responder's real-time location on a map */}
-        {responderLocation?.latitude && responderLocation?.longitude && (
-          <div className="map-container">
-            <h3>Responder's Real-Time Location</h3>
-            <Map latitude={responderLocation.latitude} longitude={responderLocation.longitude} />
+        <MapModal
+          open={showMapModal}
+          onClose={() => setShowMapModal(false)}
+          report={report}
+          departmentLocation={departmentLocation}
+        />
+        <p><strong>Reporter Contact:</strong> {report.userId && report.userId.contactNumber ? report.userId.contactNumber : 'N/A'}</p>
+        <p><strong>Submitted At: </strong> {new Date(report.clientSubmittedAt || report.createdAt).toLocaleString('en-PH', {
+          timeZone: 'Asia/Manila',
+          hour12: true,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        })} PHT</p>
+        {(report.imageURLs?.length > 0 || report.videoURLs?.length > 0) && (
+          <div className="media-section">
+            <div className="media-label"><strong>Media</strong></div>
+            <div className="media-list">
+              {[
+                ...(report.imageURLs || []).map((url, idx) => (
+                  <img
+                    key={`img-${idx}`}
+                    src={url}
+                    alt={`img${idx}`}
+                    onClick={() => setPreviewMedia({ type: 'image', url })}
+                    style={{ cursor: 'pointer' }}
+                  />
+                )),
+                ...(report.videoURLs || []).map((url, idx) => (
+                  <video
+                    key={`vid-${idx}`}
+                    src={url}
+                    controls
+                    onClick={() => setPreviewMedia({ type: 'video', url })}
+                    style={{ cursor: 'pointer' }}
+                  />
+                ))
+              ]}
+            </div>
           </div>
         )}
-        {/* Display the user's location on a map */}
-        {alertDetails?.latitude && alertDetails?.longitude && (
-          <div className="map-container">
-            <h3>Emergency Location on Map</h3>
-            <Map latitude={alertDetails.latitude} longitude={alertDetails.longitude} />
+
+        {report.status === 'pending' && (
+          <div className="action-buttons-row">
+            <button
+              style={{ background: '#df6800' }}
+              onClick={async () => {
+                await updateReportStatus('in_progress');
+              }}
+            >
+              Mark as In Progress
+            </button>
+            <button
+              style={{ background: '#e53935' }}
+              onClick={async () => {
+                const reason = prompt('Enter reason for marking as fake:');
+                if (reason) await markAsFake(reason);
+              }}
+            >
+              Mark as Fake
+            </button>
           </div>
         )}
+        {report.status === 'in_progress' && (
+          <div className="action-buttons-row">
+            <button
+              style={{ background: '#4caf50' }}
+              onClick={async () => {
+                await updateReportStatus('resolved');
+              }}
+            >
+              Mark as Resolved
+            </button>
+            <button
+              style={{ background: '#e53935' }}
+              onClick={async () => {
+                const reason = prompt('Enter reason for marking as fake:');
+                if (reason) await markAsFake(reason);
+              }}
+            >
+              Mark as Fake
+            </button>
+          </div>
+        )}
+
       </div>
-      {/* Show the Respond button only for responders and when the status is pending */}
-      {user?.role === 'responder' && alertDetails?.status === 'pending' && (
-        <button
-          onClick={handleRespond}
-          className="respond-button"
-        >
-          Respond
-        </button>
-      )}
-      {showModal && <Modal message={modalMessage} onClose={handleCloseModal} />}
-    </div>
+
+        {previewMedia && (
+          <div className="modal-backdrop" onClick={() => setPreviewMedia(null)}>
+            <div
+              className="modal-content"
+              style={{
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                background: '#fff',
+                borderRadius: 10,
+                padding: 16,
+                position: 'relative'
+              }}
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                style={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 12,
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: 28,
+                  cursor: 'pointer',
+                  zIndex: 2,
+                  pointerEvents: 'auto'
+                }}
+                onClick={e => {
+                  e.stopPropagation();
+                  setPreviewMedia(null);
+                }}
+                aria-label="Close"
+              >
+                &times;
+              </button>
+              {previewMedia.type === 'image' ? (
+                <img
+                  src={previewMedia.url}
+                  alt="Preview"
+                  style={{ maxWidth: '80vw', maxHeight: '80vh', borderRadius: 8 }}
+                />
+              ) : (
+                <video
+                  src={previewMedia.url}
+                  controls
+                  autoPlay
+                  style={{ maxWidth: '80vw', maxHeight: '80vh', borderRadius: 8, pointerEvents: 'none' }}
+                />
+              )}
+            </div>
+          </div>
+        )}
+
+    </AdminLayout>
   );
 };
 
-export default ReportDetails;
+export default ReportDetailsPage;

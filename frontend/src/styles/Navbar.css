@@ -23,27 +23,29 @@
   gap: 1rem;
 }
 
-/* Center Section: App Logo */
-.navbar-center {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .navbar-logo-img {
   height: 60px;
   width: auto;
   transition: all 0.3s ease;
 }
 
-/* Right Section: Search Icon and Notification Bell */
-.navbar-right {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 1rem;
+
+/* Right Section */
+.my-account-btn {
+  background: #2d2f35;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: .3s all ease-in-out;
+  margin-left: 1rem;
+}
+
+.my-account-btn:hover {
+  background: #df6800;
 }
 
 /* Search Bar */
@@ -87,115 +89,6 @@
 /* Search Icon for Mobile */
 .search-icon-mobile {
   display: none;
-}
-
-/* Notifications Dropdown */
-.notifications-dropdown {
-  position: relative;
-}
-
-.notifications-button {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  position: relative;
-  padding: 0.5rem;
-}
-
-.notification-badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: #d32f2f;
-  color: white;
-  border-radius: 50%;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.8rem;
-}
-
-.notifications-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  max-height: 400px;
-  overflow-y: auto;
-  z-index: 1000;
-}
-
-.notification-item {
-  padding: 1rem;
-  color: #000;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.notification-item:hover {
-  background-color: #f0f0f0;
-}
-
-/* Unread Notification */
-.notification-item.unread {
-  font-weight: bold;
-  color: #333; /* Darker color for unread notifications */
-}
-
-/* Read Notification */
-.notification-item.read {
-  font-weight: normal;
-  color: #777; /* Lighter color for read notifications */
-}
-
-/* User Dropdown */
-.user-dropdown {
-  position: relative;
-}
-
-.welcome-user {
-  background: none;
-  border: none;
-  color: #333;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-}
-
-.user-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-}
-
-.user-menu a,
-.user-menu button {
-  display: block;
-  padding: 0.75rem 1.5rem;
-  width: 100%;
-  font-size: 16px;
-  text-align: left;
-  background: none;
-  border: none;
-  color: #333;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.user-menu a:hover,
-.user-menu button:hover {
-  background-color: #f5f5f5;
-  color: #d32f2f;
 }
 
 /* Non-authenticated state */

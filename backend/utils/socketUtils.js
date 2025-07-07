@@ -5,7 +5,7 @@ let io;
 const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: 'http://localhost:3001', // Allow requests from your frontend
+      origin: '*', // Allow requests from your frontend
       methods: ['GET', 'POST'],
       credentials: true,
     },
@@ -14,10 +14,18 @@ const initSocket = (server) => {
   io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
-    // Handle "join" event to associate the socket with a userId
-    socket.on('join', (userId) => {
-      console.log(`User with ID ${userId} joined room ${userId}`);
-      socket.join(userId); // Assign user to a room
+    // Handle "join" event to associate the socket with a departmentId
+    socket.on('join_department', (departmentId) => {
+      const room = departmentId.startsWith('department_') ? departmentId : `department_${departmentId}`;
+      socket.join(room);
+      console.log(`department with ID ${departmentId} joined room ${room}`);
+    });
+
+    socket.on('join_user', (userId) => {
+      if (userId) {
+        socket.join(userId.toString());
+        console.log(`User ${userId} joined their personal room`);
+      }
     });
 
     // Handle location updates from responders and persist to DB
@@ -74,4 +82,11 @@ const sendNotification = ({ userId, responderId, message, alertId }) => {
   io.to(recipientId.toString()).emit('notification', { message, alertId });
 };
 
-module.exports = { io, initSocket, sendNotification };
+const getIO = () => {
+  if (!io) {
+    throw new Error('Socket.io not initialized');
+  }
+  return io;
+};
+
+module.exports = { getIO, initSocket, sendNotification };
