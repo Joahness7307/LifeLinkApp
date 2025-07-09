@@ -12,7 +12,7 @@ import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-const SOCKET_URL = 'http://localhost:3000'; // or your server IP
+const SOCKET_URL = process.env.REACT_APP_BACKEND_URL;
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   function deg2rad(deg) { return deg * (Math.PI / 180); }
@@ -72,7 +72,7 @@ const DepartmentAdminDashboard = () => {
 
   const fetchDepartment = async () => {
     const token = localStorage.getItem('token');
-    const res = await fetch(`/api/departments/${user.departmentId}`, {
+    const res = await fetch(`${SOCKET_URL}/api/departments/${user.departmentId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -202,7 +202,7 @@ const redIcon = new L.Icon({
   const departmentId = localStorage.getItem('departmentId');
   if (!departmentId) return;
   try {
-    const res = await fetch(`/api/reports/department/${departmentId}/status-counts`, {
+    const res = await fetch(`${SOCKET_URL}/api/reports/department/${departmentId}/status-counts`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -232,7 +232,7 @@ useEffect(() => {
       ...(debouncedSearch.trim() && { search: debouncedSearch.trim() })
     });
     const res = await fetch(
-      `/api/reports/department/${departmentId}?${params.toString()}`,
+      `${SOCKET_URL}/api/reports/department/${departmentId}?${params.toString()}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     const data = await res.json();
@@ -274,7 +274,7 @@ useEffect(() => {
 
   // Then send request
   const token = localStorage.getItem('token');
-    await fetch(`/api/reports/${reportId}/status`, {
+    await fetch(`${SOCKET_URL}/api/reports/${reportId}/status`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -293,7 +293,7 @@ useEffect(() => {
     if (!reason) return;
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/reports/${reportId}/mark-fake`, {
+      const res = await fetch(`${SOCKET_URL}/api/reports/${reportId}/mark-fake`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ fakeReason: reason }),

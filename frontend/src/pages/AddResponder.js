@@ -3,6 +3,8 @@ import AdminLayout from '../components/AdminLayout';
 import { useNavigate } from 'react-router-dom';
 import '../styles/AddResponder.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const AddResponderPage = () => {
   const [responders, setResponders] = useState([]);
   const [email, setEmail] = useState('');
@@ -17,7 +19,7 @@ const AddResponderPage = () => {
   useEffect(() => {
   const fetchResponders = async () => {
     try {
-      const response = await fetch('/api/admin/responders', {
+      const response = await fetch(`${BACKEND_URL}/api/admin/responders`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       const data = await response.json();
@@ -37,7 +39,7 @@ const AddResponderPage = () => {
       const departmentId = localStorage.getItem('departmentId');
       if (!departmentId) return;
       try {
-        const res = await fetch(`/api/reports/department/${departmentId}/status-counts`, {
+        const res = await fetch(`${BACKEND_URL}/api/reports/department/${departmentId}/status-counts`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -59,7 +61,7 @@ const AddResponderPage = () => {
     setSuccess('');
     setError('');
     try {
-      const response = await fetch('/api/admin/responders', {
+      const response = await fetch(`${BACKEND_URL}/api/admin/responders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +89,7 @@ const AddResponderPage = () => {
   
     const handleSaveEdit = async () => {
       try {
-        const response = await fetch(`/api/admin/responders/${editingResponder._id}`, {
+        const response = await fetch(`${BACKEND_URL}/api/admin/responders/${editingResponder._id}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -110,7 +112,7 @@ const AddResponderPage = () => {
     const handleDelete = async (id) => {
       if (!window.confirm('Are you sure you want to delete this responder?')) return;
       try {
-        const response = await fetch(`/api/admin/responders/${id}`, {
+        const response = await fetch(`${BACKEND_URL}/api/admin/responders/${id}`, {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });

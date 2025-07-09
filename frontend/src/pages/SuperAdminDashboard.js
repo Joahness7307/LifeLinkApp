@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/SuperAdminDashboard.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const SuperAdminDashboard = () => {
   const [regions, setRegions] = useState([]);
   const [regionAdmins, setRegionAdmins] = useState([]);
@@ -18,7 +20,7 @@ const SuperAdminDashboard = () => {
   // const ALLOWED_MUNICIPALITY_CODES = ['072208000']; // Balamban
 
   useEffect(() => {
-    fetch('/api/admin/regions', {
+    fetch(`${BACKEND_URL}/api/admin/regions`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
       .then(res => res.json())
@@ -27,7 +29,7 @@ const SuperAdminDashboard = () => {
   }, []);
 
   const fetchRegionAdmins = () => {
-    fetch('/api/admin/region-admins', {
+    fetch(`${BACKEND_URL}/api/admin/region-admins`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
       .then(res => res.json())
@@ -37,7 +39,7 @@ const SuperAdminDashboard = () => {
   const handleAddRegionAdmin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/admin/region-admins', {
+      const response = await fetch(`${BACKEND_URL}/api/admin/region-admins`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +69,7 @@ const SuperAdminDashboard = () => {
 
   const handleSaveEdit = async () => {
     try {
-      const response = await fetch(`/api/admin/region-admins/${editingAdmin._id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/region-admins/${editingAdmin._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +92,7 @@ const SuperAdminDashboard = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this region admin?')) return;
     try {
-      const response = await fetch(`/api/admin/region-admins/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/region-admins/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });

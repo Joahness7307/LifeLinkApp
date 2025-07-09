@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const useAddressSelection = () => {
   const [regions, setRegions] = useState([]);
   const [provinces, setProvinces] = useState([]);
@@ -13,7 +15,7 @@ const useAddressSelection = () => {
 
   // Fetch regions from backend
   useEffect(() => {
-    fetch('/api/address/regions')
+    fetch(`${BACKEND_URL}/api/address/regions`)
       .then((res) => res.json())
       .then((data) => setRegions(data))
       .catch((error) => console.error('Error fetching regions:', error));
@@ -22,7 +24,7 @@ const useAddressSelection = () => {
   // Fetch provinces based on selected region
   useEffect(() => {
     if (selectedRegion) {
-      fetch(`/api/address/provinces/${selectedRegion}`)
+      fetch(`${BACKEND_URL}/api/address/provinces/${selectedRegion}`)
         .then((res) => res.json())
         .then((data) => setProvinces(data))
         .catch((error) => console.error('Error fetching provinces:', error));
@@ -39,7 +41,7 @@ const useAddressSelection = () => {
   // Fetch cities based on selected province
   useEffect(() => {
     if (selectedProvince) {
-      fetch(`/api/address/cities/${selectedProvince}`)
+      fetch(`${BACKEND_URL}/api/address/cities/${selectedProvince}`)
         .then((res) => res.json())
         .then((data) => setCities(data))
         .catch((error) => console.error('Error fetching cities:', error));

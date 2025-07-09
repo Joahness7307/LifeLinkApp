@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 export const useSignup = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -9,7 +11,7 @@ export const useSignup = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/user/register', {
+      const response = await fetch(`${BACKEND_URL}/api/user/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userName, email, password, contactNumber, address }),
