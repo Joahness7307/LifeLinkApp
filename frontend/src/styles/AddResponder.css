@@ -216,13 +216,17 @@
     display: block;
     width: 100%;
   }
-  .responders-table th, .responders-table td {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    text-align: left;
+   .responders-table td, .responders-table th {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     padding: 0.7rem 0.5rem;
     font-size: 0.95rem;
+    border: none;
+    width: auto;
+    min-width: 0;
+    flex: 1 1 0;
+    box-sizing: border-box;
   }
   .responders-table th {
     background: #2d2f35;
@@ -231,14 +235,30 @@
     border-bottom: none;
   }
   .responders-table tr {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     margin-bottom: 1.2rem;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(25,118,210,0.06);
+    width: 100%;
+    min-width: 0;
   }
   .responders-table td {
     border-bottom: none;
     border-top: 1px solid #e0e0e0;
+  }
+  .responders-table td input[type="email"] {
+    width: 100%;
+    min-width: 0;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.5rem;
+  }
+  .responders-table button {
+    font-size: 0.93rem;
+    padding: 0.35rem 0.7rem;
+    margin-right: 0;
   }
 }
 
