@@ -22,6 +22,23 @@ exports.forgotPassword = async (req, res) => {
     const webResetUrl = `${process.env.WEB_BASE_URL}/reset-password/${resetToken}`;
     const mobileResetUrl = `${process.env.MOBILE_BASE_URL}reset-password/${resetToken}`;
 
+    // Prepare email content based on user role
+    let html;
+    if (user.role === 'publicUser') {
+      html = `
+        <p>Click the link below to reset your password in the mobile app:</p>
+        <a href="${mobileResetUrl}">${mobileResetUrl}</a>
+        <p>If the link is not clickable, copy and paste it into your browser or app.</p>
+      `;
+    } else {
+      // For admin and all other roles
+      html = `
+        <p>Click the link below to reset your password (Web):</p>
+        <a href="${webResetUrl}">${webResetUrl}</a>
+        <p>If the link is not clickable, copy and paste it into your browser.</p>
+      `;
+    }
+
     // Send email
     const transporter = nodemailer.createTransport({
       service: "Gmail",
@@ -35,15 +52,7 @@ exports.forgotPassword = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: user.email,
       subject: "Reset your LifeLink password",
-      html: `
-        <p>Click the link below to reset your password (Web):</p>
-        <a href="${webResetUrl}">${webResetUrl}</a>
-        <br/><br/>
-        <b>For mobile app users:</b>
-        <br/>
-        <a href="${mobileResetUrl}">${mobileResetUrl}</a>
-        <p>If the link is not clickable, copy and paste it into your browser or app.</p>
-      `,
+      html,
     });
 
     res.json({ message: "Reset email sent. Please check your inbox." });
