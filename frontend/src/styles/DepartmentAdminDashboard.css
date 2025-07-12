@@ -1,246 +1,827 @@
-.dashboard-layout {
-  display: flex;
-  min-height: 100vh;
-  background-color: #f0f0f0;
-}
+/* DepartmentAdminDashboard.css */
 
-.dashboard-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center horizontally */
-  justify-content: flex-start;
-  padding-left: 0;
-  min-height: 100vh;
-}
-
+/* Base Styles (for desktop and larger screens - acts as default) */
 .department-admin-dashboard {
-  min-height: 100vh;
-  padding-top: 120px;
-  padding-left: 260px; /* Same as sidebar width */
-  width: 100%;
-  margin: 0 auto;
+    padding: 30px; /* Increased padding for larger screens */
+    background-color: #f4f7f6;
+    min-height: calc(100vh - 80px); /* Adjust based on your AdminLayout's header height */
+    margin-left: 250px; /* Space for the sidebar */
+    transition: margin-left 0.3s ease-in-out, padding 0.3s ease-in-out;
+    box-sizing: border-box; /* Include padding in element's total width and height */
 }
 
 .dashboard-title {
-  margin: 0;
-  margin-top: 20px;
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1976d2; /* Use primary blue */
-  margin-bottom: 4.5rem;
-  letter-spacing: 1px;
-}
-
-.modal-backdrop {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal-content {
-  background: #fff;
-  border-radius: 10px;
-  padding: 32px;
-  position: relative;
-  box-shadow: 0 2px 16px rgba(25,118,210,0.12);
-}
-
-.modal-actions {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-}
-
-.status-cards-container {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 5.5rem;
-  justify-content: center;
-}
-
-.status-card {
-  background: #2d2f35;
-  color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(25,118,210,0.08);
-  padding: 2rem 2.5rem;
-  min-width: 100px;
-  text-align: center;
-  cursor: pointer;
-  transition: .2s ease-in-out;
-  position: relative;
-}
-
-.status-card.selected,
-.status-card:hover {
-  border: 4px solid #C65D00; /* Accent orange */
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 4px 16px rgba(198,93,0,0.12);
-}
-
-.status-card h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.status-count {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-top: 0.2rem;
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(25,118,210,0.10);
-}
-
-.reports-table-container {
-  margin: 0 auto 2rem auto;
-  max-width: 1450px;
-}
-
-.reports-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(25,118,210,0.08);
-  margin-bottom: 3rem;
-}
-
-.reports-table th, .reports-table td {
-  padding: 0.95rem 1.1rem;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-  color: #222;
-}
-
-.action-buttons-block {
-  display: block;
-  width: 100%;
-}
-
-.action-buttons-block button {
-  display: block;
-  width: 160px;
-  height: 42px;
-  margin-bottom: 12px;
-  margin-right: 0;
-  font-size: 1rem;
-  border-radius: 6px;
-  text-align: center;
-}
-
-.reports-table th {
-  background: #2d2f35;
-  color: #fff;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  padding: 20px;
-}
-
-.reports-table tbody tr:nth-child(even) {
-  background: #f8fafc;
-}
-
-.reports-table tbody tr:nth-child(odd) {
-  background: #e2e2e2;
-}
-
-.reports-table td {
-  vertical-align: middle;
-}
-
-.reports-table tr:last-child td {
-  border-bottom: none;
-}
-
-.reports-table tr:hover {
-  background: #e3f0fa;
-  transition: background 0.15s;
-}
-
-.reports-table button {
-  background: #777777; /* Accent orange */
-  color: #fff;
-  border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 5px;
-  font-size: 0.98rem;
-  margin-right: 0.3rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.reports-table .in-progress-btn {
-  background-color: #df6800;
-  color: #fff;
-}
-.reports-table .resolve-btn {
-  background-color: #4caf50;
-  color: #fff;
-}
-.reports-table .fake-btn {
-  background-color: #e53935;
-  color: #fff;
-}
-.reports-table .details-btn {
-  background-color: #777;
-  color: #fff;
-}
-
-.highlight-row {
-  background: #fffbe6 !important;
-  font-weight: 600;
-}
-
-.toast {
-  position: fixed;
-  top: 30px;
-  right: 30px;
-  background: #C65D00;
-  color: #fff;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  z-index: 2000;
-  box-shadow: 0 2px 8px rgba(198,93,0,0.12);
-  font-size: 1.1rem;
+    color: #2d2f35;
+    margin-top: 100px;
+    margin-bottom: 40px; /* More space below title */
+    text-align: center;
+    font-size: 2.5em; /* Larger title on desktop */
+    font-weight: 700;
 }
 
 .error {
-  color: #dc2626;
-  background: #fff0f0;
-  border-left: 4px solid #dc2626;
-  padding: 0.7rem 1.2rem;
-  margin: 1rem auto;
-  max-width: 600px;
-  border-radius: 6px;
-  font-weight: 500;
+    color: #d32f2f;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    padding: 10px;
+    border: 1px solid #d32f2f;
+    background-color: #ffebee;
+    border-radius: 8px;
 }
 
-@media (max-width: 900px) {
-  .reports-table th, .reports-table td {
-    padding: 0.6rem 0.5rem;
-    font-size: 0.95rem;
-  }
+/* Status Cards */
+.status-cards-container {
+    display: flex;
+    justify-content: space-around; /* Evenly distributes cards */
+    gap: 30px; /* Increased gap */
+    margin-bottom: 50px; /* More space below cards */
+    flex-wrap: wrap; /* Allows cards to wrap to the next line */
+    padding: 0 15px; /* Slight horizontal padding */
 }
 
-@media (max-width: 700px) {
-  .department-admin-dashboard {
-    padding: 1rem;
-  }
-  .responder-admins-table th, .department-admins-table td {
-    padding: 0.6rem 0.5rem;
-    font-size: 0.95rem;
-  }
-  .department-admin-dashboard form {
+.status-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    flex: 1; /* Allows cards to grow and shrink */
+    min-width: 220px; /* Minimum width before wrapping */
+    max-width: 28%; /* Max width to control number of cards per row (approx 3-4 per row) */
+    box-sizing: border-box;
+    display: flex; /* Use flex for internal alignment */
     flex-direction: column;
-    gap: 0.7rem;
-  }
+    justify-content: center;
+    align-items: center;
+}
+
+.status-card:hover {
+    transform: translateY(-7px); /* More pronounced hover effect */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.status-card.selected {
+    border: 3px solid #1976d2; /* Thicker border for selected state */
+    background-color: #e3f2fd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.status-card h3 {
+    color: #424242;
+    margin-top: 0;
+    margin-bottom: 15px; /* More space below heading */
+    font-size: 1.4em;
+    font-weight: 600;
+    white-space: nowrap; /* Prevent heading text from wrapping */
+}
+
+.status-count {
+    font-size: 3.2em; /* Larger count */
+    font-weight: bold;
+    color: #1976d2;
+    line-height: 1; /* Ensures count doesn't add extra line height */
+}
+
+/* Search Bar */
+.reports-table-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    overflow-x: auto; /* Enables horizontal scroll for table if content overflows */
+    box-sizing: border-box;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* Stretch items to match height */
+    margin-bottom: 40px;
+    gap: 0; /* Gap is handled by border-radius and direct element placement */
+    flex-wrap: wrap; /* Allow search input and button to wrap */
+    width: 100%;
+    max-width: 800px; /* Limit max width of search bar for aesthetics */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-input {
+    padding: 18px 22px; /* Larger padding for better touch targets */
+    border-radius: 6px 0 0 6px;
+    border: 1px solid #bbb;
+    font-size: 1.15rem;
+    flex-grow: 1; /* Allows input to take up available space */
+    min-width: 250px; /* Minimum width for input before stacking */
+    outline: none;
+    box-sizing: border-box;
+    height: 60px; /* Fixed height for consistent look */
+}
+
+.search-input:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+}
+
+.search-button {
+    padding: 18px 30px; /* Larger padding for better touch targets */
+    border-radius: 0 6px 6px 0;
+    border: 1px solid #1976d2;
+    background: #1976d2;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-left: none; /* No left border to align with input */
+    height: 60px; /* Match input height */
+    transition: background 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.search-button:hover {
+    background: #1565c0;
+    transform: translateY(-1px);
+}
+
+/* Reports Table */
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    min-width: 700px; /* Ensures horizontal scroll appears before content becomes unreadable */
+}
+
+.reports-table th,
+.reports-table td {
+    border: 1px solid #e0e0e0; /* Lighter border */
+    padding: 15px 18px; /* More padding */
+    text-align: left;
+    vertical-align: middle;
+}
+
+.reports-table th {
+    background-color: #f0f0f0; /* Slightly darker header background */
+    color: #424242;
+    font-weight: 600;
+    white-space: nowrap; /* Prevents header text from wrapping */
+}
+
+.reports-table tbody tr:nth-child(even) {
+    background-color: #fafafa; /* Lighter even row */
+}
+
+.reports-table tbody tr:hover {
+    background-color: #eef; /* Subtle hover effect */
+}
+
+/* Action Buttons within table */
+.action-buttons-block {
+    display: flex;
+    flex-direction: row; /* Default to row layout for desktop */
+    flex-wrap: wrap; /* Allow buttons to wrap within cell if needed */
+    gap: 8px; /* Space between buttons */
+    justify-content: flex-start; /* Align buttons to start */
+}
+
+.action-buttons-block button {
+    padding: 10px 14px; /* More padding for buttons */
+    border-radius: 6px; /* Slightly more rounded */
+    border: none;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap; /* Prevent button text from wrapping */
+    flex-shrink: 0; /* Prevent buttons from shrinking too much */
+}
+
+.action-buttons-block button:hover {
+    transform: translateY(-1px);
+}
+
+.in-progress-btn {
+    background-color: #4caf50;
+    color: white;
+}
+.in-progress-btn:hover { background-color: #388e3c; }
+
+.resolve-btn {
+    background-color: #2196f3;
+    color: white;
+}
+.resolve-btn:hover { background-color: #1976d2; }
+
+.details-btn {
+    background-color: #ff9800;
+    color: white;
+}
+.details-btn:hover { background-color: #f57c00; }
+
+.fake-btn {
+    background-color: #f44336;
+    color: white;
+}
+.fake-btn:hover { background-color: #d32f2f; }
+.fake-btn:disabled {
+    background-color: #e0e0e0; /* Lighter disabled background */
+    color: #a0a0a0; /* Grayer disabled text */
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none; /* No transform when disabled */
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Increased gap */
+    margin-top: 50px;
+    margin-bottom: 80px;
+    flex-wrap: wrap; /* Allow pagination to wrap */
+}
+
+.pagination-controls button {
+    padding: 10px 22px; /* More padding */
+    font-size: 1.05em;
+    border-radius: 8px; /* More rounded */
+    border: 1px solid #1976d2;
+    background: #1976d2;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.pagination-controls button:disabled {
+    background: #eee;
+    color: #888;
+    cursor: not-allowed;
+    border-color: #ccc;
+    transform: none;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+    background: #1565c0;
+    transform: translateY(-1px);
+}
+
+.pagination-controls span {
+    font-size: 1.1em;
+    color: #333;
+    font-weight: 500;
+    white-space: nowrap; /* Keep page text on one line */
+}
+
+/* Modals (New Report, Map, Image Preview) */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Darker backdrop */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 10px; /* Ensure padding so modal doesn't touch edges */
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 15px; /* More rounded corners */
+    padding: 30px; /* Increased padding */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+    position: relative;
+    max-height: 95vh; /* Allow modal to be taller */
+    overflow-y: auto; /* Enable scrolling for modal content if it overflows */
+    width: 95%; /* Responsive width for modals */
+    max-width: 650px; /* Max width for smaller modals */
+    box-sizing: border-box;
+    text-align: center; /* Center text content */
+}
+
+.alert-modal {
+    max-width: 550px; /* Slightly wider alert modal */
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    color: #1976d2;
+    font-weight: 700;
+}
+
+.modal-content p {
+    margin-bottom: 10px;
+    font-size: 1.05em;
+    line-height: 1.5;
+}
+
+.modal-content strong {
+    color: #333;
+}
+
+.modal-content img,
+.modal-content video {
+    border-radius: 10px; /* Rounded media */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    object-fit: cover; /* Ensures images/videos cover their area */
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* More space between buttons */
+    margin-top: 30px;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+}
+
+.modal-actions button {
+    padding: 12px 25px; /* Larger padding for modal buttons */
+    margin: 0; /* Reset default button margin */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    flex: 1; /* Allow buttons to take equal space */
+    min-width: 180px; /* Minimum width before wrapping/stacking */
+    max-width: 48%; /* Max width to allow two buttons per row */
+}
+
+.modal-actions button:hover {
+    transform: translateY(-2px);
+}
+
+.modal-actions button:first-child {
+    background-color: #1976d2;
+    color: white;
+}
+.modal-actions button:first-child:hover { background-color: #1565c0; }
+
+.modal-actions button:last-child {
+    background-color: #4caf50;
+    color: white;
+}
+.modal-actions button:last-child:hover { background-color: #388e3c; }
+
+/* Close button for modals */
+.modal-content > button.close-modal-btn { /* Added class for specificity */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 2.8em; /* Even larger close button */
+    cursor: pointer;
+    color: #d32f2f;
+    font-weight: bold;
+    z-index: 10;
+    line-height: 1;
+    padding: 0; /* Remove padding */
+    width: auto; /* Remove fixed width */
+    max-width: none; /* Remove max-width */
+    min-width: none; /* Remove min-width */
+    transform: none; /* No transform for close button */
+}
+
+.modal-content > button.close-modal-btn:hover {
+    color: #b71c1c;
+}
+
+/* Image/Video Preview within Modal */
+.modal-content .media-preview-container {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.modal-content .media-preview-container img,
+.modal-content .media-preview-container video {
+    width: 140px; /* Slightly larger thumbnails */
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+.modal-content .media-preview-container img:hover,
+.modal-content .media-preview-container video:hover {
+    transform: scale(1.05);
+}
+
+/* Full Image Preview Modal */
+.image-preview-modal-content {
+    background: rgba(0, 0, 0, 0.85); /* Darker background for image preview */
+    padding: 0;
+    border-radius: 0;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: none;
+}
+
+.image-preview-modal-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensures entire image is visible */
+    border-radius: 0; /* No border radius for full image */
+}
+
+/* Map Modal Specific */
+.map-modal-content {
+    max-width: 95vw; /* Allow map modal to take more width */
+    width: auto; /* Let content define width */
+    max-height: 95vh;
+    padding: 20px; /* Keep consistent padding */
+}
+.map-modal-content h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #333;
+}
+.map-modal-content .leaflet-container {
+    height: 450px; /* Default map height */
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+.map-modal-content div strong {
+    font-size: 1.1em;
+    color: #444;
+}
+
+/* Adjustments for the AdminLayout itself (assuming it's a sibling of .department-admin-dashboard) */
+/* You'll need to make sure your AdminLayout component also adjusts its sidebar/margin based on screen size.
+   This example assumes the sidebar collapses entirely, making the main content full width. */
+/* If your AdminLayout uses a state for sidebar open/close, you might need to manage it there. */
+
+
+/* --- Media Queries --- */
+
+/* Extra Large Devices (Desktops, 1400px and up) - Optional, for super wide screens */
+@media (min-width: 1400px) {
+    .department-admin-dashboard {
+        padding: 40px;
+    }
+    .status-card {
+        max-width: 23%; /* Allow 4 cards per row */
+    }
+    .dashboard-title {
+        font-size: 2.5em;
+    }
+}
+
+
+/* Large Desktops / Tablets (992px - 1199px) */
+@media (max-width: 1199px) {
+    .department-admin-dashboard {
+        padding: 25px;
+    }
+    .dashboard-title {
+        font-size: 2.3em;
+    }
+    .status-cards-container {
+        gap: 20px;
+    }
+    .status-card {
+        max-width: calc(33% - 20px); /* Adjust for 3 cards per row */
+        min-width: 200px;
+    }
+    .search-input {
+        width: calc(100% - 150px); /* Adjust width considering button */
+    }
+    .reports-table th,
+    .reports-table td {
+        padding: 12px 15px;
+        font-size: 0.9em;
+    }
+}
+
+/* Medium Tablets (768px - 991px) */
+@media (max-width: 991px) {
+    .department-admin-dashboard {
+        margin-left: 0; /* Assume sidebar collapses or is hidden */
+        padding: 20px;
+        margin-top: 30px; /* Add margin for top spacing */
+    }
+    .dashboard-title {
+        font-size: 2em;
+    }
+    .status-cards-container {
+        gap: 15px;
+        justify-content: space-around;
+        padding: 0 10px;
+    }
+    .status-card {
+        flex-basis: calc(50% - 20px); /* Two cards per row */
+        max-width: unset; /* Let flex-basis control width */
+        padding: 20px;
+    }
+    .status-card h3 {
+        font-size: 1.2em;
+        white-space: normal; /* Allow headings to wrap if necessary */
+    }
+    .status-count {
+        font-size: 2.8em;
+    }
+
+    .search-container {
+        flex-direction: column; /* Stack search input and button */
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    .search-input {
+        border-radius: 6px; /* Full border-radius when stacked */
+        width: 90%; /* Take more width */
+        max-width: 500px; /* Limit max width */
+        height: auto; /* Let padding define height */
+        padding: 15px 20px;
+    }
+    .search-button {
+        border-radius: 6px; /* Full border-radius when stacked */
+        border-left: 1px solid #1976d2; /* Re-add border */
+        width: 90%; /* Take more width */
+        max-width: 500px;
+        height: auto;
+        padding: 15px 20px;
+    }
+
+    .reports-table {
+        min-width: 600px; /* Reduced min-width */
+    }
+    .reports-table th,
+    .reports-table td {
+        padding: 10px 12px;
+        font-size: 0.85em;
+    }
+    .action-buttons-block {
+        flex-direction: column; /* Stack buttons vertically in table cells */
+        gap: 5px;
+    }
+    .action-buttons-block button {
+        padding: 8px 10px;
+        font-size: 0.8em;
+        width: 100%; /* Full width within the cell */
+    }
+
+    .pagination-controls {
+        gap: 15px;
+    }
+    .pagination-controls button {
+        padding: 8px 18px;
+        font-size: 1em;
+    }
+
+    .modal-content {
+        padding: 25px;
+        width: 95%;
+        max-width: 600px;
+    }
+    .modal-actions button {
+        max-width: unset; /* Allow buttons to take full width */
+        min-width: unset;
+        flex: 1 1 100%; /* Stack fully */
+    }
+    .map-modal-content .leaflet-container {
+        height: 380px;
+    }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (max-width: 767px) {
+    .department-admin-dashboard {
+        padding: 15px;
+        margin-top: 20px; /* Add margin for top spacing */
+    }
+    .dashboard-title {
+        font-size: 1.8em;
+        margin-bottom: 30px;
+    }
+    .status-cards-container {
+        flex-direction: column; /* Stack cards entirely */
+        align-items: center;
+        gap: 15px;
+    }
+    .status-card {
+        width: 90%; /* Almost full width for cards */
+        max-width: 400px; /* Limit for very wide phones */
+        padding: 20px;
+    }
+    .status-card h3 {
+        font-size: 1.1em;
+    }
+    .status-count {
+        font-size: 2.5em;
+    }
+
+    .reports-table-container {
+        padding: 20px;
+    }
+    .reports-table {
+        min-width: unset; /* Allow table to shrink, rely on overflow-x */
+    }
+
+    /* Hide specific columns for better readability on small screens */
+    .reports-table th:nth-child(3), /* Subtype */
+    .reports-table td:nth-child(3),
+    .reports-table th:nth-child(5), /* Location */
+    .reports-table td:nth-child(5) {
+        display: none;
+    }
+    /* Ensure action buttons column gets enough space */
+    .reports-table th:nth-child(6),
+    .reports-table td:nth-child(6) { /* Actions column */
+        width: 1%; /* Shrink column to fit content */
+        white-space: nowrap; /* Prevent actions from wrapping */
+    }
+    .reports-table th,
+    .reports-table td {
+        padding: 8px 10px;
+        font-size: 0.8em;
+    }
+    .action-buttons-block button {
+        padding: 6px 8px;
+        font-size: 0.75em;
+    }
+
+    .pagination-controls {
+        flex-direction: column; /* Stack pagination */
+        gap: 10px;
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+    .pagination-controls button {
+        width: 80%; /* Wider buttons when stacked */
+        max-width: 250px;
+    }
+    .pagination-controls span {
+        font-size: 1em;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+    .modal-content h2 {
+        font-size: 1.5em;
+    }
+    .modal-content p {
+        font-size: 1em;
+    }
+    .modal-content > button.close-modal-btn {
+        font-size: 2.5em;
+        top: 10px;
+        right: 10px;
+    }
+    .modal-actions button {
+        padding: 10px 15px;
+        font-size: 1em;
+    }
+    .map-modal-content .leaflet-container {
+        height: 300px;
+    }
+}
+
+/* Smaller Mobile Phones (max-width 575px) */
+@media (max-width: 575px) {
+    .department-admin-dashboard {
+        padding: 10px;
+        margin-top: 15px; /* Add margin for top spacing */
+    }
+    .dashboard-title {
+        font-size: 1.6em;
+        margin-bottom: 25px;
+    }
+    .status-cards-container {
+        padding: 0 5px;
+        gap: 10px;
+    }
+    .status-card {
+        width: 95%; /* Almost full width */
+        padding: 15px;
+    }
+    .status-card h3 {
+        font-size: 1em;
+    }
+    .status-count {
+        font-size: 2.2em;
+    }
+
+    .search-input,
+    .search-button {
+        width: 95%;
+        padding: 12px 15px;
+        font-size: 1em;
+    }
+
+    /* Hide more columns for very small screens */
+    .reports-table th:nth-child(4), /* Time Submitted */
+    .reports-table td:nth-child(4) {
+        display: none;
+    }
+    /* Adjust width of remaining columns */
+    .reports-table th:nth-child(1), /* Reference # */
+    .reports-table td:nth-child(1) {
+        width: 40%;
+    }
+    .reports-table th:nth-child(2), /* Type */
+    .reports-table td:nth-child(2) {
+        width: 30%;
+    }
+    .reports-table th,
+    .reports-table td {
+        font-size: 0.75em;
+        padding: 6px 8px;
+    }
+    .action-buttons-block button {
+        padding: 5px 6px;
+        font-size: 0.7em;
+    }
+
+    .modal-content {
+        padding: 15px;
+        border-radius: 10px;
+    }
+    .modal-content h2 {
+        font-size: 1.3em;
+    }
+    .modal-content p {
+        font-size: 0.95em;
+    }
+    .modal-content > button.close-modal-btn {
+        font-size: 2.2em;
+    }
+    .modal-actions button {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    .map-modal-content .leaflet-container {
+        height: 250px;
+    }
+}
+
+/* Very Small Mobile Phones (max-width 400px) */
+@media (max-width: 400px) {
+    .department-admin-dashboard {
+        padding: 5px;
+    }
+    .dashboard-title {
+        font-size: 1.4em;
+    }
+    .status-card {
+        width: 98%; /* Maximize width */
+    }
+    .status-card h3 {
+        font-size: 0.9em;
+    }
+    .status-count {
+        font-size: 2em;
+    }
+    .search-input,
+    .search-button {
+        padding: 10px 12px;
+        font-size: 0.9em;
+    }
+    .reports-table th,
+    .reports-table td {
+        font-size: 0.7em;
+        padding: 5px 6px;
+    }
+    .action-buttons-block button {
+        padding: 4px 5px;
+        font-size: 0.65em;
+    }
+    .pagination-controls button {
+        padding: 5px 10px;
+        font-size: 0.8em;
+    }
+    .pagination-controls span {
+        font-size: 0.9em;
+    }
+    .modal-content {
+        padding: 10px;
+    }
+    .modal-content h2 {
+        font-size: 1.2em;
+    }
+    .modal-actions button {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+    .map-modal-content .leaflet-container {
+        height: 200px;
+    }
 }

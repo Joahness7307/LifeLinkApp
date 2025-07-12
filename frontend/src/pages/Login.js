@@ -35,7 +35,7 @@ const Login = () => {
                 type="text"
                 name="identifier"
                 required
-                placeholder="Email or Contact Number"
+                placeholder="Email"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
               />
