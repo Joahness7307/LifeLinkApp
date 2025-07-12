@@ -10,7 +10,7 @@ import { io } from 'socket.io-client';
 import { LocationProvider } from '../context/LocationContext'
 import * as Linking from 'expo-linking';
 
-const SOCKET_URL = 'http://192.168.101.9:3000'; // your backend
+const SOCKET_URL = 'https://lifelink-backend-izjs.onrender.com';
 const linking = {
   prefixes: ['lifelinkapp-mobile://'],
   config: {

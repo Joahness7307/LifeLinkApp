@@ -26,7 +26,7 @@ const Profile = () => {
       setLoading(true);
       try {
         const token = await SecureStore.getItemAsync('token');
-        const res = await fetch('http://192.168.101.9:3000/api/user/me', {
+        const res = await fetch('https://lifelink-backend-izjs.onrender.com/api/user/me', {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -67,7 +67,7 @@ const Profile = () => {
       });
 
       const token = await SecureStore.getItemAsync('token');
-      const res = await fetch(`http://192.168.101.9:3000/api/user/${user._id}/profile-picture`, {
+      const res = await fetch(`https://lifelink-backend-izjs.onrender.com/api/user/${user._id}/profile-picture`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -189,7 +189,7 @@ const Profile = () => {
                   setSaving(true);
                   try {
                     const token = await SecureStore.getItemAsync('token');
-                    const res = await fetch(`http://192.168.101.9:3000/api/user/${user._id}`, {
+                    const res = await fetch(`https://lifelink-backend-izjs.onrender.com/api/user/${user._id}`, {
                       method: 'PATCH',
                       headers: {
                         'Content-Type': 'application/json',
