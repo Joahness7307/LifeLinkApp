@@ -37,7 +37,7 @@ const ForgotPassword = () => {
                             />
                         <button type="submit">Send Reset Link</button>
                     </form>
-                    <p>
+                    <p className="back-to-login">
                         Remember your password? <Link to="/login">Login</Link>
                     </p>
                 

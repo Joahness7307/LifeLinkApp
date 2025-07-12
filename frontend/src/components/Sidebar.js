@@ -1,14 +1,18 @@
 import React from 'react';
 import useAuthContext from '../hooks/useAuthContext';
-import { useNavigate } from 'react-router-dom';
-import { useLogout } from '../hooks/useLogout'; // Import your logout hook
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useLogout } from '../hooks/useLogout';
 import '../component-styles/Sidebar.css';
 
-const Sidebar = ({ newReportsCount, onNavigate }) => {
+const Sidebar = ({ newReportsCount, onNavigate, selectedStatus }) => {
   const navigate = useNavigate();
-  const  location = window.location; // Get current location for conditional rendering
-  const { user } = useAuthContext(); // Get user from context
+  const location = useLocation();
+  const { user } = useAuthContext();
   const { logout } = useLogout();
+
+  const handleInternalNavigate = (type) => {
+    onNavigate(type);
+  };
 
   const handleDashboardClick = () => {
     if (!user) return;
@@ -18,7 +22,7 @@ const Sidebar = ({ newReportsCount, onNavigate }) => {
     else if (user.role === 'cityAdmin') navigate('/CityAdminDashboard');
     else if (user.role === 'departmentAdmin') navigate('/DepartmentAdminDashboard');
     else if (user.role === 'responder') navigate('/ResponderDashboard');
-    else navigate('/'); // Fallback to home if role is not recognized
+    else navigate('/');
   };
 
   const handleLogout = () => {
@@ -26,7 +30,10 @@ const Sidebar = ({ newReportsCount, onNavigate }) => {
     navigate('/login');
   };
 
-  // Only show these for department admin dashboard/profile/report details
+  const handleAddResponderClick = () => {
+    navigate('/AddResponder');
+  };
+
   const isDepartmentAdminPage =
     user?.role === 'departmentAdmin' &&
     (
@@ -36,17 +43,41 @@ const Sidebar = ({ newReportsCount, onNavigate }) => {
       location.pathname.startsWith('/AddResponder')
     );
 
+  // Determine which button is selected
+ const selected = (btn) => {
+  if (btn === 'dashboard') {
+    // Only selected if on dashboard root and not viewing pending reports
+    return location.pathname === '/DepartmentAdminDashboard' && selectedStatus !== 'pending';
+  }
+  if (btn === 'new-reports') {
+    // Selected if on dashboard and viewing pending reports
+    return location.pathname === '/DepartmentAdminDashboard' && selectedStatus === 'pending';
+  }
+  if (btn === 'add-responder') return location.pathname.startsWith('/AddResponder');
+  if (btn === 'profile') return location.pathname.startsWith('/DepartmentAdminProfile');
+  return false;
+};
+
   return (
     <div className="sidebar">
-      <button className="sidebar-link" onClick={handleDashboardClick}>
+      <button
+        className={`sidebar-link${selected('dashboard') ? ' selected' : ''}`}
+        onClick={handleDashboardClick}
+      >
         Dashboard
       </button>
       {isDepartmentAdminPage && (
         <>
-          <button className="sidebar-links" onClick={() => onNavigate('new-reports')}>
+          <button
+            className={`sidebar-links${selected('new-reports') ? ' selected' : ''}`}
+            onClick={() => handleInternalNavigate('new-reports')}
+          >
             New Reports {newReportsCount > 0 && <span className="badge">{newReportsCount}</span>}
           </button>
-          <button className="sidebar-links" onClick={() => navigate('/AddResponder')}>
+          <button
+            className={`sidebar-links${selected('add-responder') ? ' selected' : ''}`}
+            onClick={handleAddResponderClick}
+          >
             Add Responder
           </button>
         </>

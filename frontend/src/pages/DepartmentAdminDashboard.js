@@ -174,13 +174,26 @@ const redIcon = new L.Icon({
     }
   };
 
+  useEffect(() => {
+  const handler = () => {
+    setSelectedStatus('pending');
+    setTimeout(() => {
+      document.getElementById('pending-reports-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+  window.addEventListener('select-pending-reports', handler);
+  return () => window.removeEventListener('select-pending-reports', handler);
+}, []);
+
   // Navigation handler for sidebar
   const handleSidebarNavigate = (section) => {
-    if (section === 'new-reports') {
+  if (section === 'new-reports') {
+    setSelectedStatus('pending');
+    setTimeout(() => {
       document.getElementById('pending-reports-section')?.scrollIntoView({ behavior: 'smooth' });
-      setSelectedStatus('pending');
-    }
-  };
+    }, 100);
+  }
+};
 
   useEffect(() => {
     if (location.state?.scrollToPending) {
@@ -430,7 +443,8 @@ useEffect(() => {
   return (
     <AdminLayout 
       newReportsCount={statusCounts.pending} 
-      onSidebarNavigate={handleSidebarNavigate}>
+      onSidebarNavigate={handleSidebarNavigate}
+      selectedStatus={selectedStatus}>
 
       {showNewReportModal && latestReport && (
         <div className="modal-backdrop">

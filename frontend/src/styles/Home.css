@@ -1,89 +1,71 @@
 /* Home.css */
-/* General styles for the home page */
 .home-container {
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
-  padding: 20px;
-  display: flex; /* Use Flexbox */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  background-image: url('../assets/world-map.png'); /* Path to your world-map image */
-  background-size: cover; /* Make the image cover the entire container */
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Prevent the image from repeating */
-  position: relative; /* Position relative for pseudo-element */
-  overflow: hidden; /* Prevent scrolling */
+  height: 100vh;
+  width: 100vw;
+  padding: 100px 16px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../assets/world-map.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
 }
 
 .home-container::before {
-  content: ''; /* Create a pseudo-element for the background overlay */
+  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent dark overlay */
-  z-index: 0; /* Place it behind the content */
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
 }
-  
+
 .home-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 900px;
-  z-index: 1;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.829);
-  border-radius: 10px;
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  /* Smooth resizing transition */
-  transition: all 0.5s ease-in-out;
-}
-
-.home-container h1,
-.home-container p,
-.get-started-button,
-.home-logo-inline {
-  transition: all 0.4s ease-in-out;
-}
-
-.logo-container {
-  margin-bottom: 2rem;
-  animation: fadeInDown 1s ease-out;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 .home-logo-inline {
-  width: 300px;
+  width: 200px;
   height: auto;
   vertical-align: middle;
+  margin-left: 10px;
 }
 
 .home-container h1 {
-  font-size: 3.5rem;
+  font-size: 2.8rem;
+  margin: 0.5em 0;
   color: #1b1b1b;
-  animation: fadeInDown 1s ease-out;
+  animation: fadeInDown 0.8s ease-out;
 }
 
 .home-container p {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: #333;
-  animation: fadeInDown 1s ease-out;
+  margin: 0.5em 0;
+  animation: fadeInDown 0.8s ease-out;
 }
 
 .get-started-button {
   display: inline-block;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 10px 20px;
+  margin-top: 1.5em;
+  padding: 10px 24px;
   background-color: #d32f2f;
   color: #fff;
   text-decoration: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 6px;
+  font-size: 1rem;
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
@@ -92,7 +74,6 @@
   background-color: #b71c1c;
 }
 
-/* Keyframes for animations */
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -104,79 +85,71 @@
   }
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
+/* 📱 Mobile (<= 600px) */
+@media (max-width: 600px) {
+  .home-container {
+    padding: 12px;
   }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
+
+  .home-content {
+    padding: 16px;
   }
-  100% {
-    transform: scale(1);
-    opacity: 1;
+
+  .home-container h1 {
+    font-size: 2rem;
+  }
+
+  .home-container p {
+    font-size: 1rem;
+  }
+
+  .home-logo-inline {
+    width: 140px;
+    margin-left: 8px;
+  }
+
+  .get-started-button {
+    font-size: 0.9rem;
+    padding: 8px 18px;
   }
 }
 
-/* Responsive Design */
-
-/* Small devices (mobile phones, less than 600px) */
-@media (max-width: 600px) {
-  .home-content h1 {
-    font-size: 2rem;
+/* 💻 Tablet (601px - 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .home-container h1 {
+    font-size: 2.4rem;
   }
 
   .home-container p {
     font-size: 1.2rem;
   }
 
-  .get-started-button {
-    padding: 8px 16px;
-    font-size: 14px;
+  .home-logo-inline {
+    width: 180px;
   }
 
-  .home-logo-inline {
-    width: 150px;
+  .get-started-button {
+    font-size: 1rem;
+    padding: 9px 22px;
   }
 }
 
-/* Medium devices (tablets, 600px to 1024px) */
-@media (min-width: 600px) and (max-width: 1024px) {
-  .home-content h1 {
-    font-size: 2.8rem;
+/* 🖥️ Desktop (1025px and up) */
+@media (min-width: 1025px) {
+  .home-container h1 {
+    font-size: 3.2rem;
   }
 
   .home-container p {
-    font-size: 1.3rem;
-  }
-
-  .get-started-button {
-    padding: 9px 18px;
-    font-size: 15px;
+    font-size: 1.5rem;
   }
 
   .home-logo-inline {
-    width: 230px;
-  }
-}
-
-/* Large devices (desktops, more than 1024px) */
-@media (min-width: 1024px) {
-  .home-content h1 {
-    font-size: 3.5rem;
-  }
-
-  .home-container p {
-    font-size: 1.8rem;
+    width: 220px;
   }
 
   .get-started-button {
-    padding: 12px 24px;
-    font-size: 18px;
-  }
-
-  .home-logo-inline {
-    width: 300px;
+    font-size: 1.1rem;
+    padding: 12px 28px;
   }
 }

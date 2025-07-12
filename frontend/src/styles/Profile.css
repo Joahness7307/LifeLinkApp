@@ -1,4 +1,3 @@
-/* General Styles */
 .profile-container {
   display: flex;
   flex-direction: column;
@@ -6,13 +5,21 @@
   background: #f4f8fb;
   border-radius: 18px;
   box-shadow: 0 4px 24px rgba(44, 110, 175, 0.07);
+  padding: 2rem;
+  margin-top: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 0;
+  width: 100%;
+  max-width: 900px; /* or 100% for mobile, 900px for desktop */
+  box-sizing: border-box;
 }
 
 .profile-container h2 {
   margin: 0;
   margin-top: 20px;
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: #1976d2;
   margin-bottom: 2rem;
@@ -24,21 +31,19 @@
   gap: 3rem;
   justify-content: center;
   align-items: flex-start;
+  width: 100%;
+  max-width: 1100px;
+  box-sizing: border-box;
+  padding: 2.5rem;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(25,118,210,0.08);
 }
 
 .profile-section {
   flex: 1 1 0;
-  min-width: 480px;
+  min-width: 260px;
   max-width: 570px;
-}
-
-.profile-image {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  margin: 0 auto 1rem auto; /* Center the image */
-  object-fit: cover;
-  display: block;
 }
 
 .profile-details {
@@ -46,23 +51,23 @@
   flex-direction: column;
 }
 
-/* Make label not wrap and align at the top */
 .profile-field {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.7rem;
+  flex-wrap: wrap;
 }
 
-/* Prevent label from shrinking or wrapping */
 .profile-field label {
   white-space: nowrap;
   flex-shrink: 0;
   margin-right: 8px;
   margin-bottom: 0;
-  line-height: 2.2; /* aligns label with numbers */
+  line-height: 2.2;
   font-weight: 500;
   color: #444;
+  font-size: 1.08rem;
 }
 
 .profile-field p {
@@ -70,9 +75,12 @@
   color: #444;
   padding: 0.5rem;
   border-radius: 5px;
+  font-size: 1.08rem;
+  background: #f7f9fa;
+  min-width: 0;
+  word-break: break-word;
 }
 
-/* Numbers wrap to next line, but label stays on first line */
 .numbers-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -99,6 +107,41 @@
   user-select: none;
 }
 
+.profile-field input[type="text"],
+.profile-field input[type="email"] {
+  padding: 0.5rem 0.8rem;
+  border-radius: 5px;
+  border: 1px solid #bbb;
+  font-size: 1rem;
+  outline: none;
+  background: #f8fafc;
+  transition: border 0.2s;
+  margin-right: 8px;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.profile-field input:focus {
+  border: 1.5px solid #1976d2;
+}
+
+.profile-field button {
+  padding: 0.4rem 1rem;
+  border-radius: 5px;
+  border: none;
+  background: #1976d2;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-right: 6px;
+}
+
+.profile-field button:hover {
+  background: #1251a3;
+}
+
 .error {
   color: #d32f2f;
   text-align: center;
@@ -107,94 +150,116 @@
 
 /* Responsive Design */
 
-/* Small devices (mobile phones, less than 600px) */
-@media (max-width: 600px) {
-  .profile-container {
-    padding: 1rem;
+/* Small devices (mobile phones, less than 700px) */
+@media (max-width: 700px) {
+  .profile-container,
+  .add-responder-container,
+  .department-admin-dashboard {
+    max-width: 100vw;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     margin-top: 80px;
   }
-
   .profile-card {
-    padding: 1.5rem;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.2rem;
+    max-width: 100vw;
   }
-
-  .profile-image {
-    width: 150px;
-    height: 150px;
+  .profile-section {
+    min-width: 0;
+    max-width: 100%;
   }
-
-  .profile-card h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+  .profile-container h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
   }
-
   .profile-field label {
-    font-size: 0.9rem;
+    font-size: 0.97rem;
+    line-height: 1.7;
   }
-
   .profile-field p {
-    font-size: 0.9rem;
+    font-size: 0.97rem;
     padding: 0.4rem;
+  }
+  .profile-field input[type="text"],
+  .profile-field input[type="email"] {
+    font-size: 0.97rem;
+    padding: 0.4rem 0.7rem;
+  }
+  .profile-field button {
+    font-size: 0.97rem;
+    padding: 0.35rem 0.8rem;
   }
 }
 
-/* Medium devices (tablets, 600px to 1024px) */
-@media (min-width: 600px) and (max-width: 1024px) {
-  .profile-container {
-    padding: 2rem;
-    margin-top: 90px;
+/* Medium devices (tablets, 700px to 1024px) */
+@media (min-width: 700px) and (max-width: 1024px) {
+  .profile-container,
+  .add-responder-container,
+  .department-admin-dashboard {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 98vw;
+    width: 100%;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    margin-top: 80px;
+    box-sizing: border-box;
   }
-
   .profile-card {
-    padding: 2rem;
+    gap: 2rem;
+    padding: 1.5rem;
+    max-width: 98vw;
   }
-
-  .profile-image {
-    width: 180px;
-    height: 180px;
+  .profile-section {
+    min-width: 0;
+    max-width: 100%;
   }
-
-  .profile-card h2 {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
+  .profile-container h2 {
+    font-size: 1.7rem;
+    margin-bottom: 1.5rem;
   }
-
   .profile-field label {
     font-size: 1rem;
   }
-
   .profile-field p {
     font-size: 1rem;
-    padding: 0.5rem;
+    padding: 0.45rem;
+  }
+  .profile-field input[type="text"],
+  .profile-field input[type="email"] {
+    font-size: 1rem;
+    padding: 0.45rem 0.8rem;
+  }
+  .profile-field button {
+    font-size: 1rem;
+    padding: 0.4rem 0.9rem;
   }
 }
 
 /* Large devices (desktops, more than 1024px) */
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .profile-container {
     padding: 2rem;
     margin-top: 120px;
-    margin-left: 260px;
   }
-
   .profile-card {
     padding: 2.5rem;
+    gap: 3rem;
+    max-width: 1100px;
   }
-
-  .profile-image {
-    width: 200px;
-    height: 200px;
+  .profile-section {
+    min-width: 320px;
+    max-width: 570px;
   }
-
-  .profile-card h2 {
+  .profile-container h2 {
     font-size: 2rem;
     margin-bottom: 2rem;
   }
-
   .profile-field label {
     font-size: 1.1rem;
   }
-
   .profile-field p {
     font-size: 1.1rem;
     padding: 0.5rem;

@@ -1,79 +1,72 @@
+/* src/component-styles/Sidebar.css */
+
+/* Base Styles (for desktop and larger screens) */
 .sidebar {
-  width: 260px;
-  min-height: 100vh;
-  min-width: 220px;
-  max-width: 300px;
-  flex-shrink: 0;
-  background: #2d2f35;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  padding: 2rem 1rem 1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  position: fixed;
-  left: 0;
-  top: 0;
+    width: 260px;
+    min-height: 100vh;
+    min-width: 220px;
+    max-width: 300px;
+    flex-shrink: 0;
+    background: #2d2f35;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 2rem 1rem 1rem 1rem;
+    display: flex; /* Displayed by default */
+    flex-direction: column;
+    gap: 1.5rem;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100; /* Lower z-index than Navbar's mobile menu */
+    box-sizing: border-box;
+}
+
+/* Common button styles */
+.sidebar-link, .sidebar-links {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    text-align: left;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
+    position: relative;
+    font-weight: 500;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .sidebar-link {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.1rem;
-  text-align: left;
-  padding: 0.7rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.18s;
-  position: relative;
-  margin-top: 80px;
-  font-weight: 500;
-}
-
-.sidebar-links {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.1rem;
-  text-align: left;
-  padding: 0.7rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: .3s all ease-in-out;
-  position: relative;
-  font-weight: 500;
+    margin-top: 80px; /* Space for a potential header/logo area */
 }
 
 .sidebar-link:hover, .sidebar-links:hover,
 .sidebar-link:focus, .sidebar-links:focus {
-  background: #df6800;
-  outline: none;
+    background: #df6800;
+    outline: none;
 }
 
 .badge {
-  background: #d32f2f;
-  color: #fff;
-  border-radius: 12px;
-  padding: 0.2em 0.7em;
-  font-size: 0.95em;
-  margin-left: 0.7em;
-  font-weight: 600;
-  vertical-align: middle;
+    background: #d32f2f;
+    color: #fff;
+    border-radius: 12px;
+    padding: 0.2em 0.7em;
+    font-size: 0.95em;
+    margin-left: 0.7em;
+    font-weight: 600;
+    vertical-align: middle;
 }
 
-@media (max-width: 900px) {
-  .sidebar {
-    position: static;
-    width: 100%;
-    min-height: unset;
-    flex-direction: row;
-    gap: 1rem;
-    padding: 1rem 0.5rem;
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
-  .sidebar-link {
-    font-size: 1rem;
-    padding: 0.6rem 0.7rem;
-  }
+.sidebar-link.selected,
+.sidebar-links.selected {
+    background: #df6800;
+    color: #fff;
+}
+
+/* --- Media Query to Hide Sidebar on Smaller Screens --- */
+@media (max-width: 991px) {
+    .sidebar {
+        display: none; /* Hides the entire sidebar component */
+    }
 }
