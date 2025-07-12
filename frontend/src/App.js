@@ -28,7 +28,7 @@ import AdminLayout from './components/AdminLayout'; // Your AdminLayout componen
 
 function App() {
   const [notifications, setNotifications] = useState([]);
-  const [newReportsCount] = useState(5); // Example: Get this dynamically from API later
+  const [newReportsCount, setNewReportsCount] = useState(0);
 
   const navigate = useNavigate(); // Initialize useNavigate here
 
@@ -104,7 +104,7 @@ function App() {
           element={
             <AdminLayout newReportsCount={newReportsCount} onSidebarNavigate={handleDepartmentSidebarNavigation}>
               <ProtectedRoute>
-                <DepartmentAdminDashboard />
+                <DepartmentAdminDashboard setNewReportsCount={setNewReportsCount}/>
               </ProtectedRoute>
             </AdminLayout>
           }
