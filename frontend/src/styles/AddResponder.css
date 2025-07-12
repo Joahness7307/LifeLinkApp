@@ -188,7 +188,7 @@
 /* Mobile: stack form, reduce padding, keep centered */
 @media (max-width: 700px) {
   .add-responder-container {
-    padding: 1.2rem 0.5rem;
+    padding: 1.5rem;
     margin-top: 60px;
     max-width: 99vw;
   }
@@ -245,7 +245,7 @@
 /* Very small screens: minimal padding and font */
 @media (max-width: 480px) {
   .add-responder-container {
-    padding: 0.5rem 0.1rem;
+    padding: 1.5rem;
     max-width: 100vw;
     margin-top: 80px;
   }

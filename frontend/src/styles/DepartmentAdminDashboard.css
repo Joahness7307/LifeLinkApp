@@ -100,50 +100,57 @@
 .search-container {
     display: flex;
     justify-content: center;
-    align-items: stretch; /* Stretch items to match height */
-    margin-bottom: 40px;
-    gap: 0; /* Gap is handled by border-radius and direct element placement */
-    flex-wrap: wrap; /* Allow search input and button to wrap */
+    align-items: stretch;
+    gap: 0;
+    flex-wrap: wrap;
     width: 100%;
-    max-width: 800px; /* Limit max width of search bar for aesthetics */
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(25,118,210,0.07);
+    padding: 0;
 }
 
 .search-input {
-    padding: 18px 22px; /* Larger padding for better touch targets */
-    border-radius: 6px 0 0 6px;
+    padding: 18px 22px;
+    border-radius: 10px 0 0 10px;
     border: 1px solid #bbb;
-    font-size: 1.15rem;
-    flex-grow: 1; /* Allows input to take up available space */
-    min-width: 250px; /* Minimum width for input before stacking */
+    font-size: 1.1rem;
+    flex-grow: 1;
+    min-width: 200px;
     outline: none;
     box-sizing: border-box;
-    height: 60px; /* Fixed height for consistent look */
+    height: 56px;
+    width: 100%;
+    max-width: 500px;
+    background: #f8fafc;
+    transition: border 0.2s;
 }
 
 .search-input:focus {
     border-color: #1976d2;
-    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
 }
 
 .search-button {
-    padding: 18px 30px; /* Larger padding for better touch targets */
-    border-radius: 0 6px 6px 0;
+    padding: 0 28px;
+    border-radius: 0 10px 10px 0;
     border: 1px solid #1976d2;
     background: #1976d2;
     color: #fff;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    border-left: none; /* No left border to align with input */
-    height: 60px; /* Match input height */
-    transition: background 0.2s ease, transform 0.1s ease;
-    flex-shrink: 0; /* Prevent button from shrinking */
+    border-left: none;
+    height: 56px;
+    transition: background 0.2s, transform 0.1s;
+    flex-shrink: 0;
+    box-shadow: none;
 }
 
 .search-button:hover {
-    background: #1565c0;
+    background: #1251a3;
     transform: translateY(-1px);
 }
 
@@ -539,25 +546,26 @@
     }
 
     .search-container {
-        flex-direction: column; /* Stack search input and button */
+        flex-direction: column;
         gap: 10px;
-        align-items: center;
-        margin-bottom: 30px;
+        align-items: stretch;
+        max-width: 98vw;
+        box-shadow: 0 1px 8px rgba(25,118,210,0.06);
+        padding: 10px 0;
     }
-    .search-input {
-        border-radius: 6px; /* Full border-radius when stacked */
-        width: 90%; /* Take more width */
-        max-width: 500px; /* Limit max width */
-        height: auto; /* Let padding define height */
-        padding: 15px 20px;
+    .search-input,
+    .search-button {
+        border-radius: 10px;
+        width: 100%;
+        max-width: 100%;
+        height: 48px;
+        font-size: 1rem;
+        padding: 14px 16px;
+        margin: 0;
+        box-shadow: none;
     }
     .search-button {
-        border-radius: 6px; /* Full border-radius when stacked */
-        border-left: 1px solid #1976d2; /* Re-add border */
-        width: 90%; /* Take more width */
-        max-width: 500px;
-        height: auto;
-        padding: 15px 20px;
+        border-left: 1px solid #1976d2;
     }
 
     .reports-table {
@@ -719,14 +727,17 @@
     .status-count {
         font-size: 2.2em;
     }
-
+    .search-container {
+        padding: 6px 0;
+        max-width: 100vw;
+    }
     .search-input,
     .search-button {
-        width: 95%;
-        padding: 12px 15px;
-        font-size: 1em;
+        width: 100%;
+        padding: 12px 10px;
+        font-size: 0.98em;
+        height: 44px;
     }
-
     /* Hide more columns for very small screens */
     .reports-table th:nth-child(4), /* Time Submitted */
     .reports-table td:nth-child(4) {
@@ -792,8 +803,9 @@
     }
     .search-input,
     .search-button {
-        padding: 10px 12px;
-        font-size: 0.9em;
+        padding: 8px 6px;
+        font-size: 0.93em;
+        height: 38px;
     }
     .reports-table th,
     .reports-table td {
