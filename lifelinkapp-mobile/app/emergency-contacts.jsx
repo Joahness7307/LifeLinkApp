@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Linking } from 'react-native';
-import React from 'react';
 import { staticDepartments } from '../constants/emergencyContacts';
 
 const EmergencyContacts = () => {

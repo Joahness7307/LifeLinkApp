@@ -7,7 +7,6 @@ import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 import { API_BASE_URL } from '../../config';
 import NetInfo from '@react-native-community/netinfo';
-import * as SecureStore from 'expo-secure-store';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
 import { useRouter } from 'expo-router';

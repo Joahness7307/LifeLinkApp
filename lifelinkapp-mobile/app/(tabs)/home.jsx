@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator, Modal, ScrollView, StyleSheet, Vibration } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { AuthContext } from '../../context/AuthContext.jsx';
-import { socketRef } from '../../utils/socketRef';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 import { useRouter } from 'expo-router';
@@ -28,7 +27,6 @@ const Home = () => {
   const isFocused = useIsFocused();
   const router = useRouter();
   const socketRef = useRef(null);
-  const showConfirmOnLocation = useRef(false);
   const showConfirmOnLocationRef = useRef(false);
   const { setCurrentLocation } = useContext(LocationContext);
 
@@ -82,8 +80,6 @@ const Home = () => {
   const MAX_FILES = 3;
   const MAX_IMAGE_SIZE = 3 * 1024 * 1024; // 3MB
   const MAX_VIDEO_SIZE = 15 * 1024 * 1024; // 15MB
-  const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-  const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/quicktime', 'video/webm'];
 
   const ALLOWED_REGION_CODES = ['070000000'];
   const ALLOWED_PROVINCE_CODES = ['072200000'];

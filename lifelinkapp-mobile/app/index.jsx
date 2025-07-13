@@ -3,9 +3,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { imagess } from '../constants';
 import { useRouter } from 'expo-router';
 import CustomButton from '../components/CustomButton';
-import { useEffect } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import { API_BASE_URL } from '../config';
 
 export default function App() {
   const router = useRouter();

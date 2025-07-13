@@ -1,5 +1,4 @@
 import { Text, View, Image, StyleSheet } from 'react-native'
-import React from 'react'
 import { Tabs } from 'expo-router'
 import { icons } from '../../constants'
 import { SafeAreaView } from 'react-native-safe-area-context'
