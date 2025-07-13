@@ -93,6 +93,7 @@ const DepartmentAdminProfile = () => {
 
   return (
     <AdminLayout newReportsCount={pendingCount} onSidebarNavigate={handleSidebarNavigate}>
+      <div className="admin-main-content">
       <div className="profile-container">
         <h2>Department Admin Profile</h2>
         <div className="profile-card">
@@ -319,6 +320,7 @@ const DepartmentAdminProfile = () => {
               )}
             </div>
         </div>
+      </div>
       </div>
     </AdminLayout>
   );

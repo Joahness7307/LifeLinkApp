@@ -129,6 +129,7 @@ const AddResponderPage = () => {
 
   return (
     <AdminLayout newReportsCount={pendingCount} onSidebarNavigate={handleSidebarNavigate}>
+       <div className="admin-main-content">
       <div className="add-responder-container">
         <h2>Add Responder</h2>
         <form className="add-responder-form" onSubmit={handleAddResponder}>
@@ -192,6 +193,7 @@ const AddResponderPage = () => {
           </tbody>
         </table>
 
+      </div>
       </div>
     </AdminLayout>
   );
