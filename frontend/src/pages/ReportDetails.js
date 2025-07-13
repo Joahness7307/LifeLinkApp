@@ -206,8 +206,9 @@ const markAsFake = async (reason) => {
 
   return (
     <AdminLayout newReportsCount={pendingCount} onSidebarNavigate={handleSidebarNavigate}>
+      <div className="admin-main-content">
       <div className="report-details">
-        <h2>Report Details</h2>
+        <h2>Report Details</h2>     
         <p><strong>Type: </strong> {report.type}</p>
         <p><strong>Subtype: </strong> {report.subtype}</p>
         <p><strong>Status: </strong> {report.status}</p>
@@ -408,7 +409,7 @@ const markAsFake = async (reason) => {
             </div>
           </div>
         )}
-
+</div>
     </AdminLayout>
   );
 };
