@@ -6,7 +6,7 @@ import io from 'socket.io-client';
 import { socketRef } from '../utils/socketRef';
 import { API_BASE_URL } from '../config';
 
-const SOCKET_URL = 'http://192.168.101.9:3000';
+const SOCKET_URL = 'https://lifelink-backend-izjs.onrender.com';
 
 const MyReports = () => {
   const [allReports, setAllReports] = useState([]);

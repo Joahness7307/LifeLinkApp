@@ -27,7 +27,7 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-const DepartmentAdminDashboard = () => {
+const DepartmentAdminDashboard = ({ setNewReportsCount }) => {
   const { user } = useAuthContext();
   const [showNewReportModal, setShowNewReportModal] = useState(false);
   const [latestReport, setSetLatestReport] = useState(null);
@@ -219,9 +219,12 @@ const redIcon = new L.Icon({
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
-    if (res.ok) setStatusCounts(data);
+    if (res.ok) {
+      setStatusCounts(data);
+      setNewReportsCount(data.pending);
+    }
   } catch {}
-}, []);
+}, [setNewReportsCount]);
 
 useEffect(() => {
   fetchStatusCounts();

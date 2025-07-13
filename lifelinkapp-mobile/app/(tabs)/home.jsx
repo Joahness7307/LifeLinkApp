@@ -18,7 +18,7 @@ import { LocationContext } from '../../context/LocationContext.jsx';
 import NetInfo from '@react-native-community/netinfo';
 
 const [isOffline, setIsOffline] = useState(false)
-const SOCKET_URL = 'http://192.168.101.9:3000';
+const SOCKET_URL = 'https://lifelink-backend-izjs.onrender.com';
 
 const allowedImageExt = ['.jpg', '.jpeg', '.png', '.webp'];
 const allowedVideoExt = ['.mp4', '.mov', '.webm'];
@@ -529,7 +529,7 @@ const Home = () => {
           barangay: barangayObj?._id || '',
           barangayCode: barangayObj?.code || ''
         };
-        await fetch(`http://192.168.101.9:3000/api/user/${user._id}`, {
+        await fetch(`https://lifelink-backend-izjs.onrender.com/api/user/${user._id}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
