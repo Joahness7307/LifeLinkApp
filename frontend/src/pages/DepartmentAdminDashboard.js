@@ -677,39 +677,21 @@ useEffect(() => {
             {selectedStatus === 'resolved' && 'Resolved Reports'}
           </h2> */}
 
-          <div style={{ marginBottom: 70, textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 0 }}>
+          <div className='search-container'>
             <input
+              className='search-input'
               type="text"
               placeholder="Search reports..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               aria-label="Search reports"
-              style={{
-                padding: '15px 20px',
-                borderRadius: '6px 0 0 6px',
-                border: '1px solid #bbb',
-                fontSize: '1.1rem',
-                width: 650,
-                outline: 'none'
-              }}
               onKeyDown={e => {
                 if (e.key === 'Enter') handleSearch();
               }}
             />
             <button
+              className='search-button'
               onClick={handleSearch}
-              style={{
-                padding: '15px 28px',
-                borderRadius: '0 6px 6px 0',
-                border: '1px solid #1976d2',
-                background: '#1976d2',
-                color: '#fff',
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                borderLeft: 'none',
-                height: 58
-              }}
               aria-label="Search"
             >
               Search
