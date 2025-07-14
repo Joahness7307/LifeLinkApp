@@ -1,4 +1,3 @@
-import React from 'react'
 import { AuthProvider } from '../context/AuthContext'
 import { Stack, SplashScreen } from 'expo-router'
 import { useFonts } from 'expo-font'
@@ -8,7 +7,6 @@ import Toast, { BaseToast } from 'react-native-toast-message'
 import { socketRef } from '../utils/socketRef';
 import { io } from 'socket.io-client';
 import { LocationProvider } from '../context/LocationContext'
-import * as Linking from 'expo-linking';
 
 const SOCKET_URL = 'https://lifelink-backend-izjs.onrender.com';
 const linking = {

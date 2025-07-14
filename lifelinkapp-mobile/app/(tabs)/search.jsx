@@ -10,7 +10,6 @@ import { API_BASE_URL } from '../../config';
 import { LocationContext } from '../../context/LocationContext';
 import { Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NetInfo from '@react-native-community/netinfo';
 
 const Search = () => {
   const { user } = useContext(AuthContext);
