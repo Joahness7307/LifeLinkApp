@@ -3,6 +3,8 @@ import AdminLayout from '../components/AdminLayout';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Profile.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const DepartmentAdminProfile = () => {
   const [profile, setProfile] = useState(null);
   const [department, setDepartment] = useState(null);
@@ -27,7 +29,7 @@ const DepartmentAdminProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch('/api/user/me', {
+        const response = await fetch(`${BACKEND_URL}/api/user/me`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         const data = await response.json();
@@ -44,7 +46,7 @@ const DepartmentAdminProfile = () => {
   useEffect(() => {
     const fetchDepartment = async () => {
       try {
-        const response = await fetch('/api/admin/my-department', {
+        const response = await fetch(`${BACKEND_URL}/api/admin/my-department`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         const data = await response.json();
@@ -65,7 +67,7 @@ const DepartmentAdminProfile = () => {
       const departmentId = localStorage.getItem('departmentId');
       if (!departmentId) return;
       try {
-        const res = await fetch(`/api/reports/department/${departmentId}/status-counts`, {
+        const res = await fetch(`${BACKEND_URL}/api/reports/department/${departmentId}/status-counts`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -91,6 +93,7 @@ const DepartmentAdminProfile = () => {
 
   return (
     <AdminLayout newReportsCount={pendingCount} onSidebarNavigate={handleSidebarNavigate}>
+      <div className="admin-main-content">
       <div className="profile-container">
         <h2>Department Admin Profile</h2>
         <div className="profile-card">
@@ -119,7 +122,7 @@ const DepartmentAdminProfile = () => {
                         return;
                       }
                       setSavingAdminContact(true);
-                      const res = await fetch(`/api/user/${profile._id}`, {
+                      const res = await fetch(`${BACKEND_URL}/api/user/${profile._id}`, {
                         method: 'PATCH',
                         headers: {
                           'Content-Type': 'application/json',
@@ -178,7 +181,7 @@ const DepartmentAdminProfile = () => {
                         <button
                           onClick={async () => {
                             setSavingDeptMobile(true);
-                            const res = await fetch(`/api/admin/departments/${department._id}`, {
+                            const res = await fetch(`${BACKEND_URL}/api/admin/departments/${department._id}`, {
                               method: 'PATCH',
                               headers: {
                                 'Content-Type': 'application/json',
@@ -243,7 +246,7 @@ const DepartmentAdminProfile = () => {
                         <button
                           onClick={async () => {
                             setSavingDeptLandline(true);
-                            const res = await fetch(`/api/admin/departments/${department._id}`, {
+                            const res = await fetch(`${BACKEND_URL}/api/admin/departments/${department._id}`, {
                               method: 'PATCH',
                               headers: {
                                 'Content-Type': 'application/json',
@@ -317,6 +320,7 @@ const DepartmentAdminProfile = () => {
               )}
             </div>
         </div>
+      </div>
       </div>
     </AdminLayout>
   );

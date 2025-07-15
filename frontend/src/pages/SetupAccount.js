@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SetupAccount.css'; // Adjust the path as necessary
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const SetupAccount = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +27,7 @@ const SetupAccount = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/admin/setup-account', {
+      const response = await fetch(`${BACKEND_URL}/api/admin/setup-account`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, userName, password, contactNumber }),

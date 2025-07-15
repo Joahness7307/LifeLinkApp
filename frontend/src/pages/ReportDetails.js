@@ -6,6 +6,8 @@ import '../styles/ReportDetails.css';
 import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const redIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
@@ -40,14 +42,14 @@ const ReportDetailsPage = () => {
   useEffect(() => {
     const fetchReport = async () => {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/reports/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/reports/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       setReport(data);
       // Fetch department location if available in report
       if (data.departmentId) {
-        const depRes = await fetch(`/api/departments/${data.departmentId}`, {
+        const depRes = await fetch(`${BACKEND_URL}/api/departments/${data.departmentId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const depData = await depRes.json();
@@ -60,7 +62,7 @@ const ReportDetailsPage = () => {
   const updateReportStatus = async (newStatus) => {
   const token = localStorage.getItem('token');
   try {
-    const res = await fetch(`/api/reports/${report._id}/status`, {
+    const res = await fetch(`${BACKEND_URL}/api/reports/${report._id}/status`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -82,7 +84,7 @@ const ReportDetailsPage = () => {
 const markAsFake = async (reason) => {
   const token = localStorage.getItem('token');
   try {
-    const res = await fetch(`/api/reports/${report._id}/mark-fake`, {
+    const res = await fetch(`${BACKEND_URL}/api/reports/${report._id}/mark-fake`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +110,7 @@ const markAsFake = async (reason) => {
       const departmentId = localStorage.getItem('departmentId');
       if (!departmentId) return;
       try {
-        const res = await fetch(`/api/reports/department/${departmentId}/status-counts`, {
+        const res = await fetch(`${BACKEND_URL}/api/reports/department/${departmentId}/status-counts`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -204,8 +206,9 @@ const markAsFake = async (reason) => {
 
   return (
     <AdminLayout newReportsCount={pendingCount} onSidebarNavigate={handleSidebarNavigate}>
+      <div className="admin-main-content">
       <div className="report-details">
-        <h2>Report Details</h2>
+        <h2>Report Details</h2>     
         <p><strong>Type: </strong> {report.type}</p>
         <p><strong>Subtype: </strong> {report.subtype}</p>
         <p><strong>Status: </strong> {report.status}</p>
@@ -406,7 +409,7 @@ const markAsFake = async (reason) => {
             </div>
           </div>
         )}
-
+</div>
     </AdminLayout>
   );
 };

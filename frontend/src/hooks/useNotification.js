@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+const SOCKET_URL = process.env.REACT_APP_BACKEND_URL;
+const socket = io(SOCKET_URL); // Use env-based backend URL
 
 const useNotifications = (userId, setNotifications) => {
   useEffect(() => {
     if (!userId) return;
 
-    // console.log(`Joining room for userId: ${userId}`);
-    socket.emit('join', userId); // Emit the "join" event with the userId
+    socket.emit('join', userId); // Join room with userId
 
     socket.on('notification', (data) => {
-      // console.log('Received notification:', data.message);
       setNotifications((prevNotifications) => [...prevNotifications, data.message]);
     });
 

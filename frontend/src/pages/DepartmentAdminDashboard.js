@@ -12,7 +12,7 @@ import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-const SOCKET_URL = 'http://localhost:3000'; // or your server IP
+const SOCKET_URL = process.env.REACT_APP_BACKEND_URL;
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   function deg2rad(deg) { return deg * (Math.PI / 180); }
@@ -27,7 +27,7 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-const DepartmentAdminDashboard = () => {
+const DepartmentAdminDashboard = ({ setNewReportsCount }) => {
   const { user } = useAuthContext();
   const [showNewReportModal, setShowNewReportModal] = useState(false);
   const [latestReport, setSetLatestReport] = useState(null);
@@ -72,7 +72,7 @@ const DepartmentAdminDashboard = () => {
 
   const fetchDepartment = async () => {
     const token = localStorage.getItem('token');
-    const res = await fetch(`/api/departments/${user.departmentId}`, {
+    const res = await fetch(`${SOCKET_URL}/api/departments/${user.departmentId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -174,13 +174,26 @@ const redIcon = new L.Icon({
     }
   };
 
+  useEffect(() => {
+  const handler = () => {
+    setSelectedStatus('pending');
+    setTimeout(() => {
+      document.getElementById('pending-reports-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+  window.addEventListener('select-pending-reports', handler);
+  return () => window.removeEventListener('select-pending-reports', handler);
+}, []);
+
   // Navigation handler for sidebar
   const handleSidebarNavigate = (section) => {
-    if (section === 'new-reports') {
+  if (section === 'new-reports') {
+    setSelectedStatus('pending');
+    setTimeout(() => {
       document.getElementById('pending-reports-section')?.scrollIntoView({ behavior: 'smooth' });
-      setSelectedStatus('pending');
-    }
-  };
+    }, 100);
+  }
+};
 
   useEffect(() => {
     if (location.state?.scrollToPending) {
@@ -202,13 +215,16 @@ const redIcon = new L.Icon({
   const departmentId = localStorage.getItem('departmentId');
   if (!departmentId) return;
   try {
-    const res = await fetch(`/api/reports/department/${departmentId}/status-counts`, {
+    const res = await fetch(`${SOCKET_URL}/api/reports/department/${departmentId}/status-counts`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
-    if (res.ok) setStatusCounts(data);
+    if (res.ok) {
+      setStatusCounts(data);
+      setNewReportsCount(data.pending);
+    }
   } catch {}
-}, []);
+}, [setNewReportsCount]);
 
 useEffect(() => {
   fetchStatusCounts();
@@ -232,7 +248,7 @@ useEffect(() => {
       ...(debouncedSearch.trim() && { search: debouncedSearch.trim() })
     });
     const res = await fetch(
-      `/api/reports/department/${departmentId}?${params.toString()}`,
+      `${SOCKET_URL}/api/reports/department/${departmentId}?${params.toString()}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     const data = await res.json();
@@ -274,7 +290,7 @@ useEffect(() => {
 
   // Then send request
   const token = localStorage.getItem('token');
-    await fetch(`/api/reports/${reportId}/status`, {
+    await fetch(`${SOCKET_URL}/api/reports/${reportId}/status`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -293,7 +309,7 @@ useEffect(() => {
     if (!reason) return;
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/reports/${reportId}/mark-fake`, {
+      const res = await fetch(`${SOCKET_URL}/api/reports/${reportId}/mark-fake`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ fakeReason: reason }),
@@ -430,7 +446,8 @@ useEffect(() => {
   return (
     <AdminLayout 
       newReportsCount={statusCounts.pending} 
-      onSidebarNavigate={handleSidebarNavigate}>
+      onSidebarNavigate={handleSidebarNavigate}
+      selectedStatus={selectedStatus}>
 
       {showNewReportModal && latestReport && (
         <div className="modal-backdrop">
@@ -663,39 +680,21 @@ useEffect(() => {
             {selectedStatus === 'resolved' && 'Resolved Reports'}
           </h2> */}
 
-          <div style={{ marginBottom: 70, textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 0 }}>
+          <div className='search-container'>
             <input
+              className='search-input'
               type="text"
               placeholder="Search reports..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               aria-label="Search reports"
-              style={{
-                padding: '15px 20px',
-                borderRadius: '6px 0 0 6px',
-                border: '1px solid #bbb',
-                fontSize: '1.1rem',
-                width: 650,
-                outline: 'none'
-              }}
               onKeyDown={e => {
                 if (e.key === 'Enter') handleSearch();
               }}
             />
             <button
+              className='search-button'
               onClick={handleSearch}
-              style={{
-                padding: '15px 28px',
-                borderRadius: '0 6px 6px 0',
-                border: '1px solid #1976d2',
-                background: '#1976d2',
-                color: '#fff',
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                borderLeft: 'none',
-                height: 58
-              }}
               aria-label="Search"
             >
               Search

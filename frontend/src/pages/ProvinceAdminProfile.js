@@ -3,6 +3,8 @@ import useAuthContext from '../hooks/useAuthContext';
 import useFetchUser from '../hooks/useFetchUser';
 import '../styles/Profile.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const ProvinceAdminProfile = () => {
   const { user } = useAuthContext();
   const { user: userDetails, error } = useFetchUser(user?.id);
@@ -20,7 +22,7 @@ const ProvinceAdminProfile = () => {
       return;
     }
     setSaving(true);
-    const res = await fetch(`/api/user/${userDetails._id}`, {
+    const res = await fetch(`${BACKEND_URL}/api/user/${userDetails._id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

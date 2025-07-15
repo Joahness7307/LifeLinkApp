@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const useFetchUser = (userId) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
@@ -18,7 +20,7 @@ const useFetchUser = (userId) => {
           return;
         }
 
-        const response = await fetch(`/api/user/${userId}`, {
+        const response = await fetch(`${BACKEND_URL}/api/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Send the token in the Authorization header
           },
