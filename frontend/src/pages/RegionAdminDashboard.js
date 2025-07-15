@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/RegionAdminDashboard.css'; // Adjust the path as necessary
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const RegionAdminDashboard = () => {
   const [provinceAdmins, setProvinceAdmins] = useState([]);
   const [provinces, setProvinces] = useState([]);
@@ -21,7 +23,7 @@ const RegionAdminDashboard = () => {
   // Fetch region admin's assigned region
   useEffect(() => {
     const fetchAssignedArea = async () => {
-      const response = await fetch('/api/admin/regionAdmin/assigned-area', {
+      const response = await fetch(`${BACKEND_URL}/api/admin/regionAdmin/assigned-area`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       const data = await response.json();
@@ -38,7 +40,7 @@ const RegionAdminDashboard = () => {
     if (!regionId) return;
     console.log('Fetching provinces for regionId:', regionId); // <-- Debug here
     const fetchProvinces = async () => {
-      const response = await fetch(`/api/admin/provinces/${regionId}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/provinces/${regionId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       const data = await response.json();
@@ -53,7 +55,7 @@ const RegionAdminDashboard = () => {
   // Fetch province admins
   useEffect(() => {
     const fetchProvinceAdmins = async () => {
-      const response = await fetch('/api/admin/get-all-province-admins', {
+      const response = await fetch(`${BACKEND_URL}/api/admin/get-all-province-admins`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       const data = await response.json();
@@ -68,7 +70,7 @@ const RegionAdminDashboard = () => {
   const handleAddProvinceAdmin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/admin/add-province-admins', {
+      const response = await fetch(`${BACKEND_URL}/api/admin/add-province-admins`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +100,7 @@ const RegionAdminDashboard = () => {
 
   const handleSaveEdit = async () => {
     try {
-      const response = await fetch(`/api/admin/update-province-admins/${editingAdmin._id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/update-province-admins/${editingAdmin._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +139,7 @@ const RegionAdminDashboard = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this admin?')) return;
     try {
-      const response = await fetch(`/api/admin/delete-province-admins/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/delete-province-admins/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });

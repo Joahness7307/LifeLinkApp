@@ -5,7 +5,11 @@ import useAuthContext from '../hooks/useAuthContext';
 import { getLocation } from '../utils/geolocationUtils';
 import '../styles/ResponderDashboard.css'; // Import your CSS file
 
-const socket = io('http://localhost:3000');
+const SOCKET_URL = process.env.REACT_APP_BACKEND_URL;
+const socket = io(SOCKET_URL, {
+  transports: ['websocket'],
+  withCredentials: true,
+});
 
 const ResponderDashboard = () => {
   const { user } = useAuthContext();

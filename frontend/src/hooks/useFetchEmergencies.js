@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import useAuthContext from './useAuthContext';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const useFetchEmergencies = () => {
   const [emergencies, setEmergencies] = useState([]);
   const [error, setError] = useState(null);
@@ -17,7 +19,7 @@ const useFetchEmergencies = () => {
           return;
         }
 
-        const response = await fetch('/api/emergencies', {
+        const response = await fetch(`${BACKEND_URL}/api/emergencies`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

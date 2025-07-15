@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 // import useAuthContext from '../hooks/useAuthContext';
 import '../styles/CityAdminDashboard.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const CityAdminDashboard = () => {
   // const { user } = useAuthContext();
   const [departmentAdmins, setDepartmentAdmins] = useState([]);
@@ -17,7 +19,7 @@ const CityAdminDashboard = () => {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const response = await fetch(`/api/admin/my-departments`, {
+        const response = await fetch(`${BACKEND_URL}/api/admin/my-departments`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         const data = await response.json();
@@ -36,7 +38,7 @@ const CityAdminDashboard = () => {
   // Fetch department admins
 const fetchAdmins = async () => {
   try {
-    const response = await fetch('/api/admin/get-all-department-admins', {
+    const response = await fetch(`${BACKEND_URL}/api/admin/get-all-department-admins`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     });
     const data = await response.json();
@@ -65,7 +67,7 @@ const fetchAdmins = async () => {
       }
 
       // Only send department name and email as required by backend
-    const response = await fetch('/api/admin/add-department-admins', {
+    const response = await fetch(`${BACKEND_URL}/api/admin/add-department-admins`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -106,7 +108,7 @@ const fetchAdmins = async () => {
         setError('Please select a department.');
         return;
       }
-      const response = await fetch(`/api/admin/update-department-admins/${editingAdmin._id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/update-department-admins/${editingAdmin._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +132,7 @@ const fetchAdmins = async () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this Department Admin?')) return;
     try {
-      const response = await fetch(`/api/admin/delete-department-admins/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/delete-department-admins/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });

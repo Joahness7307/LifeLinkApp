@@ -1,1 +1,1 @@
-export const API_BASE_URL = 'http://192.168.101.9:3000';
+export const API_BASE_URL = "https://lifelink-backend-izjs.onrender.com";
