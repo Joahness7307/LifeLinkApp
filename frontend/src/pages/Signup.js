@@ -4,6 +4,8 @@ import '../styles/Signup.css';
 import eyeIcon from '../assets/eye.png';
 import eyeSlashIcon from '../assets/hidden.png';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const Signup = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
@@ -19,7 +21,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const response = await fetch('/api/user/register', {
+    const response = await fetch(`${BACKEND_URL}/api/user/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userName, email, password }),

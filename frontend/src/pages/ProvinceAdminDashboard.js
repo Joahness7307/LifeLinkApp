@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/ProvinceAdminDashboard.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const SuperAdminDashboard = () => {
   const [cityAdmins, setCityAdmins] = useState([]);
   const [cities, setCities] = useState([]);
@@ -23,7 +25,7 @@ const SuperAdminDashboard = () => {
   useEffect(() => {
     const fetchAssignedArea = async () => {
       try {
-        const response = await fetch('/api/admin/provinceAdmin/assigned-area', {
+        const response = await fetch(`${BACKEND_URL}/api/admin/provinceAdmin/assigned-area`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         const data = await response.json();
@@ -47,7 +49,7 @@ const SuperAdminDashboard = () => {
   console.log('Fetching cities for provinceId:', provinceId); // <-- Debug here
   const fetchCities = async () => {
     try {
-      const response = await fetch(`/api/admin/cities/${provinceId}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/cities/${provinceId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       const data = await response.json();
@@ -68,7 +70,7 @@ const SuperAdminDashboard = () => {
   useEffect(() => {
     const fetchCityAdmins = async () => {
       try {
-        const response = await fetch('/api/admin/get-all-city-admins', {
+        const response = await fetch(`${BACKEND_URL}/api/admin/get-all-city-admins`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         const data = await response.json();
@@ -88,7 +90,7 @@ const SuperAdminDashboard = () => {
   const handleAddCityAdmin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/admin/add-city-admins', {
+      const response = await fetch(`${BACKEND_URL}/api/admin/add-city-admins`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +128,7 @@ const SuperAdminDashboard = () => {
 
   const handleSaveEdit = async () => {
     try {
-      const response = await fetch(`/api/admin/update-city-admins/${editingAdmin._id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/update-city-admins/${editingAdmin._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +164,7 @@ const SuperAdminDashboard = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this City Admin?')) return;
     try {
-      const response = await fetch(`/api/admin/delete-city-admins/${id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/admin/delete-city-admins/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
