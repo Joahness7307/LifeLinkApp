@@ -7,6 +7,8 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
+const WEB_BASE_URL = process.env.WEB_BASE_URL || 'http://localhost:3001'; 
+
 // Helper function to send email invitations
 const sendInvitationEmail = async (email, role, token) => {
   const transporter = nodemailer.createTransport({
@@ -17,7 +19,7 @@ const sendInvitationEmail = async (email, role, token) => {
     },
   });
 
-  const invitationLink = `http://localhost:3001/setup-account?token=${token}`;
+  const invitationLink = `${WEB_BASE_URL}/setup-account?token=${token}`;
   const subject = `Invitation to join LifeLink as ${role}`;
   const text = `You have been invited to join LifeLink as a ${role}. Click the link below to set up your account:\n\n${invitationLink}`;
 
