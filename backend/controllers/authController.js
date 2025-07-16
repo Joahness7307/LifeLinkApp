@@ -51,17 +51,17 @@ const registerUser = async (req, res) => {
       role: role || 'publicUser', // Default to 'publicUser' if no role is provided
       isProfileComplete: role === 'publicUser' ? true : undefined, // Only set isProfileComplete for public users
       isVerified: true, // <-- Set verified immediately
-      // verificationToken, // Store the verification token
+      verificationToken, // Store the verification token
     });
 
     // Send verification email
-    // const transporter = nodemailer.createTransport({
-    //   service: 'Gmail',
-    //   auth: {
-    //     user: process.env.EMAIL_USER,
-    //     pass: process.env.EMAIL_PASS,
-    //   },
-    // });
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
      // Generate a JWT token
      const token = generateToken(
@@ -74,17 +74,17 @@ const registerUser = async (req, res) => {
       user.departmentId || null // Include departmentId if it exists
     );
 
-    // const verifyUrl = `lifelinkapp-mobile://email-verified?token=${verificationToken}`;
-    // const mailOptions = {
-    //   from: process.env.EMAIL_USER,
-    //   to: email,
-    //   subject: 'Verify your LifeLink account',
-    //   html: `<p>Hi ${userName},</p>
-    //          <p>Click the link below to verify your account:</p>
-    //          <a href="${verifyUrl}">${verifyUrl}</a>`,
-    // };
+    const verifyUrl = `lifelinkapp-mobile://email-verified?token=${verificationToken}`;
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Verify your LifeLink account',
+      html: `<p>Hi ${userName},</p>
+             <p>Click the link below to verify your account:</p>
+             <a href="${verifyUrl}">${verifyUrl}</a>`,
+    };
 
-    // await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
 
     // Return response
     res.status(201).json({
@@ -97,56 +97,56 @@ const registerUser = async (req, res) => {
 };
 
 // Verify email
-// const verifyEmail = async (req, res) => {
-//   const { token } = req.query;
-//   try {
-//     const user = await User.findOne({ verificationToken: token });
-//     if (!user) {
-//       return res.status(400).send('Invalid or expired verification token.');
-//     }
-//     user.isVerified = true;
-//     user.verificationToken = undefined;
-//     await user.save();
-//     res.status(200).send('Email verified successfully! You can go back to the app and login.');
-//   } catch (err) {
-//     res.status(400).send('Invalid or expired token.');
-//   }
-// };
+const verifyEmail = async (req, res) => {
+  const { token } = req.query;
+  try {
+    const user = await User.findOne({ verificationToken: token });
+    if (!user) {
+      return res.status(400).send('Invalid or expired verification token.');
+    }
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    await user.save();
+    res.status(200).send('Email verified successfully! You can go back to the app and login.');
+  } catch (err) {
+    res.status(400).send('Invalid or expired token.');
+  }
+};
 
 // Resend verification email
-// const resendVerificationEmail = async (req, res) => {
-//   const { email } = req.body;
-//   try {
-//     const user = await User.findOne({ email });
-//     if (!user) return res.status(404).json({ error: 'User not found.' });
-//     if (user.isVerified) return res.status(400).json({ error: 'User already verified.' });
+const resendVerificationEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+    if (user.isVerified) return res.status(400).json({ error: 'User already verified.' });
 
-//     const verificationToken = crypto.randomBytes(32).toString('hex');
-//     user.verificationToken = verificationToken;
-//     await user.save();
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    user.verificationToken = verificationToken;
+    await user.save();
 
-//     const transporter = nodemailer.createTransport({
-//       service: 'Gmail',
-//       auth: {
-//         user: process.env.EMAIL_USER,
-//         pass: process.env.EMAIL_PASS,
-//       },
-//     });
-//     const verifyUrl = `lifelinkapp-mobile://email-verified?token=${verificationToken}`;
-//     const mailOptions = {
-//       from: process.env.EMAIL_USER,
-//       to: email,
-//       subject: 'Verify your LifeLink account',
-//       html: `<p>Click the link below to verify your account:</p>
-//              <a href="${verifyUrl}">${verifyUrl}</a>`,
-//     };
-//     await transporter.sendMail(mailOptions);
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    const verifyUrl = `lifelinkapp-mobile://email-verified?token=${verificationToken}`;
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Verify your LifeLink account',
+      html: `<p>Click the link below to verify your account:</p>
+             <a href="${verifyUrl}">${verifyUrl}</a>`,
+    };
+    await transporter.sendMail(mailOptions);
 
-//     res.json({ message: 'Verification email resent. Please check your inbox.' });
-//   } catch (error) {
-//     res.status(500).json({ error: 'Failed to resend verification email.' });
-//   }
-// };
+    res.json({ message: 'Verification email resent. Please check your inbox.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to resend verification email.' });
+  }
+};
 
 // Login user
 const loginUser = async (req, res) => {
@@ -182,9 +182,9 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // if (!user.isVerified) {
-    //   return res.status(401).json({ error: 'Please verify your email before logging in.' });
-    // }
+    if (!user.isVerified) {
+      return res.status(401).json({ error: 'Please verify your email before logging in.' });
+    }
 
     // Generate a JWT token
     const token = generateToken(
@@ -228,7 +228,7 @@ const loginUser = async (req, res) => {
 
 module.exports = {
   registerUser,
-  // verifyEmail,
-  // resendVerificationEmail,
+  verifyEmail,
+  resendVerificationEmail,
   loginUser
 };

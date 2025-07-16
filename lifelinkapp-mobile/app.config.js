@@ -1,14 +1,16 @@
-{
+import 'dotenv/config';
+
+export default {
   "expo": {
     "name": "LifeLink",
     "slug": "lifelinkapp-mobile",
-    "scheme": "lifelinkapp-mobile",
+    "scheme": "lifelink",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/LifeLinkIcon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "extra": {
+      "apiBaseUrl": "https://lifelink-backend-izjs.onrender.com",
       "expoRouterImportMode": "static",
       "router": {},
       "eas": {
@@ -32,6 +34,10 @@
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
+        "FOREGROUND_SERVICE",
+        "ACCESS_BACKGROUND_LOCATION",
+        "RECORD_AUDIO",
+        "MODIFY_AUDIO_SETTINGS",
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
@@ -39,6 +45,13 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    extra: {
+      apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL,
+      OPENCAGE_API_KEY: process.env.EXPO_PUBLIC_OPENCAGE_API_KEY,
+      eas: {
+        projectId: "e1095969-8a34-4956-b0e6-a22aae516b8c"
+      }
     },
     "plugins": [
       "expo-router",
