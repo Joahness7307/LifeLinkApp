@@ -18,7 +18,23 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    const resetUrl = `https://lifelink-frontend-admin.onrender.com/reset-password/${resetToken}`;
+    // Define which roles are considered admin
+    const isAdmin = [
+      "superAdmin",
+      "regionAdmin",
+      "provinceAdmin",
+      "cityAdmin",
+      "departmentAdmin"
+    ].includes(user.role);
+
+    // Set the correct reset URL
+    let resetUrl;
+    if (isAdmin) {
+      resetUrl = `${process.env.WEB_RESET_URL_ADMIN}/${resetToken}`;
+    } else {
+      resetUrl = `${process.env.WEB_RESET_URL_PUBLIC}/${resetToken}`;
+    }
+
     const html = `<p>Click the link below to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`;
 
     // Send email

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { API_BASE_URL } from '../../config';
+import { WEB_RESET_URL } from '../../config';
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ export default function ForgotPasswordScreen({ navigation }) {
     }
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/password/forgot-password`, {
+      const res = await fetch(`${WEB_RESET_URL}/api/password/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
