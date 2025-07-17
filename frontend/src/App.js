@@ -9,6 +9,7 @@ import Unauthorized from './pages/Unauthorized';
 // import ResponderDashboard from './pages/ResponderDashboard';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import MobileResetPassword from './pages/MobileAppResetPass';
 import GoogleAuthHandler from './pages/GoogleAuthHandler';
 import './styles/index.css'; // Your global styles
 import SetupAccount from './pages/SetupAccount';
@@ -162,6 +163,7 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/reset-password/:token" element={<MobileResetPassword />} />
         <Route
           path="/setup-account"
           element={

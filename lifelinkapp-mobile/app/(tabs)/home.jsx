@@ -1648,7 +1648,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   mapSection: {
-    height: 200,
+    height: 100,
     borderRadius: 12,
     overflow: 'hidden',
     marginBottom: 16,

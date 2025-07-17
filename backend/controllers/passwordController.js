@@ -18,26 +18,8 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    // Build reset URLs
-    const webResetUrl = `${process.env.WEB_BASE_URL}/reset-password/${resetToken}`;
-    const mobileResetUrl = `${process.env.MOBILE_BASE_URL}reset-password/${resetToken}`;
-
-    // Prepare email content based on user role
-    let html;
-    if (user.role === 'publicUser') {
-      html = `
-        <p>Click the link below to reset your password in the mobile app:</p>
-        <a href="${mobileResetUrl}">${mobileResetUrl}</a>
-        <p>If the link is not clickable, copy and paste it into your browser or app.</p>
-      `;
-    } else {
-      // For admin and all other roles
-      html = `
-        <p>Click the link below to reset your password (Web):</p>
-        <a href="${webResetUrl}">${webResetUrl}</a>
-        <p>If the link is not clickable, copy and paste it into your browser.</p>
-      `;
-    }
+    const resetUrl = `https://lifelink-frontend-admin.onrender.com/reset-password/${resetToken}`;
+    await sendEmail(user.email, "Reset Your LifeLink Password", `Click to reset: ${resetUrl}`);
 
     // Send email
     const transporter = nodemailer.createTransport({

@@ -7,16 +7,8 @@ export default {
     "scheme": "lifelink",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/LifeLinkIcon.png",
+    "icon": "./assets/appIcon.png",
     "userInterfaceStyle": "light",
-    "extra": {
-      "apiBaseUrl": "https://lifelink-backend-izjs.onrender.com",
-      "expoRouterImportMode": "static",
-      "router": {},
-      "eas": {
-        "projectId": "e1095969-8a34-4956-b0e6-a22aae516b8c"
-      }
-    },
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -27,7 +19,7 @@ export default {
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/appIcon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -47,8 +39,7 @@ export default {
       "favicon": "./assets/favicon.png"
     },
     extra: {
-      apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL,
-      OPENCAGE_API_KEY: process.env.EXPO_PUBLIC_OPENCAGE_API_KEY,
+      apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL || 'https://lifelink-backend-izjs.onrender.com',
       eas: {
         projectId: "e1095969-8a34-4956-b0e6-a22aae516b8c"
       }
