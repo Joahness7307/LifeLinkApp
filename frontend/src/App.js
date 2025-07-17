@@ -163,7 +163,7 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/reset-password/:token" element={<MobileResetPassword />} />
+        <Route path="/mobile-reset-password/:token" element={<MobileResetPassword />} />
         <Route
           path="/setup-account"
           element={
