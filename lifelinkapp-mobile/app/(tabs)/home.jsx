@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator, Modal, ScrollView, StyleSheet, Vibration } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { AuthContext } from '../../context/AuthContext.jsx';
-import { socketRef } from '../../utils/socketRef';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 import { useRouter } from 'expo-router';
@@ -16,14 +15,15 @@ import Toast from 'react-native-toast-message';
 import { playNotificationSound } from '../../utils/playNotificationSound';
 import { LocationContext } from '../../context/LocationContext.jsx';
 import NetInfo from '@react-native-community/netinfo';
+import { forwardGeocode } from '../../utils/geoCode.js';
 
-const [isOffline, setIsOffline] = useState(false)
 const SOCKET_URL = 'https://lifelink-backend-izjs.onrender.com';
 
 const allowedImageExt = ['.jpg', '.jpeg', '.png', '.webp'];
 const allowedVideoExt = ['.mp4', '.mov', '.webm'];
 
 const Home = () => {
+  const [isOffline, setIsOffline] = useState(false)
   const { user, setUser } = useContext(AuthContext);
   const isFocused = useIsFocused();
   const router = useRouter();
@@ -1209,57 +1209,37 @@ const Home = () => {
 
             <View style={{ flexDirection: 'row', marginTop: 16 }}>
               <TouchableOpacity
-                style={{ backgroundColor: '#C65D00', padding: 10, borderRadius: 8, flex: 1, marginRight: 8 }}
+                style={{
+                  backgroundColor: '#C65D00',
+                  padding: 10,
+                  borderRadius: 8,
+                  flex: 1,
+                  marginRight: 8,
+                  opacity: selectedBarangay ? 1 : 0.5
+                }}
                 disabled={!selectedRegion || !selectedProvince || !selectedCity || !selectedBarangay}
                 onPress={async () => {
-                   // Try to find the most specific location to center the map
-                  let centerLat, centerLng;
-
-                  // 1. Barangay
                   const barangayObj = barangays.find(b => b.name === selectedBarangay);
-                  if (barangayObj?.latitude && barangayObj?.longitude) {
-                    centerLat = barangayObj.latitude;
-                    centerLng = barangayObj.longitude;
+                  const cityObj = cities.find(c => c._id === selectedCity);
+                  const provinceObj = provinces.find(p => p._id === selectedProvince);
+                  const regionObj = regions.find(r => r._id === selectedRegion);
+
+                  const fullAddress = `${barangayObj?.name}, ${cityObj?.name}, ${provinceObj?.name}, ${regionObj?.name}`;
+
+                  const geo = await forwardGeocode(fullAddress);
+                  if (geo) {
+                    setReportLocation({ latitude: geo.latitude, longitude: geo.longitude });
+                    setDisplayAddress(geo.formatted);
+                  } else {
+                    setReportLocation({ latitude: 10.3157, longitude: 123.8854 }); // fallback: Cebu City
+                    setDisplayAddress(fullAddress);
                   }
 
-                  // 2. City/Municipality
-                  if ((!centerLat || !centerLng) && selectedCity) {
-                    const cityObj = cities.find(c => c._id === selectedCity);
-                    if (cityObj?.latitude && cityObj?.longitude) {
-                      centerLat = cityObj.latitude;
-                      centerLng = cityObj.longitude;
-                    }
-                  }
-
-                  // 3. Province
-                  if ((!centerLat || !centerLng) && selectedProvince) {
-                    const provinceObj = provinces.find(p => p._id === selectedProvince);
-                    if (provinceObj?.latitude && provinceObj?.longitude) {
-                      centerLat = provinceObj.latitude;
-                      centerLng = provinceObj.longitude;
-                    }
-                  }
-
-                  // 4. Region
-                  if ((!centerLat || !centerLng) && selectedRegion) {
-                    const regionObj = regions.find(r => r._id === selectedRegion);
-                    if (regionObj?.latitude && regionObj?.longitude) {
-                      centerLat = regionObj.latitude;
-                      centerLng = regionObj.longitude;
-                    }
-                  }
-
-                  // 5. Fallback: Cebu City
-                  if (!centerLat || !centerLng) {
-                    centerLat = 10.3157;
-                    centerLng = 123.8854;
-                  }
-
-                  setManualPinLocation({ latitude: centerLat, longitude: centerLng });
                   setManualAddressModal(false);
-                  setTimeout(() => setMapPickerModal(true), 100); // Ensure state is set before opening modal
-                }}              >
-                <Text style={{ color: '#fff', textAlign: 'center' }}>Pick on map</Text>
+                  setConfirmModalVisible(true);
+                }}
+              >
+                <Text style={{ color: '#fff', textAlign: 'center' }}>Confirm</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ backgroundColor: '#eee', padding: 10, borderRadius: 8, flex: 1 }}
@@ -1276,7 +1256,7 @@ const Home = () => {
       </Modal>
 
       {/* Map Picker Modal */}
-      <Modal visible={mapPickerModal} transparent animationType="slide">
+      {/* <Modal visible={mapPickerModal} transparent animationType="slide">
         <View style={{ flex: 1, backgroundColor: '#0008', justifyContent: 'center', alignItems: 'center' }}>
           <View style={{ backgroundColor: '#fff', borderRadius: 10, padding: 10, width: '95%', height: 400 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 10, textAlign: 'center' }}>
@@ -1330,7 +1310,7 @@ const Home = () => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       {/* Confirmation Modal */}
       <Modal visible={confirmModalVisible} transparent animationType="fade">
@@ -1356,32 +1336,6 @@ const Home = () => {
                   Emergency Location:
                   {'\n'}Lat: {reportLocation.latitude}, Lng: {reportLocation.longitude}
                 </Text>
-            
-                {/* Map Preview */}
-                <View style={{ height: 180, borderRadius: 8, overflow: 'hidden', marginBottom: 12 }}>
-                  <MapView
-                    style={{ flex: 1 }}
-                    initialRegion={{
-                      latitude: reportLocation.latitude,
-                      longitude: reportLocation.longitude,
-                      latitudeDelta: 0.005,
-                      longitudeDelta: 0.005,
-                    }}
-                    region={{
-                      latitude: reportLocation.latitude,
-                      longitude: reportLocation.longitude,
-                      latitudeDelta: 0.005,
-                      longitudeDelta: 0.005,
-                    }}
-                    pointerEvents="none"
-                  >
-                    <Marker
-                      coordinate={reportLocation}
-                      title="Emergency Location"
-                      pinColor="red"
-                    />
-                  </MapView>
-                </View>
               </>
             )}
             {displayAddress ? (
@@ -1482,11 +1436,17 @@ const Home = () => {
         </View>
       </Modal>
 
-      {/* Map Section */}
       <View style={styles.mapSection}>
+        <Text style={{ textAlign: 'center', padding: 20 }}>Map is temporarily disabled</Text>
+      </View>
+
+
+      {/* Map Section */}
+      {/* <View style={styles.mapSection}>
         {locationLoading ? (
           <ActivityIndicator size="large" color="#C65D00" style={{ flex: 1 }} />
         ) : location ? (
+          <Text style={{ textAlign: 'center', padding: 20 }}>Map disabled</Text>
           <MapView
             style={{ flex: 1 }}
             initialRegion={{
@@ -1514,7 +1474,7 @@ const Home = () => {
         ) : (
           <Text style={styles.locationNotAvailable}>Location not available</Text>
         )}
-      </View>
+      </View> */}
 
       {/* Recent Reports Section */}
       <View style={styles.recentReportsSection}>
@@ -1688,7 +1648,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   mapSection: {
-    height: 250,
+    height: 200,
     borderRadius: 12,
     overflow: 'hidden',
     marginBottom: 16,
