@@ -25,8 +25,8 @@ const MobileResetPassword = () => {
       setMessage(data.message);
 
       if (response.ok) {
-        message("Password reset successful. You can now open your app and log in.");
-      };
+        setMessage("Password reset successful. You can now open your app and log in.");
+      }
     };
 
     const togglePasswordVisibility = () => {

@@ -39,7 +39,8 @@ export default {
       "favicon": "./assets/favicon.png"
     },
     extra: {
-      apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL || 'https://lifelink-backend-izjs.onrender.com',
+      apiBaseUrl: process.env.API_BASE_URL,
+      webResetUrl: process.env.WEB_RESET_URL,
       eas: {
         projectId: "e1095969-8a34-4956-b0e6-a22aae516b8c"
       }
