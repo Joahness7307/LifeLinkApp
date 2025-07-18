@@ -121,11 +121,11 @@ const SignIn = () => {
             <Text style={styles.errorText}>{error}</Text>
           ) : null}
           
-{/*           <View style={styles.forgotContainer}>
+          <View style={styles.forgotContainer}>
             <Link href="/forgot-password" style={styles.forgotText}>
               Forgot Password?
             </Link>
-          </View> */}
+          </View>
 
           <CustomButton
             title="Log In"

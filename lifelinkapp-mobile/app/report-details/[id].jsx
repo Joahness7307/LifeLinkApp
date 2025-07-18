@@ -255,17 +255,17 @@ export default function ReportDetailsScreen() {
                   {distance !== null ? `${distance.toFixed(2)} km` : '--'}
                 </Text>
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.mapBtn}
                 onPress={() => setMapVisible(true)}
               >
                 <Text style={styles.mapBtnText}>View on Map</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           )}
 
           {/* Map Modal */}
-          <Modal visible={mapVisible} animationType="slide" transparent>
+          {/* <Modal visible={mapVisible} animationType="slide" transparent>
             <View style={styles.mapModalBg}>
               <View style={styles.mapModalContent}>
                 <Text style={styles.mapModalTitle}>
@@ -326,7 +326,7 @@ export default function ReportDetailsScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-          </Modal>
+          </Modal> */}
 
           {/* Address */}
           <View style={styles.row}>

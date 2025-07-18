@@ -2,14 +2,26 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://lifelink-backend-izjs.onrender.com",
+        "EXPO_PUBLIC_OPENCAGE_API_KEY": "66487a5f68da4c0e9ec920d8375c30f0"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://lifelink-backend-izjs.onrender.com",
+        "EXPO_PUBLIC_OPENCAGE_API_KEY": "66487a5f68da4c0e9ec920d8375c30f0"
+      }
     },
     "production": {
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://lifelink-backend-izjs.onrender.com",
+        "EXPO_PUBLIC_OPENCAGE_API_KEY": "66487a5f68da4c0e9ec920d8375c30f0"
       }
     }
   }
