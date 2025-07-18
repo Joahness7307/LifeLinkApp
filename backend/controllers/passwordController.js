@@ -19,7 +19,7 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     const resetUrl = `https://lifelink-frontend-admin.onrender.com/reset-password/${resetToken}`;
-    await sendEmail(user.email, "Reset Your LifeLink Password", `Click to reset: ${resetUrl}`);
+    const html = `<p>Click the link below to reset your password:</p><a href="${resetUrl}">${resetUrl}</a>`;
 
     // Send email
     const transporter = nodemailer.createTransport({
